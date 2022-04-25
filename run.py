@@ -30,15 +30,18 @@ def display_top_level_interface():
     print("To view module information and statistics, enter 1.\n")
     print("To view or add/edit student information enter 2.\n")
     while True:
-        selected_option = input("->")
-        if selected_option == '1':
-            print('Loading module interface.')
-            break
-        elif selected_option == '2':
-            print('Loading student information interface.')
-            break
-        else:
-            print('Invalid input. Please enter either 1 or 2.\n')
+        try:
+            selected_option = input("->")
+            if selected_option == '1':
+                print('Loading module interface.')
+                break
+            elif selected_option == '2':
+                print('Loading student information interface.')
+                break
+            else:
+                raise ValueError('Invalid input. Please enter either 1 or 2.')
+        except ValueError as error:
+            print(f"{error}\n")
 
 
 display_top_level_interface()
