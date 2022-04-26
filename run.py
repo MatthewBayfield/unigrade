@@ -30,15 +30,9 @@ def top_level_interface():
     \n""")
     print("To view module information and statistics, enter 1.\n")
     print("To view or add/edit student information enter 2.\n")
-    while True:
-        try:
-            user_selected_option = input("->")
-            if validate_numeric_input(user_selected_option, 2):
-                user_selected_options['user_selected_option1'] = user_selected_option
-                break
-            raise ValueError('Invalid input. Please enter either 1 or 2.')
-        except ValueError as error:
-            print(f"{error}\n")
+    valid_input = False
+    while (not valid_input):
+        valid_input = validate_numeric_input(1, 2)
 
 
 def validate_numeric_input(user_selected_option_number, number_of_options):
