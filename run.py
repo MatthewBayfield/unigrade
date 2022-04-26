@@ -16,7 +16,8 @@ SHEET = GSPREAD_CLIENT.open('unigrade-physics')
 
 def top_level_interface():
     """
-    Displays the top-level interface, after clearing the console. The user is prompted to choose one of two options: either view module information, or view and or edit/add student information
+    Displays the top-level interface, after clearing the console.
+    The user is prompted to choose one of two options: either view module information, or view and or edit/add student information.
     """
     system('clear')
     print("""
@@ -31,12 +32,31 @@ def top_level_interface():
     print("To view or add/edit student information enter 2.\n")
     while True:
         try:
-            selected_option = input("->")
-            if selected_option in ('1', '2'):
+            user_selected_option = input("->")
+            if user_selected_option in ('1', '2'):
+                user_selected_options['user_selected_option1'] = user_selected_option
                 break
-            
             raise ValueError('Invalid input. Please enter either 1 or 2.')
         except ValueError as error:
             print(f"{error}\n")
 
 
+def main():
+    """
+    Runs and controls program execution.
+    """
+    interface_level = 0
+    global user_selected_options
+    user_selected_options = {}
+    while True:
+        if interface_level == 0:
+            top_level_interface()
+            interface_level += 1
+        user_selected_option1 = user_selected_options['user_selected_option1']
+        if user_selected_option1 == '1':
+            break
+        elif user_selected_option1 == '2':
+            break
+
+
+main()
