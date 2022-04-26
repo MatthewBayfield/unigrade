@@ -41,6 +41,38 @@ def top_level_interface():
             print(f"{error}\n")
 
 
+def student_information_top_level_interface():
+    """
+    Displays the top-level student information terminal interface to the user.
+    Prompts the user to select to alter student registration, or to view/edit existing student information, as well as 'go back' or 'exit' the program.
+    """
+    system('clear')
+    print("""
+                      ___  _             _            _   
+                     / __|| |_  _  _  __| | ___  _ _ | |_ 
+                     \__ \|  _|| || |/ _` |/ -_)| ' \|  _|
+                     |___/ \__| \_,_|\__,_|\___||_||_|\__|
+                                                          
+            ___         __                         _    _            
+           |_ _| _ _   / _| ___  _ _  _ __   __ _ | |_ (_) ___  _ _  
+            | | | ' \ |  _|/ _ \| '_|| '  \ / _` ||  _|| |/ _ \| ' \ 
+           |___||_||_||_|  \___/|_|  |_|_|_|\__,_| \__||_|\___/|_||_|
+                                                                             
+    \n""")
+    print("To view or edit information about an existing student, enter 1.\n")
+    print("To register or unregister a student in the system enter 2.\n")
+    print('''To go back a step, return to the initial interface,\nor exit the program; enter 3,4 and 5 respectively.\n''')
+    while True:
+        try:
+            user_selected_option = input("->")
+            if user_selected_option in ('1', '2', '3', '4', '5'):
+                user_selected_options['user_selected_option2'] = user_selected_option
+                break
+            raise ValueError('Invalid input. Please enter either 1,2,3,4, or 5')
+        except ValueError as error:
+            print(f"{error}\n")
+
+
 def main():
     """
     Runs and controls program execution.
