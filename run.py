@@ -32,14 +32,10 @@ def top_level_interface():
     while True:
         try:
             selected_option = input("->")
-            if selected_option == '1':
-                print('Loading module interface.')
+            if selected_option in ('1', '2'):
                 break
-            elif selected_option == '2':
-                print('Loading student information interface.')
-                break
-            else:
-                raise ValueError('Invalid input. Please enter either 1 or 2.')
+            
+            raise ValueError('Invalid input. Please enter either 1 or 2.')
         except ValueError as error:
             print(f"{error}\n")
 
