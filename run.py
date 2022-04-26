@@ -41,6 +41,16 @@ def top_level_interface():
             print(f"{error}\n")
 
 
+def validate_numeric_input(user_input, number_of_options):
+    '''
+    Tests whether the user_input parameter is in the valid range of integers, as determined by the number_of_options parameter.
+    '''
+    if user_input in [f"{x}" for x in range(1, number_of_options + 1)]:
+        return True
+    else:
+        return False
+
+
 def student_information_top_level_interface():
     """
     Displays the top-level student information terminal interface to the user.
