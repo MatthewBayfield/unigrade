@@ -46,7 +46,7 @@ def validate_numeric_input(user_selected_option_number, number_of_options):
             user_selected_options[f'user_selected_option{user_selected_option_number}'] = user_selected_option
             return True
         else:
-            raise ValueError(f'Invalid input. Please enter an integer in the range 1-{number_of_options}')
+            raise ValueError(f'Invalid input. Please enter an integer in the range 1-{number_of_options}.')
     except ValueError as error:
         print(f"{error}\n")
         return False
@@ -73,15 +73,9 @@ def student_information_top_level_interface():
     print("To view or edit information about an existing student, enter 1.\n")
     print("To register or unregister a student in the system enter 2.\n")
     print('''To go back a step, return to the initial interface,\nor exit the program; enter 3,4 and 5 respectively.\n''')
-    while True:
-        try:
-            user_selected_option = input("->")
-            if user_selected_option in ('1', '2', '3', '4', '5'):
-                user_selected_options['user_selected_option2'] = user_selected_option
-                break
-            raise ValueError('Invalid input. Please enter either 1,2,3,4, or 5')
-        except ValueError as error:
-            print(f"{error}\n")
+    valid_input = False
+    while (not valid_input):
+        valid_input = validate_numeric_input(2, 5)
 
 
 def modules_interface():
