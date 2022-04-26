@@ -73,6 +73,36 @@ def student_information_top_level_interface():
             print(f"{error}\n")
 
 
+def modules_interface():
+    """
+    Displays the modules terminal interface to the user.
+    Prompts the user to select to view a list of year 1, year 2, year 3, or year 4 module titles; or 'go back' or 'exit' the program.
+    """
+    system('clear')
+    print("""
+                      __  __          _        _          
+                     |  \/  | ___  __| | _  _ | | ___  ___
+                     | |\/| |/ _ \/ _` || || || |/ -_)(_-<
+                     |_|  |_|\___/\__,_| \_,_||_|\___|/__/
+                                                          
+            ___         __                         _    _            
+           |_ _| _ _   / _| ___  _ _  _ __   __ _ | |_ (_) ___  _ _  
+            | | | ' \ |  _|/ _ \| '_|| '  \ / _` ||  _|| |/ _ \| ' \ 
+           |___||_||_||_|  \___/|_|  |_|_|_|\__,_| \__||_|\___/|_||_|
+    \n""")
+    print('''To view a list of year 1, year 2, year 3, or year 4 module titles;\nenter 1,2,3, or 4 respectively.\n''')
+    print('''To go back a step, return to the initial interface,\nor exit the program; enter 5,6 and 7 respectively.\n''')
+    while True:
+        try:
+            user_selected_option = input("->")
+            if user_selected_option in [f"{x}" for x in range(1, 8)]:
+                user_selected_options['user_selected_option2'] = user_selected_option
+                break
+            raise ValueError('Invalid input. Please enter a number in the range 1-7')
+        except ValueError as error:
+            print(f"{error}\n")
+
+
 def main():
     """
     Runs and controls program execution.
