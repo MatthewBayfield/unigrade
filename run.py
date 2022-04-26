@@ -115,12 +115,12 @@ def main():
             top_level_interface()
             interface_level += 1
         user_selected_option1 = user_selected_options['user_selected_option1']
-        if user_selected_option1 == '1':
-            break
-        elif user_selected_option1 == '2':
-            if interface_level == 1:
+        if interface_level == 1:
+            if user_selected_option1 == '1':
+                modules_interface()
+            elif user_selected_option1 == '2':
                 student_information_top_level_interface()
-                interface_level += 1
+            interface_level += 1
         break
 
 
