@@ -14,7 +14,7 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('unigrade-physics')
 
 
-def display_top_level_interface():
+def top_level_interface():
     """
     Displays the top-level interface, after clearing the console. The user is prompted to choose one of two options: either view module information, or view and or edit/add student information
     """
@@ -44,4 +44,3 @@ def display_top_level_interface():
             print(f"{error}\n")
 
 
-display_top_level_interface()
