@@ -88,7 +88,10 @@ def main():
         if user_selected_option1 == '1':
             break
         elif user_selected_option1 == '2':
-            break
+            if interface_level == 1:
+                student_information_top_level_interface()
+                interface_level += 1
+        break
 
 
 main()
