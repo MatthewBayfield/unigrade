@@ -33,7 +33,7 @@ def top_level_interface():
     while True:
         try:
             user_selected_option = input("->")
-            if user_selected_option in ('1', '2'):
+            if validate_numeric_input(user_selected_option, 2):
                 user_selected_options['user_selected_option1'] = user_selected_option
                 break
             raise ValueError('Invalid input. Please enter either 1 or 2.')
