@@ -97,15 +97,9 @@ def modules_interface():
     \n""")
     print('''To view a list of year 1, year 2, year 3, or year 4 module titles;\nenter 1,2,3, or 4 respectively.\n''')
     print('''To go back a step, return to the initial interface,\nor exit the program; enter 5,6 and 7 respectively.\n''')
-    while True:
-        try:
-            user_selected_option = input("->")
-            if user_selected_option in [f"{x}" for x in range(1, 8)]:
-                user_selected_options['user_selected_option2'] = user_selected_option
-                break
-            raise ValueError('Invalid input. Please enter a number in the range 1-7')
-        except ValueError as error:
-            print(f"{error}\n")
+    valid_input = False
+    while (not valid_input):
+        valid_input = validate_numeric_input(2, 7)
 
 
 def main():
