@@ -47,7 +47,8 @@ def validate_numeric_input(user_selected_option_number, number_of_options):
                 user_selected_options[f'user_selected_option{user_selected_option_number}'] = user_selected_option
                 return True
             else:
-                return True
+                list_to_return = [True, user_selected_option]
+                return list_to_return
         else:
             raise ValueError(f'Invalid input. Please enter an integer in the range 1-{number_of_options}.')
     except ValueError as error:
@@ -103,6 +104,37 @@ def modules_interface():
     valid_input = False
     while (not valid_input):
         valid_input = validate_numeric_input(2, 7)
+
+
+def validate_student_name_input():
+    """
+    Prompts a user for input. Checks whether a student name user input is valid. Returns a boolean, or a boolean as part of a list.
+    """
+    try:
+        full_name = input('->')
+        names = full_name.split(',')
+        if full_name.count(',') != 2:
+            raise ValueError('''Invalid input. Please enter a first, middle, and last name separated with commas;\nfor example: John,Paul,Smith.''')
+        elif not (names[0].isalpha() and names[1].isalpha() and names[2].isalpha()):
+            raise ValueError('Invalid input. Please use only standard alphabetic characters.')
+        else:
+            student_name = ""
+            for name in names:
+                student_name += name.capitalize()
+                student_name += " "
+            print(f"Student name: {student_name} ")
+            print('is this correct? Enter 1 for yes, 2 for no.\n')
+            while True:
+                return_values = validate_numeric_input(0, 2)
+                if isinstance(return_values, list):
+                    if return_values[1] == '1':
+                        return [True, student_name]
+                    else:
+                        print('Enter the correct student name\n')
+                        return False
+    except ValueError as error:
+        print(f"{error}\n")
+        return False
 
 
 def main():
