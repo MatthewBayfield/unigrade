@@ -43,8 +43,11 @@ def validate_numeric_input(user_selected_option_number, number_of_options):
     try:
         user_selected_option = input("->")
         if user_selected_option in [f"{x}" for x in range(1, number_of_options + 1)]:
-            user_selected_options[f'user_selected_option{user_selected_option_number}'] = user_selected_option
-            return True
+            if user_selected_option_number != 0:
+                user_selected_options[f'user_selected_option{user_selected_option_number}'] = user_selected_option
+                return True
+            else:
+                return True
         else:
             raise ValueError(f'Invalid input. Please enter an integer in the range 1-{number_of_options}.')
     except ValueError as error:
