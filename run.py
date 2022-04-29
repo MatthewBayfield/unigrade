@@ -35,7 +35,7 @@ def top_level_interface():
         valid_input = validate_numeric_input(1, 2)
 
 
-def validate_numeric_input(user_selected_option_number, number_of_options):
+def validate_numeric_input(number_of_options):
     '''
     Prompts user input. Tests whether the user input is in the valid range of integers, as determined by the number_of_options parameter.
     If it is not it raises an exception. Returns a boolean.
@@ -43,12 +43,7 @@ def validate_numeric_input(user_selected_option_number, number_of_options):
     try:
         user_selected_option = input("->")
         if user_selected_option in [f"{x}" for x in range(1, number_of_options + 1)]:
-            if user_selected_option_number != 0:
-                user_selected_options[f'user_selected_option{user_selected_option_number}'] = user_selected_option
-                return True
-            else:
-                list_to_return = [True, user_selected_option]
-                return list_to_return
+            return user_selected_option
         else:
             raise ValueError(f'Invalid input. Please enter an integer in the range 1-{number_of_options}.')
     except ValueError as error:
