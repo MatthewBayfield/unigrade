@@ -109,7 +109,8 @@ def modules_interface():
 
 def validate_student_name_input():
     """
-    Prompts a user for input. Checks whether a student name user input is valid. Returns a boolean, or an expression that will be evaluated to a boolean elsewhere.
+    Prompts a user for input. Checks whether a 'student name' user input is valid. Returns a boolean, or the student name input, which will also
+    be used to evaluate to a boolean within the function in which this function is called.
     """
     try:
         full_name = input('->')
@@ -125,17 +126,26 @@ def validate_student_name_input():
                 student_name += " "
             print(f"Student name: {student_name} ")
             print('is this correct? Enter 1 for yes, 2 for no.\n')
-            while True:
-                valid_input = validate_numeric_input(2)
-                if valid_input:
-                    if valid_input == '1':
-                        return student_name
-                    else:
-                        print('Enter the correct student name\n')
-                        return False
+            return is_this_correct_checker(student_name)
     except ValueError as error:
         print(f"{error}\n")
         return False
+
+
+def is_this_correct_checker(user_input):
+    """
+    Called after a user input to prompt the user for further input to confirm whether they are happy with their input.
+    Returns a boolean, or the user input value, which will also be used to evaluate to a boolean within the function
+    in which this function is called.
+    """
+    while True:
+        valid_input = validate_numeric_input(2)
+        if valid_input:
+            if valid_input == '1':
+                return user_input
+            else:
+                print(f'Enter the correct {user_input}\n')
+                return False
 
 
 def main():
