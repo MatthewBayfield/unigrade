@@ -1,6 +1,9 @@
 from os import system
 import gspread
 from google.oauth2.service_account import Credentials
+import sys
+sys.path.insert(1, '/workspace/unigrade/classes')
+import student
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -106,7 +109,7 @@ def modules_interface():
 
 def validate_student_name_input():
     """
-    Prompts a user for input. Checks whether a student name user input is valid. Returns a boolean, or a boolean as part of a list.
+    Prompts a user for input. Checks whether a student name user input is valid. Returns a boolean, or an expression that will be evaluated to a boolean elsewhere.
     """
     try:
         full_name = input('->')
@@ -123,10 +126,10 @@ def validate_student_name_input():
             print(f"Student name: {student_name} ")
             print('is this correct? Enter 1 for yes, 2 for no.\n')
             while True:
-                return_values = validate_numeric_input(0, 2)
-                if isinstance(return_values, list):
-                    if return_values[1] == '1':
-                        return [True, student_name]
+                valid_input = validate_numeric_input(2)
+                if valid_input:
+                    if valid_input == '1':
+                        return student_name
                     else:
                         print('Enter the correct student name\n')
                         return False
@@ -139,12 +142,14 @@ def main():
     """
     Runs and controls program execution.
     """
-    FUNCTION_DICTIONARY = {'top_level_interface': top_level_interface, 'student_information_top_level_interface': student_information_top_level_interface, 
+    FUNCTION_DICTIONARY = {'top_level_interface': top_level_interface, 'student_information_top_level_interface': student_information_top_level_interface,
                            'modules_interface': modules_interface}
-    global next_function_call                       
+    global next_function_call
     next_function_call = 'top_level_interface'
     while True:
         FUNCTION_DICTIONARY[next_function_call]()
-        
 
-main()
+
+#main()
+student = student.Student('Matthew Bayfield')
+print(student.programme)
