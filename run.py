@@ -141,21 +141,12 @@ def main():
     """
     Runs and controls program execution.
     """
-    interface_level = 0
-    global user_selected_options
-    user_selected_options = {}
+    FUNCTION_DICTIONARY = {'top_level_interface': top_level_interface, 'student_information_top_level_interface': student_information_top_level_interface, 
+                           'modules_interface': modules_interface}
+    global next_function_call                       
+    next_function_call = 'top_level_interface'
     while True:
-        if interface_level == 0:
-            top_level_interface()
-            interface_level += 1
-        user_selected_option1 = user_selected_options['user_selected_option1']
-        if interface_level == 1:
-            if user_selected_option1 == '1':
-                modules_interface()
-            elif user_selected_option1 == '2':
-                student_information_top_level_interface()
-            interface_level += 1
-        break
-
+        FUNCTION_DICTIONARY[next_function_call]()
+        
 
 main()
