@@ -44,7 +44,8 @@ def top_level_interface():
 def validate_numeric_input(number_of_options):
     '''
     Prompts user input. Tests whether the user input is in the valid range of integers, as determined by the number_of_options parameter.
-    If it is not it raises an exception. Returns a boolean.
+    If it is not it raises an exception. Returns a boolean,  or the user input value, which will also
+    be used to evaluate to a boolean within the function in which this function is called.
     '''
     try:
         user_selected_option = input("->")
@@ -126,13 +127,13 @@ def validate_student_name_input():
                 student_name += " "
             print(f"Student name: {student_name} ")
             print('is this correct? Enter 1 for yes, 2 for no.\n')
-            return is_this_correct_checker(student_name)
+            return is_this_correct_checker(student_name, 'student name')
     except ValueError as error:
         print(f"{error}\n")
         return False
 
 
-def is_this_correct_checker(user_input):
+def is_this_correct_checker(user_input, user_input_description):
     """
     Called after a user input to prompt the user for further input to confirm whether they are happy with their input.
     Returns a boolean, or the user input value, which will also be used to evaluate to a boolean within the function
@@ -144,7 +145,7 @@ def is_this_correct_checker(user_input):
             if valid_input == '1':
                 return user_input
             else:
-                print(f'Enter the correct {user_input}\n')
+                print(f'Enter the correct {user_input_description}\n')
                 return False
 
 
