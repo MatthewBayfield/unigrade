@@ -66,6 +66,34 @@ class StudentMixin(object):
                 STUDENT_DETAILS.update_cell(next_empty_row_number + 1, 1, self.student_id)
             else:
                 return 'Student not registered.\n'
+            
+    def set_study_programme(self, assignment='edit',):
+        """
+        For an initial assignment param value, searches the unigrade google sheet for the student, and if they exist, assigns the
+        study_programme instance property for a student class instance, using the corresponding google sheet student property.
+        For an edit param value, prompts the user for input in order to assign the study_programme instance property, and update
+        the google sheet.
+        """
+        STUDENT_DETAILS = SHEET.worksheet('student details')
+        student_name_cell = STUDENT_DETAILS.find(self.student_name)
+        if assignment == 'initial':
+            if not isinstance(student_name_cell, type(None)):
+                self.study_programme = STUDENT_DETAILS.cell(student_name_cell.row, student_name_cell.col + 1).value
+        else:
+            correct = False
+            while not correct:
+                print("For MSci Physics enter 1.\n")
+                print("For BSc Physics enter 2.\n")
+                user_options = {'1': 'MSci Physics', '2': 'BSc Physics'}
+                valid_input = False
+                while not valid_input:
+                    valid_input = validate_numeric_input(2)
+                self.study_programme = user_options[valid_input]
+                print(f"{self.student_name} programme: {self.study_programme}")
+                print('Is this correct? Enter 1 for yes, 2 for no.\n')
+                correct = is_this_correct_checker(self.study_programme, 'programme')
+                STUDENT_DETAILS.update_cell(student_name_cell.row, student_name_cell.col + 1, self.study_programme)
+            print('study programme confirmed.\n')
 
 
 def validate_numeric_input(number_of_options):
