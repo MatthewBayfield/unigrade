@@ -142,6 +142,23 @@ class StudentMixin(object):
             print('year confirmed.\n')
 
 
+class Student(StudentMixin):
+    """
+    Creates student objects, that have instance properties assigned using a combination of input parameters, and methods from
+    the StudentMixin class. The student properties are those found in the student details worksheet of the unigrade-physics google sheet.
+    A student object is used to hold the results of user inputs or database queries, during the process of updating the google sheet, and for displaying
+    retrieved student information; the various instance methods exist for this purpose.
+    """
+    def __init__(self, identifier, identifier_type, register):
+        result = self.set_student_identifiers(identifier, identifier_type, register)
+        if result is not None:
+            print(result)
+        if result == 'Student currently registered.\n':
+            self.set_study_programme('initial')
+            self.set_year('start', 'initial')
+            self.set_year('end', 'initial')
+
+
 def validate_numeric_input(number_of_options):
     '''
     Prompts user input. Tests whether the user input is in the valid range of integers, as determined by the number_of_options parameter.
