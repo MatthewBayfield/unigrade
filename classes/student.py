@@ -149,7 +149,7 @@ class Student(StudentMixin):
     A student object is used to hold the results of user inputs or database queries, during the process of updating the google sheet, and for displaying
     retrieved student information; the various instance methods exist for this purpose.
     """
-    def __init__(self, identifier, identifier_type, register):
+    def __init__(self, identifier, identifier_type, register=False):
         result = self.set_student_identifiers(identifier, identifier_type, register)
         if result is not None:
             print(result)
