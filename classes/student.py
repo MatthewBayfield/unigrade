@@ -12,6 +12,61 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('unigrade-physics')
 
+class StudentMixin(object):
+    """
+    A mixin class, that contains methods used by student class instances for the initialisation and updating of
+    their properties, in the process of retrieving and displaying student information, and updating the unigrade-physics
+    google sheet, for example during student registration.
+    """
+    def set_student_identifiers(self, identifier, identifier_type, register=False):
+        """
+        Searches the unigrade google sheet for a student using the identifier param; if the student exists, instance properties
+         of the student class instance are assigned with the student google sheet properties. Also when the register param value
+         is True, the user is prompted for input, to assign the instance properties, which are then used to update the
+         google sheet.
+        """
+        STUDENT_DETAILS = SHEET.worksheet('student details')
+        student_identifier_cell = STUDENT_DETAILS.find(identifier)
+        if not isinstance(student_identifier_cell, type(None)):
+            if identifier_type == 'name':
+                self.student_name = identifier
+                self.student_id = STUDENT_DETAILS.cell(student_identifier_cell.row, student_identifier_cell.col -1).value
+            else:
+                self.student_name = STUDENT_DETAILS.cell(student_identifier_cell.row, student_identifier_cell.col +1).value
+                self.student_id = identifier
+            return 'Student is currently registered.\n'
+        else:
+            if register:
+                used_ids_str = set(STUDENT_DETAILS.col_values(1))
+                used_ids_str.remove('Student ID')
+                if identifier_type == 'name':
+                    self.student_name = identifier
+                    print('Now enter the 9 digit student ID of the student.\n')
+                    valid_input = False
+                    while not valid_input:
+                        ID_input = input('->')
+                        if not (ID_input.isdigit() and len(ID_input) == 9):
+                            print("""Invalid ID, please check you have entered the student's ID correctly:\n
+                            it should contain 9 digits and nothing else.\n""")
+                        elif ID_input in used_ids_str:
+                            print("This ID belongs to an already registered student, please check you have entered the student's ID correctly.\n")
+                        else:
+                            valid_input = is_this_correct_checker(ID_input, 'Student ID:')
+                    self.student_id = valid_input
+                else:
+                    self.student_id = identifier
+                    print('''Now enter the student's full name separated by a comma;\nfor example: John,Smith.\n''')
+                    valid_input = False
+                    while not valid_input:
+                        valid_input = validate_student_name_input()
+                    self.student_name = valid_input
+
+                next_empty_row_number = len(used_ids_str) + 1
+                STUDENT_DETAILS.update_cell(next_empty_row_number + 1, 2, self.student_name)
+                STUDENT_DETAILS.update_cell(next_empty_row_number + 1, 1, self.student_id)
+            else:
+                return 'Student not registered.\n'
+
 
 def validate_numeric_input(number_of_options):
     '''
