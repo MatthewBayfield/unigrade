@@ -158,6 +158,31 @@ class Student(StudentMixin):
             self.set_year('start', 'initial')
             self.set_year('end', 'initial')
 
+    def register(self, identifier, identifier_type):
+        """
+        Adds the student, as well as the student's details, associated with the student object to the unigrade-physics
+        google sheet: First sets the instance properties, then updates the google sheet;
+        using methods from the StudentMixin class, along with user inputs.
+        """
+        print('starting the registration process:\n')
+        self.set_student_identifiers(identifier, identifier_type, True)
+        self.set_study_programme()
+        self.set_year('start')
+        self.set_year('end')
+        print("Student registered.\n")
+
+    def unregister(self):
+        """
+        Deletes any rows in the unigrade-physics google sheet containing
+        the student object's associated student_id instance property.
+        """
+        UNIGRADE_WORKSHEETS = SHEET.worksheets()
+        for sheet in UNIGRADE_WORKSHEETS:
+            student_id_cell = sheet.find(self.student_id)
+            if student_id_cell is not None:
+                sheet.delete_rows(student_id_cell.row)
+        print('student successfully unregistered\n')
+
 
 def validate_numeric_input(number_of_options):
     '''
