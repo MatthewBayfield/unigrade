@@ -31,14 +31,7 @@ def top_level_interface():
         | |__| || |\  | _| |_| |__| || | \ \  / ____ \ | |__| || |____ 
          \____/ |_| \_||_____|\_____||_|  \_\/_/    \_\|_____/ |______|
     \n""")
-    print("To view module information and statistics, enter 1.\n")
-    print("To view or add/edit student information enter 2.\n")
-    user_options = {'1': 'modules_interface', '2': 'student_information_top_level_interface'}
-    valid_input = False
-    while (not valid_input):
-        valid_input = validate_numeric_input(2)
-    global next_function_call
-    next_function_call = user_options[valid_input]
+    next_function([['1', 'modules_interface'], ['2', 'student_information_top_level_interface']])
 
 
 def validate_numeric_input(number_of_options):
@@ -190,5 +183,3 @@ def main():
 
 
 main()
-next_function([['1', 'modules_interface'], ['2', 'student_information_top_level_interface']])
-print(next_function_call)
