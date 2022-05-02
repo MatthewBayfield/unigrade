@@ -149,6 +149,27 @@ def is_this_correct_checker(user_input, user_input_description):
                 return False
 
 
+def next_function(option_pair_list):
+    """
+    Prints a list of indexed options, provided using the option_pair_list param - a list of 2-item lists, to the user,
+    each featuring a description. Then prompts the user for input. Uses the user_input to select which function to
+    call next, where the function to be called matches the selected description.
+    """
+    print("Enter a number corresponding to one of the following options:\n")
+    for option_pair in option_pair_list:
+        print(f"{option_pair[0]}: {FUNCTION_USER_DESCRIPTION_DICTIONARY[option_pair[1]]}.")
+
+    print('\n')
+    valid_input = False
+    while (not valid_input):
+        valid_input = validate_numeric_input(len(option_pair_list)) 
+    
+    for option_pair in option_pair_list:
+        if valid_input in option_pair:
+                    global next_function_call
+                    next_function_call = option_pair[1]
+
+
 def main():
     """
     Runs and controls program execution.
@@ -168,6 +189,6 @@ def main():
         FUNCTION_DICTIONARY[next_function_call]()
 
 
-#main()
-student = student.Student('Matthew Bayfield')
-print(student.programme)
+main()
+next_function([['1', 'modules_interface'], ['2', 'student_information_top_level_interface']])
+print(next_function_call)
