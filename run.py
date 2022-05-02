@@ -81,7 +81,7 @@ def student_information_top_level_interface():
     print('''To go back a step, return to the initial interface,\nor exit the program; enter 3,4 and 5 respectively.\n''')
     valid_input = False
     while (not valid_input):
-        valid_input = validate_numeric_input(2, 5)
+        valid_input = validate_numeric_input(5)
 
 
 def modules_interface():
@@ -105,7 +105,7 @@ def modules_interface():
     print('''To go back a step, return to the initial interface,\nor exit the program; enter 5,6 and 7 respectively.\n''')
     valid_input = False
     while (not valid_input):
-        valid_input = validate_numeric_input(2, 7)
+        valid_input = validate_numeric_input(7)
 
 
 def validate_student_name_input():
@@ -118,7 +118,7 @@ def validate_student_name_input():
         names = full_name.split(',')
         if full_name.count(',') != 1:
             raise ValueError('''Invalid input. Please enter a first, and last name separated with a comma;\nfor example: John,Smith.''')
-        elif not (names[0].isalpha() and names[1].isalpha() and names[2].isalpha()):
+        elif not (names[0].isalpha() and names[1].isalpha()):
             raise ValueError('Invalid input. Please use only standard alphabetic characters.')
         else:
             student_name = ""
