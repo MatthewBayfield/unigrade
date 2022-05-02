@@ -31,7 +31,7 @@ def top_level_interface():
         | |__| || |\  | _| |_| |__| || | \ \  / ____ \ | |__| || |____ 
          \____/ |_| \_||_____|\_____||_|  \_\/_/    \_\|_____/ |______|
     \n""")
-    next_function([['1', 'modules_interface'], ['2', 'student_information_top_level_interface']])
+    next_function([['1', 'modules_interface'], ['2', 'student_information_top_level_interface'], ['3', 'exit_the_program']])
 
 
 def validate_numeric_input(number_of_options):
