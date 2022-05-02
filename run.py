@@ -156,6 +156,12 @@ def main():
     global FUNCTION_DICTIONARY
     FUNCTION_DICTIONARY = {'top_level_interface': top_level_interface, 'student_information_top_level_interface': student_information_top_level_interface,
                            'modules_interface': modules_interface}
+    
+    global FUNCTION_USER_DESCRIPTION_DICTIONARY
+    FUNCTION_USER_DESCRIPTION_DICTIONARY = {'top_level_interface': 'return to the top program interface',
+                                        'student_information_top_level_interface': 'view or add/edit student information',
+                                        'modules_interface': 'view module information and statistics'}
+    
     global next_function_call
     next_function_call = 'top_level_interface'
     while True:
