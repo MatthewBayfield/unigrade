@@ -86,6 +86,7 @@ class StudentMixin(object):
                 self.study_programme = STUDENT_DETAILS.cell(student_name_cell.row, student_name_cell.col + 1).value
         else:
             correct = False
+            print("Enter the student's study programme:\n")
             while not correct:
                 print("For MSci Physics enter 1.\n")
                 print("For BSc Physics enter 2.\n")
@@ -94,9 +95,9 @@ class StudentMixin(object):
                 while not valid_input:
                     valid_input = validate_numeric_input(2)
                 self.study_programme = user_options[valid_input]
-                print(f"{self.student_name} programme: {self.study_programme}")
+                print(f"{self.student_name} study programme: {self.study_programme}")
                 print('Is this correct? Enter 1 for yes, 2 for no.\n')
-                correct = is_this_correct_checker(self.study_programme, 'programme')
+                correct = is_this_correct_checker(self.study_programme, 'study programme')
                 STUDENT_DETAILS.update_cell(student_name_cell.row, student_name_cell.col + 1, self.study_programme)
             print('study programme confirmed.\n')
 
