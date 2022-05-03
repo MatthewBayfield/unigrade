@@ -164,6 +164,17 @@ def next_function(option_pair_list):
                     return FUNCTION_DICTIONARY[next_function_call]
 
 
+def go_back():
+    """
+    Allows the user to cancel the current function called, in particular its action, and returns ths user
+    to the previous function called.
+    """
+    global next_function_call
+    global last_function_call
+
+    next_function_call = last_function_call
+
+
 def main():
     """
     Runs and controls program execution.
