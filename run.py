@@ -77,6 +77,21 @@ def student_information_top_level_interface():
         valid_input = validate_numeric_input(5)
 
 
+def register_student(registration_status, new_student_object, valid_entry, user_options, user_options_index):
+    """
+    Registers a student in the unigrade google sheet, by invoking the student class methods,
+    on the new_student_object param. Should only be called within the
+    student_registration_interface function.
+    """
+    if registration_status != 'Student is currently registered':
+        new_student_object.register(valid_entry, user_options[user_options_index])
+        global next_function_call
+        next_function_call = 'student_registration_interface'
+    else:
+        print('Student is already registered.\n')
+        next_function([['1', 'unregister the student'], ['2', 'go_back']])
+
+
 def modules_interface():
     """
     Displays the modules terminal interface to the user.
