@@ -122,12 +122,14 @@ class StudentMixin(object):
                 print(f"Enter a {point} year; for example 2022.\n")
                 valid_input = False
                 while not valid_input:
-                    user_input = input('->')
-                    if not (user_input.isdigit() and len(user_input) == 4):
-                        print('Invalid input.\n')
-                    elif point == 'end' and (int(user_input) - int(self.start_year))  not in (3, 4):
-                        print('Invalid input; the end year must be 3 or 4 years later than the start year.' )
-                        print(f'student start year: {self.start_year}.')
+                    try:
+                        user_input = input('->')
+                        if not (user_input.isdigit() and len(user_input) == 4):
+                            raise ValueError('Invalid input. Enter a valid year.\n')
+                        elif point == 'end' and (int(user_input) - int(self.start_year))  not in (3, 4):
+                            raise ValueError(f'Invalid input; the end year must be 3 or 4 years later than the start year.\nStudent start year: {self.start_year}.')
+                    except ValueError as error:
+                        print(f'{error}\n')                     
                     else:
                         valid_input = True
                 if point == 'start':
