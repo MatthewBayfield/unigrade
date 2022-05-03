@@ -226,7 +226,7 @@ def validate_student_name_input():
         names = full_name.split(',')
         if full_name.count(',') != 1:
             raise ValueError('''Invalid input. Please enter a first, and last name separated with a comma;\nfor example: John,Paul,Smith.''')
-        elif not (names[0].isalpha() and names[1].isalpha() and names[2].isalpha()):
+        elif not (names[0].isalpha() and names[1].isalpha()):
             raise ValueError('Invalid input. Please use only standard alphabetic characters.')
         else:
             student_name = ""
