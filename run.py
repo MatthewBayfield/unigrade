@@ -92,6 +92,21 @@ def register_student(registration_status, new_student_object, valid_entry, user_
         next_function([['1', 'unregister the student'], ['2', 'go_back']])
 
 
+def unregister_student(registration_status, new_student_object, valid_entry, user_options, user_options_index):
+    """
+    Unregisters a student in the unigrade google sheet, by invoking the student class methods,
+    on the new_student_object param. Should only be called within the
+    student_registration_interface function; unused params allow the function to be called within this function .
+    """
+    if registration_status == 'Student is currently registered':
+        new_student_object.unregister()
+        global next_function_call
+        next_function_call = 'student_registration_interface'
+    else:
+        print('Student is already not registered.\n')
+        next_function([['1', 'register the student'], ['2', 'go_back']])
+
+
 def modules_interface():
     """
     Displays the modules terminal interface to the user.
