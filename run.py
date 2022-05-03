@@ -161,6 +161,7 @@ def next_function(option_pair_list):
         if valid_input in option_pair:
                     global next_function_call
                     next_function_call = option_pair[1]
+                    return FUNCTION_DICTIONARY[next_function_call]
 
 
 def main():
