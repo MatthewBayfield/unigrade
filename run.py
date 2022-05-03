@@ -54,7 +54,8 @@ def validate_numeric_input(number_of_options):
 def student_information_top_level_interface():
     """
     Displays the top-level student information terminal interface to the user.
-    Prompts the user to select to alter student registration, or to view/edit existing student information, as well as 'go back' or 'exit' the program.
+    Prompts the user to select to alter student registration, or to view/edit existing student information,
+    as well as 'return to the top program interface' or 'exit' the program.
     """
     system('clear')
     print("""
@@ -69,13 +70,10 @@ def student_information_top_level_interface():
            |___||_||_||_|  \___/|_|  |_|_|_|\__,_| \__||_|\___/|_||_|
                                                                              
     \n""")
-    print("To view or edit information about an existing student, enter 1.\n")
-    print("To register or unregister a student in the system enter 2.\n")
-    print('''To go back a step, return to the initial interface,\nor exit the program; enter 3,4 and 5 respectively.\n''')
-    valid_input = False
-    while (not valid_input):
-        valid_input = validate_numeric_input(5)
-
+    global last_function_call
+    last_function_call = 'student_information_top_level_interface'
+    next_function([['1', 'student_registration_interface'], ['2', 'top_level_interface'], ['3', 'exit_the_program']])
+    
 
 def register_student(registration_status, new_student_object, valid_entry, user_options, user_options_index):
     """
