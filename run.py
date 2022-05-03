@@ -177,6 +177,8 @@ def main():
                                         'student_information_top_level_interface': 'view or add/edit student information',
                                         'modules_interface': 'view module information and statistics', 'exit_the_program': 'exit the unigrade program'}
     
+    global last_function_call
+    last_function_call = ''
     global next_function_call
     next_function_call = 'top_level_interface'
     while True:
