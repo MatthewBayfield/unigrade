@@ -89,7 +89,7 @@ def register_student(registration_status, new_student_object, valid_entry, user_
         next_function_call = 'student_registration_interface'
     else:
         print('Student is already registered.\n')
-        next_function([['1', 'unregister the student'], ['2', 'go_back']])
+        next_function([['1', 'unregister_student'], ['2', 'go_back']])
 
 
 def unregister_student(registration_status, new_student_object, valid_entry, user_options, user_options_index):
@@ -104,7 +104,7 @@ def unregister_student(registration_status, new_student_object, valid_entry, use
         next_function_call = 'student_registration_interface'
     else:
         print('Student is already not registered.\n')
-        next_function([['1', 'register the student'], ['2', 'go_back']])
+        next_function([['1', 'register_student'], ['2', 'go_back']])
 
 
 def modules_interface():
