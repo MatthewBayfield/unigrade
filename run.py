@@ -211,12 +211,14 @@ def main():
     """
     global FUNCTION_DICTIONARY
     FUNCTION_DICTIONARY = {'top_level_interface': top_level_interface, 'student_information_top_level_interface': student_information_top_level_interface,
-                           'modules_interface': modules_interface, 'exit_the_program': sys.exit, 'go_back' : go_back}
+                           'modules_interface': modules_interface,  'register_student': register_student, 'unregister_student': unregister_student,
+                            'exit_the_program': sys.exit, 'go_back' : go_back}
     
     global FUNCTION_USER_DESCRIPTION_DICTIONARY
     FUNCTION_USER_DESCRIPTION_DICTIONARY = {'top_level_interface': 'return to the top program interface',
                                         'student_information_top_level_interface': 'view or add/edit student information',
-                                        'modules_interface': 'view module information and statistics', 'exit_the_program': 'exit the unigrade program',
+                                        'modules_interface': 'view module information and statistics', 'register_student': 'register the student',
+                                        'unregister_student': 'unregister the student', 'exit_the_program': 'exit the unigrade program',
                                         'go_back': 'go back'}
     
     global last_function_call
