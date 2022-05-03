@@ -44,13 +44,18 @@ class StudentMixin(object):
                     print('Now enter the 9 digit student ID of the student.\n')
                     valid_input = False
                     while not valid_input:
-                        ID_input = input('->')
-                        if not (ID_input.isdigit() and len(ID_input) == 9):
-                            print("""Invalid ID, please check you have entered the student's ID correctly:\n
-                            it should contain 9 digits and nothing else.\n""")
-                        elif ID_input in used_ids_str:
-                            print("This ID belongs to an already registered student, please check you have entered the student's ID correctly.\n")
+                        try:
+                            ID_input = input('->')
+                            if not (ID_input.isdigit() and len(ID_input) == 9):
+                                raise ValueError("""Invalid ID, please check you have entered the student's ID correctly:\n
+                                it should contain 9 digits and nothing else.\n""")
+                            elif ID_input in used_ids_str:
+                                raise ValueError("This ID belongs to an already registered student, please check you have entered the student's ID correctly.\n")
+                        except ValueError as error:
+                            print(f"{error}\n")
                         else:
+                            print(f"Student ID: {ID_input} ")
+                            print('is this correct? Enter 1 for yes, 2 for no.\n')
                             valid_input = is_this_correct_checker(ID_input, 'Student ID:')
                     self.student_id = valid_input
                 else:
