@@ -138,14 +138,9 @@ def student_registration_interface():
             valid_entry = False
             while not valid_entry:
                 try:
-                    STUDENT_DETAILS = SHEET.worksheet('student details')
-                    used_ids_str = set(STUDENT_DETAILS.col_values(1))
-                    used_ids_str.remove('Student ID')
                     ID_input = input('->')
                     if not (ID_input.isdigit() and len(ID_input) == 9):
                         raise ValueError("""Invalid ID, please check you have entered the student's ID correctly: it should contain 9 digits and nothing else.\n""")
-                    elif ID_input in used_ids_str:
-                        raise ValueError("""This ID belongs to an already registered student, please check you have entered the student's ID correctly.\n""")
                 except ValueError as error:
                     print(f"{error}\n")
                 else:
