@@ -178,6 +178,8 @@ class Student(StudentMixin):
         self.set_year('start')
         self.set_year('end')
         print("Student registered.\n")
+        print('Enter any key to continue.')
+        input('->')
 
     def unregister(self):
         """
@@ -190,6 +192,8 @@ class Student(StudentMixin):
             if student_id_cell is not None:
                 sheet.delete_rows(student_id_cell.row)
         print('student successfully unregistered\n')
+        print('Enter any key to continue.')
+        input('->')
 
 
 def validate_numeric_input(number_of_options):
