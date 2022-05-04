@@ -179,10 +179,7 @@ class Student(StudentMixin):
         self.set_year('start')
         self.set_year('end')
         print("Student registered:\n")
-        STUDENT_DETAILS = SHEET.worksheet('student details')
-        student_name_cell = STUDENT_DETAILS.find(self.student_name)
-        registered_student_details = tabulate([STUDENT_DETAILS.row_values(1), STUDENT_DETAILS.row_values(student_name_cell.row)], headers='firstrow', tablefmt='grid')
-        print(registered_student_details)
+        self.retrieve_student_details()
         print('Enter any key to continue.')
         input('->')
 
@@ -199,6 +196,16 @@ class Student(StudentMixin):
         print('student successfully unregistered\n')
         print('Enter any key to continue.')
         input('->')
+    
+    def retrieve_student_details(self):
+        """
+        Retrieves the student details of a student from the unigrade google sheet. Prints the details as a table using
+        the tabulate module.
+        """
+        STUDENT_DETAILS = SHEET.worksheet('student details')
+        student_name_cell = STUDENT_DETAILS.find(self.student_name)
+        registered_student_details = tabulate([STUDENT_DETAILS.row_values(1), STUDENT_DETAILS.row_values(student_name_cell.row)], headers='firstrow', tablefmt='grid')
+        print(registered_student_details)
 
 
 def validate_numeric_input(number_of_options):
