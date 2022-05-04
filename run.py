@@ -2,8 +2,7 @@ from os import system
 import gspread
 from google.oauth2.service_account import Credentials
 import sys
-sys.path.insert(1, '/workspace/unigrade/classes')
-import student
+import classes.student
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
