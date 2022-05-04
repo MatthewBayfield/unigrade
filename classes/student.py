@@ -1,5 +1,6 @@
 import gspread
 from google.oauth2.service_account import Credentials
+from tabulate import tabulate
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -177,7 +178,11 @@ class Student(StudentMixin):
         self.set_study_programme()
         self.set_year('start')
         self.set_year('end')
-        print("Student registered.\n")
+        print("Student registered:\n")
+        STUDENT_DETAILS = SHEET.worksheet('student details')
+        student_name_cell = STUDENT_DETAILS.find(self.student_name)
+        registered_student_details = tabulate([STUDENT_DETAILS.row_values(1), STUDENT_DETAILS.row_values(student_name_cell.row)], headers='firstrow', tablefmt='grid')
+        print(registered_student_details)
         print('Enter any key to continue.')
         input('->')
 
