@@ -121,45 +121,54 @@ def student_registration_interface():
     if valid_input == '2':
         next_function([['1', 'go_back'],['2', 'top_level_interface'], ['3', 'exit_the_program']])
     else:
-        print("To enter the new/existing student's name, enter 1; or 2 for their student ID.\n")
-        user_options = {'1': 'name', '2': 'ID'}
-        valid_input = False
-        while not valid_input:
-            valid_input = validate_numeric_input(2)
-
-        if valid_input == '1':
-            print('''Enter the new/existing student's full name separated by a comma;\nfor example: John,Smith.\n''')
-            valid_entry = False
-            while not valid_entry:
-                valid_entry = validate_student_name_input()
-            user_options_index = '1'
-        else:
-            print('Enter the 9 digit student ID of the student.\n')
-            valid_entry = False
-            while not valid_entry:
-                try:
-                    ID_input = input('->')
-                    if not (ID_input.isdigit() and len(ID_input) == 9):
-                        raise ValueError("""Invalid ID, please check you have entered the student's ID correctly: it should contain 9 digits and nothing else.\n""")
-                except ValueError as error:
-                    print(f"{error}\n")
-                else:
-                    print(f"Student ID: {ID_input} ")
-                    print('is this correct? Enter 1 for yes, 2 for no.\n')
-                    valid_entry = is_this_correct_checker(ID_input, 'Student ID:')
-                    user_options_index = '2'
-
-        new_student_object = student.Student(valid_entry, user_options[user_options_index])
-        registration_status = new_student_object.set_student_identifiers(valid_entry, user_options[user_options_index])
-
+        valid_entry, user_options, user_options_index, new_student_object = registration_status_checker()
         next_function([['1', 'register_student'], ['2', 'unregister_student'], ['3', 'top_level_interface'], ['4', 'exit_the_program']])
         
         while next_function_call in ('register_student', 'unregister_student'):
             registration_status = new_student_object.set_student_identifiers(valid_entry, user_options[user_options_index])
             if next_function_call in ('register_student', 'unregister_student'):
                 FUNCTION_DICTIONARY[next_function_call](registration_status, new_student_object, valid_entry, user_options, user_options_index)
-                
-            
+      
+
+def registration_status_checker():
+    """
+    Checks whether a student identified by their student ID or student name, provided by user input,
+    is registered in the unigrade google sheet. Prints to the terminal the result.
+    Returns the valid input value and its identifier type, and the new student object.
+    """
+    print("To enter the student's name, enter 1; or 2 for their student ID.\n")
+    user_options = {'1': 'name', '2': 'ID'}
+    valid_input = False
+    while not valid_input:
+        valid_input = validate_numeric_input(2)
+
+    if valid_input == '1':
+        print('''Enter the  student's full name separated by a comma;\nfor example: John,Smith.\n''')
+        valid_entry = False
+        while not valid_entry:
+            valid_entry = validate_student_name_input()
+        user_options_index = '1'
+    else:
+        print('Enter the 9 digit student ID of the student.\n')
+        valid_entry = False
+        while not valid_entry:
+            try:
+                ID_input = input('->')
+                if not (ID_input.isdigit() and len(ID_input) == 9):
+                    raise ValueError("""Invalid ID, please check you have entered the student's ID correctly: it should contain 9 digits and nothing else.\n""")
+            except ValueError as error:
+                print(f"{error}\n")
+            else:
+                print(f"Student ID: {ID_input} ")
+                print('is this correct? Enter 1 for yes, 2 for no.\n')
+                valid_entry = is_this_correct_checker(ID_input, 'Student ID:')
+                user_options_index = '2'
+
+    new_student_object = student.Student(valid_entry, user_options[user_options_index])
+    new_student_object.set_student_identifiers(valid_entry, user_options[user_options_index])
+    return [valid_entry, user_options, user_options_index, new_student_object]
+
+
 def modules_interface():
     """
     Displays the modules terminal interface to the user.
