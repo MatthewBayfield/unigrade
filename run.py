@@ -148,7 +148,6 @@ def registration_status_checker():
                 user_options_index = '2'
 
     new_student_object = student.Student(valid_entry, user_options[user_options_index])
-    new_student_object.set_student_identifiers(valid_entry, user_options[user_options_index])
     return [valid_entry, user_options, user_options_index, new_student_object]
 
 
