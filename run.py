@@ -2,7 +2,8 @@ from os import system
 import gspread
 from google.oauth2.service_account import Credentials
 import sys
-import classes.student
+import modules.classes.student as student
+import modules.general_functions as gen_functions
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -31,23 +32,6 @@ def top_level_interface():
          \____/ |_| \_||_____|\_____||_|  \_\/_/    \_\|_____/ |______|
     \n""")
     next_function([['1', 'modules_interface'], ['2', 'student_information_top_level_interface'], ['3', 'exit_the_program']])
-
-
-def validate_numeric_input(number_of_options):
-    '''
-    Prompts user input. Tests whether the user input is in the valid range of integers, as determined by the number_of_options parameter.
-    If it is not it raises an exception. Returns a boolean,  or the user input value, which will also
-    be used to evaluate to a boolean within the function in which this function is called.
-    '''
-    try:
-        user_selected_option = input("->")
-        if user_selected_option in [f"{x}" for x in range(1, number_of_options + 1)]:
-            return user_selected_option
-        else:
-            raise ValueError(f'Invalid input. Please enter an integer in the range 1-{number_of_options}.')
-    except ValueError as error:
-        print(f"{error}\n")
-        return False
 
 
 def student_information_top_level_interface():
@@ -115,7 +99,7 @@ def student_registration_interface():
     print('Do you want to continue? 1 for yes, 2 for no',)
     valid_input = False
     while not valid_input:
-        valid_input = validate_numeric_input(2)
+        valid_input = gen_functions.validate_numeric_input(2)
     
     if valid_input == '2':
         next_function([['1', 'go_back'],['2', 'top_level_interface'], ['3', 'exit_the_program']])
@@ -139,13 +123,13 @@ def registration_status_checker():
     user_options = {'1': 'name', '2': 'ID'}
     valid_input = False
     while not valid_input:
-        valid_input = validate_numeric_input(2)
+        valid_input = gen_functions.validate_numeric_input(2)
 
     if valid_input == '1':
         print('''Enter the  student's full name separated by a comma;\nfor example: John,Smith.\n''')
         valid_entry = False
         while not valid_entry:
-            valid_entry = validate_student_name_input()
+            valid_entry = gen_functions.validate_student_name_input()
         user_options_index = '1'
     else:
         print('Enter the 9 digit student ID of the student.\n')
@@ -160,7 +144,7 @@ def registration_status_checker():
             else:
                 print(f"Student ID: {ID_input} ")
                 print('is this correct? Enter 1 for yes, 2 for no.\n')
-                valid_entry = is_this_correct_checker(ID_input, 'Student ID:')
+                valid_entry = gen_functions.is_this_correct_checker(ID_input, 'Student ID:')
                 user_options_index = '2'
 
     new_student_object = student.Student(valid_entry, user_options[user_options_index])
@@ -189,48 +173,8 @@ def modules_interface():
     print('''To go back a step, return to the initial interface,\nor exit the program; enter 5,6 and 7 respectively.\n''')
     valid_input = False
     while (not valid_input):
-        valid_input = validate_numeric_input(7)
+        valid_input = gen_functions.validate_numeric_input(7)
 
-
-def validate_student_name_input():
-    """
-    Prompts a user for input. Checks whether a 'student name' user input is valid. Returns a boolean, or the student name input, which will also
-    be used to evaluate to a boolean within the function in which this function is called.
-    """
-    try:
-        full_name = input('->')
-        names = full_name.split(',')
-        if full_name.count(',') != 1:
-            raise ValueError('''Invalid input. Please enter a first, and last name separated with a comma;\nfor example: John,Smith.''')
-        elif not (names[0].isalpha() and names[1].isalpha()):
-            raise ValueError('Invalid input. Please use only standard alphabetic characters.')
-        else:
-            student_name = ""
-            for name in names:
-                student_name += name.capitalize()
-                student_name += " "
-            print(f"Student name: {student_name} ")
-            print('is this correct? Enter 1 for yes, 2 for no.\n')
-            return is_this_correct_checker(student_name, 'student name')
-    except ValueError as error:
-        print(f"{error}\n")
-        return False
-
-
-def is_this_correct_checker(user_input, user_input_description):
-    """
-    Called after a user input to prompt the user for further input to confirm whether they are happy with their input.
-    Returns a boolean, or the user input value, which will also be used to evaluate to a boolean within the function
-    in which this function is called.
-    """
-    while True:
-        valid_input = validate_numeric_input(2)
-        if valid_input:
-            if valid_input == '1':
-                return user_input
-            else:
-                print(f'Enter the correct {user_input_description}:\n')
-                return False
 
 
 def next_function(option_pair_list):
@@ -246,7 +190,7 @@ def next_function(option_pair_list):
     print('\n')
     valid_input = False
     while (not valid_input):
-        valid_input = validate_numeric_input(len(option_pair_list)) 
+        valid_input = gen_functions.validate_numeric_input(len(option_pair_list)) 
     
     for option_pair in option_pair_list:
         if valid_input in option_pair:
