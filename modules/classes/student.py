@@ -1,13 +1,12 @@
+import sys
+import os
 import gspread
 from google.oauth2.service_account import Credentials
 from tabulate import tabulate
-import sys
-import os
-script_dir = os.path.dirname(__file__)
-mymodule_dir = os.path.join(script_dir, '..')
-sys.path.insert(1, mymodule_dir)
+student_dir = os.path.dirname(__file__)
+general_functions_dir = os.path.join(student_dir, '..')
+sys.path.insert(1, general_functions_dir)
 import general_functions as gen_functions
-
 
 
 SCOPE = [
@@ -214,3 +213,24 @@ class Student(StudentMixin):
         student_name_cell = STUDENT_DETAILS.find(self.student_name)
         registered_student_details = tabulate([STUDENT_DETAILS.row_values(1), STUDENT_DETAILS.row_values(student_name_cell.row)], headers='firstrow', tablefmt='grid')
         print(registered_student_details)
+
+    def edit_student_details(self):
+        """
+        Prompts the user for input to select to edit the student's mutable details,
+        or to go back. Performs the editing process using existing student class methods, that
+        through user input first alter the instance properties, before then updating the google sheet.
+        """
+        valid_input = False
+        print("Enter a number to edit student details, or to go back :\n")
+        options = ["Alter the student's study programme, and their start and end year", 'go back']
+        for i in range(0, 2, 1):
+            print(f"{i+1}: {options[i]}")
+        print('')
+        while not valid_input:
+            valid_input = gen_functions.validate_numeric_input(2)
+        if valid_input == '2':
+            return 'go_back'
+        elif valid_input == '1':
+            self.set_study_programme()
+            self.set_year('start')
+            self.set_year('end')
