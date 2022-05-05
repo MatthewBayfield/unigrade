@@ -1,6 +1,14 @@
 import gspread
 from google.oauth2.service_account import Credentials
 from tabulate import tabulate
+import sys
+import os
+script_dir = os.path.dirname(__file__)
+mymodule_dir = os.path.join(script_dir, '..')
+sys.path.insert(1, mymodule_dir)
+import general_functions as gen_functions
+
+
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -57,14 +65,14 @@ class StudentMixin(object):
                         else:
                             print(f"Student ID: {ID_input} ")
                             print('is this correct? Enter 1 for yes, 2 for no.\n')
-                            valid_input = is_this_correct_checker(ID_input, 'Student ID:')
+                            valid_input = gen_functions.is_this_correct_checker(ID_input, 'Student ID:')
                     self.student_id = valid_input
                 else:
                     self.student_id = identifier
                     print('''Now enter the student's full name separated by a comma;\nfor example: John,Smith.\n''')
                     valid_input = False
                     while not valid_input:
-                        valid_input = validate_student_name_input()
+                        valid_input = gen_functions.validate_student_name_input()
                     self.student_name = valid_input
 
                 next_empty_row_number = len(used_ids_str) + 1
@@ -94,11 +102,11 @@ class StudentMixin(object):
                 user_options = {'1': 'MSci Physics', '2': 'BSc Physics'}
                 valid_input = False
                 while not valid_input:
-                    valid_input = validate_numeric_input(2)
+                    valid_input = gen_functions.validate_numeric_input(2)
                 self.study_programme = user_options[valid_input]
                 print(f"{self.student_name} study programme: {self.study_programme}")
                 print('Is this correct? Enter 1 for yes, 2 for no.\n')
-                correct = is_this_correct_checker(self.study_programme, 'study programme')
+                correct = gen_functions.is_this_correct_checker(self.study_programme, 'study programme')
                 STUDENT_DETAILS.update_cell(student_name_cell.row, student_name_cell.col + 1, self.study_programme)
             print('study programme confirmed.\n')
 
@@ -138,12 +146,12 @@ class StudentMixin(object):
                     self.start_year = user_input
                     print(f" start year: {self.start_year}")
                     print('Is this correct? Enter 1 for yes, 2 for no.\n')
-                    correct = is_this_correct_checker(self.start_year, 'start year')
+                    correct = gen_functions.is_this_correct_checker(self.start_year, 'start year')
                 else:
                     self.end_year = user_input
                     print(f"end year: {self.end_year}")
                     print('Is this correct? Enter 1 for yes, 2 for no.\n')
-                    correct = is_this_correct_checker(self.end_year, 'end year')
+                    correct = gen_functions.is_this_correct_checker(self.end_year, 'end year')
             if point == 'start':
                 STUDENT_DETAILS.update_cell(student_name_cell.row, student_name_cell.col + 2, self.start_year)
             else:
@@ -206,60 +214,3 @@ class Student(StudentMixin):
         student_name_cell = STUDENT_DETAILS.find(self.student_name)
         registered_student_details = tabulate([STUDENT_DETAILS.row_values(1), STUDENT_DETAILS.row_values(student_name_cell.row)], headers='firstrow', tablefmt='grid')
         print(registered_student_details)
-
-
-def validate_numeric_input(number_of_options):
-    '''
-    Prompts user input. Tests whether the user input is in the valid range of integers, as determined by the number_of_options parameter.
-    If it is not it raises an exception. Returns a boolean.
-    '''
-    try:
-        user_selected_option = input("->")
-        if user_selected_option in [f"{x}" for x in range(1, number_of_options + 1)]:
-            return user_selected_option
-        else:
-            raise ValueError(f'Invalid input. Please enter an integer in the range 1-{number_of_options}.')
-    except ValueError as error:
-        print(f"{error}\n")
-        return False
-
-
-def is_this_correct_checker(user_input, user_input_description):
-    """
-    Called after a user input to prompt the user for further input to confirm whether they are happy with their input.
-    Returns a boolean, or the user input value, which will also be used to evaluate to a boolean within the function
-    in which this function is called.
-    """
-    while True:
-        valid_input = validate_numeric_input(2)
-        if valid_input:
-            if valid_input == '1':
-                return user_input
-            else:
-                print(f'Enter the correct {user_input_description}:\n')
-                return False
-
-
-def validate_student_name_input():
-    """
-    Prompts a user for input. Checks whether a 'student name' user input is valid. Returns a boolean, or the student name input, which will also
-    be used to evaluate to a boolean within the function in which this function is called.
-    """
-    try:
-        full_name = input('->')
-        names = full_name.split(',')
-        if full_name.count(',') != 1:
-            raise ValueError('''Invalid input. Please enter a first, and last name separated with a comma;\nfor example: John,Paul,Smith.''')
-        elif not (names[0].isalpha() and names[1].isalpha()):
-            raise ValueError('Invalid input. Please use only standard alphabetic characters.')
-        else:
-            student_name = ""
-            for name in names:
-                student_name += name.capitalize()
-                student_name += " "
-            print(f"Student name: {student_name} ")
-            print('is this correct? Enter 1 for yes, 2 for no.\n')
-            return is_this_correct_checker(student_name, 'student name')
-    except ValueError as error:
-        print(f"{error}\n")
-        return False
