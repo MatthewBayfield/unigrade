@@ -29,9 +29,13 @@ def validate_student_name_input():
             raise ValueError('Invalid input. Please use only standard alphabetic characters.')
         else:
             student_name = ""
-            for name in names:
-                student_name += name.capitalize()
-                student_name += " "
+            for i in range(0, len(names), 1):
+                if i != (len(names) - 1):
+                    student_name += names[i].capitalize()
+                    student_name += " "
+                else:
+                    student_name += names[i].capitalize()
+
             print(f"Student name: {student_name} ")
             print('is this correct? Enter 1 for yes, 2 for no.\n')
             return is_this_correct_checker(student_name, 'student name')
