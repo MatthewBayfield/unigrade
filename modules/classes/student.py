@@ -169,7 +169,7 @@ class Student(StudentMixin):
         result = self.set_student_identifiers(identifier, identifier_type, register)
         if result is not None:
             print(result)
-        if result == 'Student currently registered.\n':
+        if result == 'Student is currently registered.\n':
             self.set_study_programme('initial')
             self.set_year('start', 'initial')
             self.set_year('end', 'initial')
