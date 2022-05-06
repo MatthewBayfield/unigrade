@@ -172,7 +172,9 @@ def view_or_edit_student_details_interface():
         registration_status = new_student_object.set_student_identifiers(input_student_identifier, identifier_types_list[input_identifier_type_index])
         if registration_status == 'Student not registered.\n':
             next_function([['1', 'register_student'], ['2', 'go_back']])
-            FUNCTION_DICTIONARY[next_function_call](registration_status, new_student_object, input_student_identifier, identifier_types_list, input_identifier_type_index)
+            global next_function_call
+            if next_function_call == 'register_student':
+                FUNCTION_DICTIONARY[next_function_call](registration_status, new_student_object, input_student_identifier, identifier_types_list, input_identifier_type_index)
 
         else:
             while True:
