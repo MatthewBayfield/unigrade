@@ -55,8 +55,8 @@ def student_information_top_level_interface():
     \n""")
     global last_function_call
     last_function_call = 'student_information_top_level_interface'
-    next_function([['1', 'student_registration_interface'], ['2', 'top_level_interface'], ['3', 'exit_the_program']])
-    
+    next_function([['1', 'view_or_edit_student_details_interface'], ['2', 'student_registration_interface'], ['3', 'top_level_interface'], ['4', 'exit_the_program']])
+
 
 def register_student(registration_status, new_student_object, valid_entry, user_options, user_options_index):
     """
