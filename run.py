@@ -90,7 +90,7 @@ def unregister_student(registration_status, new_student_object, valid_entry, use
 
 def student_registration_interface():
     """
-    Displays the student registration interface to the user. Prompts the user to input a students name or ID, then
+    Displays the student registration interface to the user. Prompts the user to input a student's name or ID, then
     confirms whether the student is currently registered in the unigrade google sheet, before allowing the user to register or unregister a
     student by perfoming the registration process.
     """
@@ -149,6 +149,38 @@ def registration_status_checker():
 
     new_student_object = student.Student(valid_entry, user_options[user_options_index])
     return [valid_entry, user_options, user_options_index, new_student_object]
+
+
+def view_or_edit_student_details_interface():
+    """
+    Prompts the user to input a student's name or ID, which is searched for within the unigrade google sheet.
+    If the student is not registered, the user is given the option of registering the student. If the student
+    is registered, their details are displayed in a table printed to the terminal. The user is then able to edit
+    the mutable details if they desire, which are then updated in the unigrade google sheet.
+    """
+    system('clear')
+    print('Student Details:', '\n')
+    print('Do you want to continue? 1 for yes, 2 for no',)
+    valid_input = False
+    while not valid_input:
+        valid_input = gen_functions.validate_numeric_input(2)
+    if valid_input == '2':
+        next_function([['1', 'go_back'],['2', 'top_level_interface'], ['3', 'exit_the_program']])
+    else:
+        global next_function_call
+        input_student_identifier, identifier_types_list, input_identifier_type_index, new_student_object = registration_status_checker()
+        registration_status = new_student_object.set_student_identifiers(input_student_identifier, identifier_types_list[input_identifier_type_index])
+        if registration_status == 'Student not registered.\n':
+            next_function([['1', 'register_student'], ['2', 'go_back']])
+            FUNCTION_DICTIONARY[next_function_call](registration_status, new_student_object, input_student_identifier, identifier_types_list, input_identifier_type_index)
+
+        else:
+            while True:
+                new_student_object.retrieve_student_details()
+                returned_next_function_call = new_student_object.edit_student_details()
+                if returned_next_function_call == 'go_back':
+                    next_function_call = 'go_back'
+                    break
 
 
 def modules_interface():
