@@ -2,6 +2,7 @@ from os import system
 import gspread
 from google.oauth2.service_account import Credentials
 import sys
+import time
 import modules.classes.student as student
 import modules.general_functions as gen_functions
 
@@ -243,6 +244,18 @@ def go_back():
     next_function_call = last_function_call
 
 
+def exit_the_program():
+    """
+    When called clears the terminal, informs the user the program is quitting, pauses,
+    before clearing the terminal again, and terminating the program.
+    """
+    system('clear')
+    print('Quitting the unigrade program...')
+    time.sleep(3.0)
+    system('clear')
+    sys.exit()
+
+
 def main():
     """
     Runs and controls program execution.
@@ -251,7 +264,7 @@ def main():
     FUNCTION_DICTIONARY = {'top_level_interface': top_level_interface, 'student_information_top_level_interface': student_information_top_level_interface,
                            'modules_interface': modules_interface, 'student_registration_interface': student_registration_interface,
                             'register_student': register_student, 'unregister_student': unregister_student, 
-                            'view_or_edit_student_details_interface': view_or_edit_student_details_interface, 'exit_the_program': sys.exit, 'go_back' : go_back}
+                            'view_or_edit_student_details_interface': view_or_edit_student_details_interface, 'exit_the_program': exit_the_program, 'go_back' : go_back}
     
     global FUNCTION_USER_DESCRIPTION_DICTIONARY
     FUNCTION_USER_DESCRIPTION_DICTIONARY = {'top_level_interface': 'return to the top program interface',
