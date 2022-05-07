@@ -210,6 +210,30 @@ def modules_interface():
         valid_input = gen_functions.validate_numeric_input(7)
 
 
+def view_or_edit_student_module_info_and_grades():
+    """
+    """
+    system('clear')
+    print('Student module information and grades:', '\n')
+    print('Do you want to continue? 1 for yes, 2 for no',)
+    valid_input = False
+    while not valid_input:
+        valid_input = gen_functions.validate_numeric_input(2)
+    if valid_input == '2':
+        next_function([['1', 'go_back'],['2', 'top_level_interface'], ['3', 'exit_the_program']])
+    else:
+        global next_function_call
+        input_student_identifier, identifier_types_list, input_identifier_type_index, new_student_object = registration_status_checker()
+        registration_status = new_student_object.set_student_identifiers(input_student_identifier, identifier_types_list[input_identifier_type_index])
+        if registration_status == 'Student not registered.\n':
+            next_function([['1', 'register_student'], ['2', 'go_back']])
+            global next_function_call
+            if next_function_call == 'register_student':
+                FUNCTION_DICTIONARY[next_function_call](registration_status, new_student_object, input_student_identifier, identifier_types_list, input_identifier_type_index)
+        else:
+            pass
+
+
 
 def next_function(option_pair_list):
     """
