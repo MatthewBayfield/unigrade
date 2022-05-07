@@ -3,6 +3,7 @@ import os
 import gspread
 from google.oauth2.service_account import Credentials
 from tabulate import tabulate
+import datetime
 student_dir = os.path.dirname(__file__)
 general_functions_dir = os.path.join(student_dir, '..')
 sys.path.insert(1, general_functions_dir)
@@ -234,3 +235,27 @@ class Student(StudentMixin):
             self.set_study_programme()
             self.set_year('start')
             self.set_year('end')
+    
+    def student_current_year(self):
+        """
+        Calulates, prints and returns the current academic year the student is in, using information
+        from the unigrade google sheet, stored in the student class instance properties.
+        """
+        current_date = datetime.date.today()
+        current_year = datetime.date.today().year
+        academic_year_start_date_this_year = datetime.date(current_year, 9, 27)
+        academic_year_end_date_student_end_year = datetime.date(int(self.end_year), 6, 10)
+        if current_date >= academic_year_end_date_student_end_year:
+            student_current_academic_year = 'graduated'
+        elif current_date >= academic_year_start_date_this_year:
+            student_current_academic_year = (current_year - int(self.start_year)) + 1
+        else:
+            student_current_academic_year = current_year - int(self.start_year)
+        
+        if isinstance(student_current_academic_year, int):
+            if student_current_academic_year < 1:
+                print('Current academic year: yet to start.')
+                return 'yet to start'
+        
+        print(f"Current academic year: {student_current_academic_year}.")
+        return student_current_academic_year
