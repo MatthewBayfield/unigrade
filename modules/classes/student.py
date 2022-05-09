@@ -74,10 +74,16 @@ class StudentMixin(object):
                         valid_input = gen_functions.validate_student_name_input()
                     self.student_name = valid_input
 
-                STUDENT_DETAILS.add_rows(1)
-                next_empty_row_number = len(used_ids_str) + 1
-                STUDENT_DETAILS.update_cell(next_empty_row_number + 1, 2, self.student_name)
-                STUDENT_DETAILS.update_cell(next_empty_row_number + 1, 1, self.student_id)
+                next_empty_row_number = len(used_ids_str) + 2
+                STUDENT_DETAILS.update_cell(next_empty_row_number, 2, self.student_name)
+                UNIGRADE_WORKSHEETS = SHEET.worksheets()
+                for sheet in UNIGRADE_WORKSHEETS:
+                    sheet.add_rows(1)
+                    if sheet.id == 0:
+                        sheet.update_cell(next_empty_row_number, 1, self.student_id)
+                    else:
+                        sheet.update_cell(next_empty_row_number + 1, 1, self.student_id)
+
             else:
                 return 'Student not registered.\n'
 
