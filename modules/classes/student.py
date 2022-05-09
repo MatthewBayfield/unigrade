@@ -56,8 +56,7 @@ class StudentMixin(object):
                         try:
                             ID_input = input('->')
                             if not (ID_input.isdigit() and len(ID_input) == 9):
-                                raise ValueError("""Invalid ID, please check you have entered the student's ID correctly:\n
-                                it should contain 9 digits and nothing else.\n""")
+                                raise ValueError("""Invalid ID, please check you have entered the student's ID correctly: it should contain 9 digits and nothing else.\n""")
                             elif ID_input in used_ids_str:
                                 raise ValueError("This ID belongs to an already registered student, please check you have entered the student's ID correctly.\n")
                         except ValueError as error:
@@ -75,6 +74,7 @@ class StudentMixin(object):
                         valid_input = gen_functions.validate_student_name_input()
                     self.student_name = valid_input
 
+                STUDENT_DETAILS.add_rows(1)
                 next_empty_row_number = len(used_ids_str) + 1
                 STUDENT_DETAILS.update_cell(next_empty_row_number + 1, 2, self.student_name)
                 STUDENT_DETAILS.update_cell(next_empty_row_number + 1, 1, self.student_id)
