@@ -58,3 +58,87 @@ def is_this_correct_checker(user_input, user_input_description):
             else:
                 print(f'Enter the correct {user_input_description}:\n')
                 return False
+
+
+def update_sheet_borders(worksheet, google_sheet):
+    """
+    Updates the border formatting of a worksheet, supplied as a paramater, in a google sheet. In particular it gives all cells a black border.
+    This function will be called when new rows or columns are added to the google sheet.
+    Uses gspread batch_update API method. 
+    """
+    borders_update_body = {
+        "requests": [
+            {
+                "updateBorders": {
+                    "range": {
+                        "sheetId": worksheet.id,
+                        "startRowIndex": 0,
+                        "startColumnIndex": 0
+
+                    },
+                    "top": {
+                        "style": "SOLID",
+                        "width": 1,
+                        "color": {
+                            "red": 0,
+                            "green": 0,
+                            "blue": 0,
+                            "alpha": 1
+                        }
+                    },
+                    "bottom": {
+                        "style": "SOLID",
+                        "width": 1,
+                        "color": {
+                            "red": 0,
+                            "green": 0,
+                            "blue": 0,
+                            "alpha": 1
+                        }
+                    },
+                    "left": {
+                        "style": "SOLID",
+                        "width": 1,
+                        "color": {
+                            "red": 0,
+                            "green": 0,
+                            "blue": 0,
+                            "alpha": 1
+                        }
+                    },
+                    "right": {
+                        "style": "SOLID",
+                        "width": 1,
+                        "color": {
+                            "red": 0,
+                            "green": 0,
+                            "blue": 0,
+                            "alpha": 1
+                        }
+                    },
+                    "innerVertical": {
+                        "style": "SOLID",
+                        "width": 1,
+                        "color": {
+                            "red": 0,
+                            "green": 0,
+                            "blue": 0,
+                            "alpha": 1
+                        }
+                    },
+                    "innerHorizontal": {
+                        "style": "SOLID",
+                        "width": 1,
+                        "color": {
+                            "red": 0,
+                            "green": 0,
+                            "blue": 0,
+                            "alpha": 1
+                        }
+                    }
+                    
+                } 
+            }
+        ]
+    }
+    google_sheet.batch_update(borders_update_body)
