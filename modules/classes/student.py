@@ -79,6 +79,7 @@ class StudentMixin(object):
                 UNIGRADE_WORKSHEETS = SHEET.worksheets()
                 for sheet in UNIGRADE_WORKSHEETS:
                     sheet.add_rows(1)
+                    gen_functions.update_sheet_borders(sheet, SHEET)
                     if sheet.id == 0:
                         sheet.update_cell(next_empty_row_number, 1, self.student_id)
                     else:
