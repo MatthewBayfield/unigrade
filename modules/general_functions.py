@@ -1,3 +1,21 @@
+from os import system
+import gspread
+from google.oauth2.service_account import Credentials
+import time
+import sys
+
+SCOPE = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive.file",
+    "https://www.googleapis.com/auth/drive"
+    ]
+
+CREDS = Credentials.from_service_account_file('creds.json')
+SCOPED_CREDS = CREDS.with_scopes(SCOPE)
+GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
+SHEET = GSPREAD_CLIENT.open('unigrade-physics')
+
+
 def validate_numeric_input(number_of_options):
     '''
     Prompts user input. Tests whether the user input is in the valid range of integers, as determined by the number_of_options parameter.
@@ -142,3 +160,39 @@ def update_sheet_borders(worksheet, google_sheet):
         ]
     }
     google_sheet.batch_update(borders_update_body)
+
+
+def gspread_api_error_exception_handling(gspread_method_or_request, *params):
+    """
+    Handles the processing of gspread 'APIError' exceptions that occur as part of a request in a called function or method.
+    If a 'resource exhausted error' occurs, due to exceeding the google sheet API request rate of 60 requests per minute per user,
+    then the request is repeated until successful, which should occur when upto 60 seconds have passed. The user is displayed
+    a timer updating them of the maximum time left for loading. For any other form of API error,
+    an error message is printed, and the program terminated.
+    """
+    time_left = 60
+    while True:
+        try:
+            result = gspread_method_or_request(*params)
+            time_left = 60
+        except gspread.exceptions.APIError as error:
+            if error.args[0]['code'] == 429:
+                system('clear')
+                print('Loading...')
+                print(f'Max time left: {time_left}s')
+                time_left -= 1
+                time.sleep(1.0)
+                
+            else:
+                print('''ERROR ENCOUNTERED: There seems to be a problem accessing the unigrade google sheet. The program will now terminate.
+Please try running the program again, and try to complete the desired action again. If the error persists try again later.\n''')
+                print('Enter any key to initiate exiting the unigrade program.')
+                input('->')
+                system('clear')
+                print('Quitting the unigrade program...')
+                time.sleep(3.0)
+                system('clear')
+                sys.exit()
+                
+        else:
+            return result
