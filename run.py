@@ -5,6 +5,7 @@ import sys
 import time
 import modules.classes.student as student
 import modules.general_functions as gen_functions
+import modules.decorated_gspread_methods
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -12,10 +13,21 @@ SCOPE = [
     "https://www.googleapis.com/auth/drive"
     ]
 
-CREDS = Credentials.from_service_account_file('creds.json')
-SCOPED_CREDS = CREDS.with_scopes(SCOPE)
-GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
-SHEET = GSPREAD_CLIENT.open('unigrade-physics')
+try:
+    CREDS = Credentials.from_service_account_file('creds.json')
+    SCOPED_CREDS = CREDS.with_scopes(SCOPE)
+    GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
+    SHEET = GSPREAD_CLIENT.open('unigrade-physics')
+except:
+    print('''ERROR ENCOUNTERED: There seems to be a problem accessing the unigrade google sheet. The unigrade program will now terminate.
+Please try running the program again. If the error persists try again later.\n''')
+    print('Enter any key to initiate exiting the unigrade program.')
+    input('->')
+    system('clear')
+    print('Quitting the unigrade program...')
+    time.sleep(3.0)
+    system('clear')
+    sys.exit()
 
 
 def top_level_interface():
