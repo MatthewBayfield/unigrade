@@ -27,8 +27,11 @@ def gspread_api_error_exception_handling(gspread_method_or_request):
                     time.sleep(1.0)
 
                 else:
-                    print('''ERROR ENCOUNTERED: There seems to be a problem accessing the unigrade google sheet. The program will now terminate.
-Please try running the program again, and try to complete the desired action again. If the error persists try again later.\n''')
+                    print('''ERROR ENCOUNTERED: There seems to be a problem accessing
+the unigrade google sheet, and or performing the requested actions.
+The program will now terminate. Please try running the program again,
+and try to complete the desired action again.
+If the error persists try again later.\n''')
                     print('Enter any key to initiate exiting the unigrade program.')
                     input('->')
                     system('clear')
@@ -36,7 +39,21 @@ Please try running the program again, and try to complete the desired action aga
                     time.sleep(3.0)
                     system('clear')
                     sys.exit()
-
+                    
+            except gspread.exceptions.GSpreadException:
+                print('''ERROR ENCOUNTERED: There seems to be a problem accessing
+the unigrade google sheet, and or performing the requested actions.
+The program will now terminate. Please try running the program again,
+and try to complete the desired action again.
+If the error persists try again later.\n''')
+                print('Enter any key to initiate exiting the unigrade program.')
+                input('->')
+                system('clear')
+                print('Quitting the unigrade program...')
+                time.sleep(3.0)
+                system('clear')
+                sys.exit()
+               
             else:
                 return result
     return inner
