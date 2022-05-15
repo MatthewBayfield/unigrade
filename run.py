@@ -18,7 +18,7 @@ try:
     SCOPED_CREDS = CREDS.with_scopes(SCOPE)
     GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
     SHEET = GSPREAD_CLIENT.open('unigrade-physics')
-except:
+except gspread.exceptions.GSpreadException:
     print('''ERROR ENCOUNTERED: There seems to be a problem accessing the unigrade google sheet. The unigrade program will now terminate.
 Please try running the program again. If the error persists try again later.\n''')
     print('Enter any key to initiate exiting the unigrade program.')
