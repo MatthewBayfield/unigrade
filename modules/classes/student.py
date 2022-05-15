@@ -4,11 +4,13 @@ import gspread
 from google.oauth2.service_account import Credentials
 from tabulate import tabulate
 import datetime
+import time
+from os import system
 student_dir = os.path.dirname(__file__)
 general_functions_dir = os.path.join(student_dir, '..')
 sys.path.insert(1, general_functions_dir)
 import general_functions as gen_functions
-
+import decorated_gspread_methods
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -16,10 +18,25 @@ SCOPE = [
     "https://www.googleapis.com/auth/drive"
     ]
 
-CREDS = Credentials.from_service_account_file('creds.json')
-SCOPED_CREDS = CREDS.with_scopes(SCOPE)
-GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
-SHEET = GSPREAD_CLIENT.open('unigrade-physics')
+try:
+    CREDS = Credentials.from_service_account_file('creds.json')
+    SCOPED_CREDS = CREDS.with_scopes(SCOPE)
+    GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
+    SHEET = GSPREAD_CLIENT.open('unigrade-physics')
+except gspread.exceptions.GSpreadException:
+    print('''ERROR ENCOUNTERED: There seems to be a problem accessing
+the unigrade google sheet. The unigrade program will now terminate.
+Please try running the program again. If the error persists try again later.\n''')
+    print('Enter any key to initiate exiting the unigrade program.')
+    input('->')
+    system('clear')
+    print('Quitting the unigrade program...')
+    time.sleep(3.0)
+    system('clear')
+    sys.exit()
+
+
+
 
 class StudentMixin(object):
     """
