@@ -40,3 +40,16 @@ Please try running the program again, and try to complete the desired action aga
             else:
                 return result
     return inner
+
+
+# Decorated gspread methods of interest. Executed when imported as part of this module.
+gspread.worksheet.Worksheet.find = gspread_api_error_exception_handling(gspread.worksheet.Worksheet.find)
+gspread.worksheet.Worksheet.findall = gspread_api_error_exception_handling(gspread.worksheet.Worksheet.findall)
+gspread.worksheet.Worksheet.cell = gspread_api_error_exception_handling(gspread.worksheet.Worksheet.cell) 
+gspread.worksheet.Worksheet.update_cell = gspread_api_error_exception_handling(gspread.worksheet.Worksheet.update_cell)
+gspread.worksheet.Worksheet.col_values = gspread_api_error_exception_handling(gspread.worksheet.Worksheet.col_values)
+gspread.worksheet.Worksheet.add_rows = gspread_api_error_exception_handling(gspread.worksheet.Worksheet.add_rows)
+gspread.worksheet.Worksheet.delete_rows = gspread_api_error_exception_handling(gspread.worksheet.Worksheet.delete_rows)
+gspread.spreadsheet.Spreadsheet.worksheet = gspread_api_error_exception_handling(gspread.spreadsheet.Spreadsheet.worksheet)
+gspread.spreadsheet.Spreadsheet.worksheets = gspread_api_error_exception_handling(gspread.spreadsheet.Spreadsheet.worksheets)
+gspread.spreadsheet.Spreadsheet.batch_update = gspread_api_error_exception_handling(gspread.spreadsheet.Spreadsheet.batch_update) 
