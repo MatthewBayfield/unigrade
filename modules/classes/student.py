@@ -236,7 +236,7 @@ class Student(StudentMixin):
         """
         STUDENT_DETAILS = SHEET.worksheet('student details')
         student_name_cell = STUDENT_DETAILS.find(self.student_name)
-        registered_student_details = tabulate([STUDENT_DETAILS.row_values(1), STUDENT_DETAILS.row_values(student_name_cell.row)], headers='firstrow', tablefmt='grid')
+        registered_student_details = tabulate([STUDENT_DETAILS.row_values(1), STUDENT_DETAILS.row_values(student_name_cell.row)], headers='firstrow', tablefmt='pretty', numalign='left')
         print(registered_student_details)
 
     def edit_student_details(self):
@@ -313,5 +313,5 @@ class Student(StudentMixin):
             next_row = [module_numeric_labels[label_index], key, value[0], value[1], value[2], value[3]]
             table_data.append(next_row)
             label_index += 1
-        modules_enrolled_info_table = tabulate(table_data, headers='firstrow', tablefmt='grid')
+        modules_enrolled_info_table = tabulate(table_data, headers='firstrow', tablefmt='pretty', numalign='left')
         return [modules_enrolled_info_table, module_titles_enrolled]
