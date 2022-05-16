@@ -283,3 +283,35 @@ class Student(StudentMixin):
         
         print(f"Current academic year: {student_current_academic_year}.")
         return student_current_academic_year
+    
+    def retrieve_student_enrolled_module_info(self, year):
+        """
+        Retrieves data from the unigrade google sheet pertainig to the enrolled modules of a student object, for a chosen year param.
+        Uses the retrieved data to return a list, containing as the first item a table displaying all enrolled module titles
+        and associated information for the student, and as a second item the list of enrolled module titles.
+        """
+        UNIGRADE_WORKSHEETS = SHEET.worksheets()
+        sheet = UNIGRADE_WORKSHEETS[year]
+
+        student_entry_row = sheet.find(self.student_id).row
+        crossed_cells = sheet.findall('X', in_row=student_entry_row)
+        crossed_cells_col_index = [x.col for x in crossed_cells]
+
+        module_titles_enrolled = [sheet.cell(1, index).value for index in crossed_cells_col_index]
+        module_info_cohort_year = [sheet.cell(student_entry_row, index + 1).value for index in crossed_cells_col_index]
+        module_info_module_status = [sheet.cell(student_entry_row, index + 2).value for index in crossed_cells_col_index]
+        module_info_mark = [sheet.cell(student_entry_row, index + 3).value for index in crossed_cells_col_index]
+        module_info_grade = [sheet.cell(student_entry_row, index + 4).value for index in crossed_cells_col_index]
+        module_info_all = list(zip(module_info_cohort_year, module_info_module_status, module_info_mark, module_info_grade))
+
+        modules_enrolled_info = dict(zip(module_titles_enrolled, module_info_all))
+        module_numeric_labels = [label for label in range(1, len(module_titles_enrolled) + 1, 1)]
+        table_headings = ['Module Title', 'Cohort Year', 'Module Status',	'Mark (%)', 'Grade']
+        table_data = [table_headings]
+        label_index = 0
+        for key, value in modules_enrolled_info.items():
+            next_row = [module_numeric_labels[label_index], key, value[0], value[1], value[2], value[3]]
+            table_data.append(next_row)
+            label_index += 1
+        modules_enrolled_info_table = tabulate(table_data, headers='firstrow', tablefmt='grid')
+        return [modules_enrolled_info_table, module_titles_enrolled]
