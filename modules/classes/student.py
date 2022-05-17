@@ -236,7 +236,7 @@ class Student(StudentMixin):
         """
         STUDENT_DETAILS = SHEET.worksheet('student details')
         student_name_cell = STUDENT_DETAILS.find(self.student_name)
-        registered_student_details = tabulate([STUDENT_DETAILS.row_values(1), STUDENT_DETAILS.row_values(student_name_cell.row)], headers='firstrow', tablefmt='pretty', numalign='left')
+        registered_student_details = tabulate([STUDENT_DETAILS.row_values(1), STUDENT_DETAILS.row_values(student_name_cell.row)], headers='firstrow', tablefmt='pretty', stralign='left', numalign='left')
         print(registered_student_details)
 
     def edit_student_details(self):
@@ -262,7 +262,7 @@ class Student(StudentMixin):
     
     def student_current_year(self):
         """
-        Calulates, prints and returns the current academic year the student is in, using information
+        Calulates and returns the current academic year the student is in, using information
         from the unigrade google sheet, stored in the student class instance properties.
         """
         current_date = datetime.date.today()
@@ -281,14 +281,13 @@ class Student(StudentMixin):
                 print('Current academic year: yet to start.')
                 return 'yet to start'
         
-        print(f"Current academic year: {student_current_academic_year}.")
-        return student_current_academic_year
+        return [student_current_academic_year, f"Current academic year: {student_current_academic_year}."]
     
     def retrieve_student_enrolled_module_info(self, year):
         """
         Retrieves data from the unigrade google sheet pertainig to the enrolled modules of a student object, for a chosen year param.
-        Uses the retrieved data to return a list, containing as the first item a table displaying all enrolled module titles
-        and associated information for the student, and as a second item the list of enrolled module titles.
+        Uses the retrieved data to return a list, containing tables displaying all enrolled module titles
+        and associated information for the student, as well as the list of enrolled module titles.
         """
         UNIGRADE_WORKSHEETS = SHEET.worksheets()
         sheet = UNIGRADE_WORKSHEETS[year]
@@ -298,20 +297,33 @@ class Student(StudentMixin):
         crossed_cells_col_index = [x.col for x in crossed_cells]
 
         module_titles_enrolled = [sheet.cell(1, index).value for index in crossed_cells_col_index]
+        formatted_module_titles_enrolled = [title.replace(': ', ':\n') for title in module_titles_enrolled]
         module_info_cohort_year = [sheet.cell(student_entry_row, index + 1).value for index in crossed_cells_col_index]
         module_info_module_status = [sheet.cell(student_entry_row, index + 2).value for index in crossed_cells_col_index]
         module_info_mark = [sheet.cell(student_entry_row, index + 3).value for index in crossed_cells_col_index]
         module_info_grade = [sheet.cell(student_entry_row, index + 4).value for index in crossed_cells_col_index]
-        module_info_all = list(zip(module_info_cohort_year, module_info_module_status, module_info_mark, module_info_grade))
+        first_table_module_info = list(zip(module_info_cohort_year, module_info_module_status))
+        second_table_module_info = list(zip(module_info_mark, module_info_grade))
 
-        modules_enrolled_info = dict(zip(module_titles_enrolled, module_info_all))
+
+        first_table_content = dict(zip(formatted_module_titles_enrolled, first_table_module_info))
+        second_table_content = dict(zip(formatted_module_titles_enrolled, second_table_module_info))
         module_numeric_labels = [label for label in range(1, len(module_titles_enrolled) + 1, 1)]
-        table_headings = ['Module Title', 'Cohort Year', 'Module Status',	'Mark (%)', 'Grade']
-        table_data = [table_headings]
+        first_table_headings = ['Module Title', 'Cohort\nYear', 'Module\nStatus']
+        second_table_headings = ['Module Title', 'Mark\n(%)', 'Grade']
+        first_table_data = [first_table_headings]
+        second_table_data = [second_table_headings]
         label_index = 0
-        for key, value in modules_enrolled_info.items():
-            next_row = [module_numeric_labels[label_index], key, value[0], value[1], value[2], value[3]]
-            table_data.append(next_row)
+        for key, value in first_table_content.items():
+            next_row = [module_numeric_labels[label_index], key, value[0], value[1]]
+            first_table_data.append(next_row)
             label_index += 1
-        modules_enrolled_info_table = tabulate(table_data, headers='firstrow', tablefmt='pretty', numalign='left')
-        return [modules_enrolled_info_table, module_titles_enrolled]
+        modules_enrolled_info_first_table = tabulate(first_table_data, headers='firstrow', tablefmt='pretty', stralign='left', numalign='left')
+        label_index = 0
+        for key, value in second_table_content.items():
+            next_row = [module_numeric_labels[label_index], key, value[0], value[1]]
+            second_table_data.append(next_row)
+            label_index += 1
+        modules_enrolled_info_second_table = tabulate(second_table_data, headers='firstrow', tablefmt='pretty', stralign='left', numalign='left')
+
+        return [modules_enrolled_info_first_table, modules_enrolled_info_second_table, module_titles_enrolled]
