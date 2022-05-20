@@ -19,7 +19,8 @@ try:
     GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
     SHEET = GSPREAD_CLIENT.open('unigrade-physics')
 except gspread.exceptions.GSpreadException:
-    print('''ERROR ENCOUNTERED: There seems to be a problem accessing the unigrade google sheet. The unigrade program will now terminate.
+    print('''ERROR ENCOUNTERED: There seems to be a problem accessing
+the unigrade google sheet. The unigrade program will now terminate.
 Please try running the program again. If the error persists try again later.\n''')
     print('Enter any key to initiate exiting the unigrade program.')
     input('->')
@@ -222,7 +223,7 @@ def modules_interface():
         valid_input = gen_functions.validate_numeric_input(7)
 
 
-def view_or_edit_student_module_info_and_grades():
+def view_or_edit_student_module_info_and_grades_interface():
     """
     """
     system('clear')
@@ -244,7 +245,6 @@ def view_or_edit_student_module_info_and_grades():
                 FUNCTION_DICTIONARY[next_function_call](registration_status, new_student_object, input_student_identifier, identifier_types_list, input_identifier_type_index)
         else:
             pass
-
 
 
 def next_function(option_pair_list):
@@ -300,13 +300,16 @@ def main():
     FUNCTION_DICTIONARY = {'top_level_interface': top_level_interface, 'student_information_top_level_interface': student_information_top_level_interface,
                            'modules_interface': modules_interface, 'student_registration_interface': student_registration_interface,
                             'register_student': register_student, 'unregister_student': unregister_student, 
-                            'view_or_edit_student_details_interface': view_or_edit_student_details_interface, 'exit_the_program': exit_the_program, 'go_back' : go_back}
+                            'view_or_edit_student_details_interface': view_or_edit_student_details_interface,
+                            'view_or_edit_student_module_info_and_grades_interface': view_or_edit_student_module_info_and_grades_interface,
+                            'exit_the_program': exit_the_program, 'go_back' : go_back}
     
     global FUNCTION_USER_DESCRIPTION_DICTIONARY
     FUNCTION_USER_DESCRIPTION_DICTIONARY = {'top_level_interface': 'return to the top program interface',
                                         'student_information_top_level_interface': 'view or add/edit student information',
                                         'modules_interface': 'view module information and statistics','student_registration_interface': 'register or unregister a student',                                        'register_student': 'register the student',
                                         'unregister_student': 'unregister the student', 'view_or_edit_student_details_interface': 'view and edit student details',
+                                        'view_or_edit_student_module_info_and_grades_interface': 'view/edit student module information, including grades and enrolment status'
                                         'exit_the_program': 'exit the unigrade program',
                                         'go_back': 'go back'}
     global last_function_call
