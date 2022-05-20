@@ -69,7 +69,8 @@ def student_information_top_level_interface():
     \n""")
     global last_function_call
     last_function_call = 'student_information_top_level_interface'
-    next_function([['1', 'view_or_edit_student_details_interface'], ['2', 'student_registration_interface'], ['3', 'top_level_interface'], ['4', 'exit_the_program']])
+    next_function([['1', 'view_or_edit_student_details_interface'], ['2', 'student_registration_interface'],['3', 'view_or_edit_student_module_info_and_grades_interface'],
+    ['4', 'top_level_interface'], ['5', 'exit_the_program']])
 
 
 def register_student(registration_status, new_student_object, valid_entry, user_options, user_options_index):
@@ -309,7 +310,7 @@ def main():
                                         'student_information_top_level_interface': 'view or add/edit student information',
                                         'modules_interface': 'view module information and statistics','student_registration_interface': 'register or unregister a student',                                        'register_student': 'register the student',
                                         'unregister_student': 'unregister the student', 'view_or_edit_student_details_interface': 'view and edit student details',
-                                        'view_or_edit_student_module_info_and_grades_interface': 'view/edit student module information, including grades and enrolment status'
+                                        'view_or_edit_student_module_info_and_grades_interface': 'view/edit student module information, including grades and enrolment status',
                                         'exit_the_program': 'exit the unigrade program',
                                         'go_back': 'go back'}
     global last_function_call
