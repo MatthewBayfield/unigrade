@@ -241,11 +241,48 @@ def view_or_edit_student_module_info_and_grades_interface():
         registration_status = new_student_object.set_student_identifiers(input_student_identifier, identifier_types_list[input_identifier_type_index])
         if registration_status == 'Student not registered.\n':
             next_function([['1', 'register_student'], ['2', 'go_back']])
-            global next_function_call
             if next_function_call == 'register_student':
                 FUNCTION_DICTIONARY[next_function_call](registration_status, new_student_object, input_student_identifier, identifier_types_list, input_identifier_type_index)
+                next_function_call = 'student_information_top_level_interface'
         else:
-            pass
+            time.sleep(2.0)
+            system('clear')
+            print('Loading student details, module information and grades...')
+            module_info = {}
+            for year in range(1, 5, 1):
+                print(f'Loading year {year} enrolled module information...')
+                time.sleep(2)
+                module_info[f'year {year}'] = new_student_object.retrieve_student_enrolled_module_info(year)
+                print(f'year {year} enrolled module information loaded.')
+                time.sleep(2)
+
+            modules_enrolled ={}
+            for key, value in module_info.items():
+                modules_enrolled.update({key: value[2]})
+            new_student_object.enrolled_modules = modules_enrolled
+
+            def print_info():
+                system('clear')
+                print("Student's details:")
+                new_student_object.retrieve_student_details()
+                print('')
+                print(new_student_object.student_current_year()[1])
+                print('')
+                time.sleep(2)
+                print("Module information for all the student's currently enrolled modules:")
+                print('')
+                if list(modules_enrolled.values()) == [[], [], [], []]:
+                    print('Student is not enrolled on any modules.')
+                else:
+                    for key, value in module_info.items():
+                        if value[2] != []:
+                            print(f'{key} modules:')
+                            print(value[0])
+                            time.sleep(2)
+                            print(value[1])
+                            print('')
+                            time.sleep(2)
+            print_info()
 
 
 def next_function(option_pair_list):
