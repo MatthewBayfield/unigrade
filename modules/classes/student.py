@@ -36,8 +36,6 @@ Please try running the program again. If the error persists try again later.\n''
     sys.exit()
 
 
-
-
 class StudentMixin(object):
     """
     A mixin class, that contains methods used by student class instances for the initialisation and updating of
@@ -56,9 +54,9 @@ class StudentMixin(object):
         if not isinstance(student_identifier_cell, type(None)):
             if identifier_type == 'name':
                 self.student_name = identifier
-                self.student_id = STUDENT_DETAILS.cell(student_identifier_cell.row, student_identifier_cell.col -1).value
+                self.student_id = STUDENT_DETAILS.cell(student_identifier_cell.row, student_identifier_cell.col - 1).value
             else:
-                self.student_name = STUDENT_DETAILS.cell(student_identifier_cell.row, student_identifier_cell.col +1).value
+                self.student_name = STUDENT_DETAILS.cell(student_identifier_cell.row, student_identifier_cell.col + 1).value
                 self.student_id = identifier
             return 'Student is currently registered.\n'
         else:
@@ -95,12 +93,13 @@ class StudentMixin(object):
                 STUDENT_DETAILS.update_cell(next_empty_row_number, 2, self.student_name)
                 UNIGRADE_WORKSHEETS = SHEET.worksheets()
                 for sheet in UNIGRADE_WORKSHEETS:
-                    sheet.add_rows(1)
-                    gen_functions.update_sheet_borders(sheet, SHEET)
-                    if sheet.id == 0:
-                        sheet.update_cell(next_empty_row_number, 1, self.student_id)
-                    else:
-                        sheet.update_cell(next_empty_row_number + 1, 1, self.student_id)
+                    if sheet.title != 'module weightings and active module status':
+                        sheet.add_rows(1)
+                        gen_functions.update_sheet_borders(sheet, SHEET)
+                        if sheet.id == 0:
+                            sheet.update_cell(next_empty_row_number, 1, self.student_id)
+                        else:
+                            sheet.update_cell(next_empty_row_number + 1, 1, self.student_id)
 
             else:
                 return 'Student not registered.\n'
@@ -222,9 +221,10 @@ class Student(StudentMixin):
         """
         UNIGRADE_WORKSHEETS = SHEET.worksheets()
         for sheet in UNIGRADE_WORKSHEETS:
-            student_id_cell = sheet.find(self.student_id)
-            if student_id_cell is not None:
-                sheet.delete_rows(student_id_cell.row)
+            if sheet.title != 'module weightings and active module status':
+                student_id_cell = sheet.find(self.student_id)
+                if student_id_cell is not None:
+                    sheet.delete_rows(student_id_cell.row)
         print('student successfully unregistered\n')
         print('Enter any key to continue.')
         input('->')
@@ -444,4 +444,4 @@ class Student(StudentMixin):
         print(student_module_info_table)
         print('press any key to continue')
         input('->')
-        return 'student_information_top_level_interface'   
+        return 'student_information_top_level_interface' 
