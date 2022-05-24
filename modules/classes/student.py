@@ -353,7 +353,7 @@ class Student(StudentMixin):
             while not chosen_year:
                 chosen_year = gen_functions.validate_numeric_input(5)
             if chosen_year != '5':
-                print(f"'modify a year {chosen_year}' selected.")
+                print(f"'modify a year {chosen_year} module' selected.")
                 print('Is this correct? Enter 1 for yes, 2 for no.\n')
                 correct_year_chosen = gen_functions.is_this_correct_checker(chosen_year, 'number corresponding to one of the following options')
             else:
