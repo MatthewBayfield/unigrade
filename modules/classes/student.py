@@ -384,15 +384,15 @@ class Student(StudentMixin):
         cohort_year = (int(self.start_year) + int(chosen_year)) - 1
             
         print('Enter the number corresponding to the current module status for the student:\n')
-        module_status_options = ['yet to start', 'ongoing', 'completed']
-        for option_index in range(1, 4, 1):
+        module_status_options = ['not yet completed', 'completed']
+        for option_index in range(1, 3, 1):
             print(f'{option_index}. {module_status_options[option_index - 1]}')
         print('')
         correct_status = False
         while not correct_status:
                 chosen_status = False
                 while not chosen_status:
-                    chosen_status = gen_functions.validate_numeric_input(3)
+                    chosen_status = gen_functions.validate_numeric_input(2)
                 print(f'Module status: {module_status_options[int(chosen_status) - 1]}')
                 print('Is this correct? Enter 1 for yes, 2 for no.\n')
                 correct_status = gen_functions.validate_numeric_input(2)
