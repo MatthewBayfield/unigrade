@@ -445,3 +445,68 @@ class Student(StudentMixin):
         print('press any key to continue')
         input('->')
         return 'student_information_top_level_interface' 
+    
+    def unenrol_student_from_module(self):
+        """
+        Prompts the user to select a module, for which the student object is enrolled on, to unenrol the student object from.
+        First prints tables displaying the student's enrolled modules. Once a module is chosen, the necessary updates
+        to the unigrade google sheet are performed, namely clearing the data cells for this module for this student.
+        """
+        system('clear')
+        print('Student module unenrolment:\n')
+        print('')
+        table_headings = [' ', 'Module title']
+        table_data = []
+        year_1_modules = [title for title in self.enrolled_modules['year 1']]
+        year_2_modules = [title for title in self.enrolled_modules['year 2']]
+        year_3_modules = [title for title in self.enrolled_modules['year 3']]
+        year_4_modules = [title for title in self.enrolled_modules['year 4']]
+        modules_by_year = [year_1_modules, year_2_modules, year_3_modules, year_4_modules]
+        last_used_label = 0
+        for list_index in range(0, 3, 1):
+            if modules_by_year[list_index] != []:
+                numeric_labels = range(last_used_label + 1, last_used_label + len(modules_by_year[list_index]) + 1, 1 )
+                table_data.append([' ', f'year {list_index + 1}:'])
+                table_rows = (list(zip(numeric_labels, modules_by_year[list_index])))
+                for row in range(0, len(table_rows), 1):
+                    packed_row = table_rows[row]
+                    *unpacked_row, = packed_row
+                    table_data.append(unpacked_row)
+                last_used_label += len(modules_by_year[list_index])
+        table_data.insert(0, table_headings)
+        labelled_modules_table = tabulate(table_data, headers='firstrow', tablefmt='pretty', stralign='left', numalign='left')
+
+        print("Student's currently enrolled modules:")
+        print(labelled_modules_table)
+        print('')
+        print(f"Enter the numeric label corresponding to the module title of the module you wish to unenrol the student from;")
+        print(f'or enter {last_used_label + 1} to go back.')
+
+        all_modules = year_1_modules + year_2_modules + year_3_modules + year_4_modules
+        correct_module_chosen = False
+        while not correct_module_chosen:
+            chosen_module = False
+            while not chosen_module:
+                chosen_module = gen_functions.validate_numeric_input(last_used_label + 1)
+            if int(chosen_module) in range(1, last_used_label + 1, 1):
+                print(f"'Module {all_modules[int(chosen_module) - 1]}' selected.")
+                print('Is this correct? Enter 1 for yes, 2 for no.\n')
+                correct_module_chosen = gen_functions.is_this_correct_checker(chosen_module, f'number corresponding to one of the modules, or the number {last_used_label + 1} to go back.')
+            else:
+                return 'view_or_edit_student_module_info_and_grades_interface'
+        for year in self.enrolled_modules.keys():
+            if  all_modules[int(chosen_module) - 1] in self.enrolled_modules[year]:
+                sheet_reference = f'{year} modules'
+                break
+
+        chosen_module_worksheet = SHEET.worksheet(sheet_reference)
+        student_entry_row = chosen_module_worksheet.find(self.student_id).row
+        module_info_cell_range_start_col = chosen_module_worksheet.find(all_modules[int(chosen_module) - 1], in_row=1).col
+        module_info_cell_range_start_address = gspread.utils.rowcol_to_a1(student_entry_row, module_info_cell_range_start_col)
+        module_info_cell_range_end_address = gspread.utils.rowcol_to_a1(student_entry_row, module_info_cell_range_start_col + 4)
+        chosen_module_worksheet.batch_clear([f'{module_info_cell_range_start_address}:{module_info_cell_range_end_address}'])
+        
+        print(f"Student successfully unenrolled from the module: '{all_modules[int(chosen_module) - 1]}'.\n")
+        print('Enter any key to continue.')
+        input('->')
+        return 'student_information_top_level_interface'
