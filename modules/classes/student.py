@@ -93,7 +93,7 @@ class StudentMixin(object):
                 STUDENT_DETAILS.update_cell(next_empty_row_number, 2, self.student_name)
                 UNIGRADE_WORKSHEETS = SHEET.worksheets()
                 for sheet in UNIGRADE_WORKSHEETS:
-                    if sheet.title != 'module weightings and active module status':
+                    if sheet.title != 'module properties':
                         sheet.add_rows(1)
                         gen_functions.update_sheet_borders(sheet, SHEET)
                         if sheet.id == 0:
@@ -221,7 +221,7 @@ class Student(StudentMixin):
         """
         UNIGRADE_WORKSHEETS = SHEET.worksheets()
         for sheet in UNIGRADE_WORKSHEETS:
-            if sheet.title != 'module weightings and active module status':
+            if sheet.title != 'module properties':
                 student_id_cell = sheet.find(self.student_id)
                 if student_id_cell is not None:
                     sheet.delete_rows(student_id_cell.row)
