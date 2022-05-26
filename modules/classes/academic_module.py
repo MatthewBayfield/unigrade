@@ -51,15 +51,15 @@ class AcademicModule:
     @classmethod
     def retrieve_active_year_x_modules(cls, x, programme):
         """
-        Returns a list of the currently active academic module titles for the programme 'MSci' or 'BSc', and year x: 1<=x<=4, retrieved from the unigrade google sheet.
+        Returns a list of the currently active academic module titles for the programme 'MSci Physics' or 'BSc Physics', and year x: 1<=x<=4, retrieved from the unigrade google sheet.
         """
         module_information_worksheet = SHEET.worksheet('module properties')
         year_x_module_titles_col_number = module_information_worksheet.find(f'Year {x} Module Titles').col
 
-        if programme == 'MSci':
+        if programme == 'MSci Physics':
             module_info = module_information_worksheet.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number + 2)[:-1]}'],
                                                                  major_dimension='ROWS')
-        elif programme == 'BSc':
+        elif programme == 'BSc Physics':
             module_info = module_information_worksheet.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number + 1)[:-1]}',
                                                                  f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 5)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number + 5)[:-1]}'],
                                                                  major_dimension='ROWS')
@@ -73,17 +73,17 @@ class AcademicModule:
     @classmethod
     def retrieve_active_and_compulsory_year_x_modules(cls, x, programme):
         """
-        Returns a list of the currently active and compulsory academic module titles for the programme MSci or BSc, and year x: 1<=x<=4, retrieved from the unigrade google sheet.
+        Returns a list of the currently active and compulsory academic module titles for the programme 'MSci Physics' or 'BSc Physics', and year x: 1<=x<=4, retrieved from the unigrade google sheet.
         """
         active_modules = AcademicModule.retrieve_active_year_x_modules(x, programme)
         module_information_worksheet = SHEET.worksheet('module properties')
         year_x_module_titles_col_number = module_information_worksheet.find(f'Year {x} Module Titles').col
 
-        if programme == 'MSci':
+        if programme == 'MSci Physics':
             module_info = module_information_worksheet.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number)[:-1]}',
                                                                   f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 4)}:{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 4)[:-1]}'],
                                                                  major_dimension='ROWS')
-        elif programme == 'BSc':
+        elif programme == 'BSc Physics':
             module_info = module_information_worksheet.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number)[:-1]}', 
                                                                   f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 7)}:{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 7)[:-1]}'],
                                                                  major_dimension='ROWS')
