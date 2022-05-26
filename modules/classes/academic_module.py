@@ -1,5 +1,7 @@
 import sys
 import os
+from os import system
+import time
 import gspread
 from google.oauth2.service_account import Credentials
 academic_module_dir = os.path.dirname(__file__)
@@ -32,18 +34,38 @@ Please try running the program again. If the error persists try again later.\n''
     sys.exit()
 
 
-
-
 class AcademicModule:
     """
-    Represents an academic module. Class/instance methods and properties featured pertain to adding and removing modules;
-    viewing module statistics; assigning module weightings.
+    Represents an academic module. Class/instance methods and properties featured pertain to changing module properties,
+    and producing module statistics; .
     """
     @classmethod
     def retrieve_year_x_modules(cls, x):
         """
-        Produces a list of academic module titles for a chosen year x: 1<=x<=4, retrieved from the unigrade google sheet.
+        Produces a list of all academic module titles for a chosen year x: 1<=x<=4, retrieved from the unigrade google sheet.
         """
         YEAR_X_MODULES_WORKSHEET = SHEET.worksheet(f'year {x} modules')
         year_x_modules = list(filter(lambda title: title != "", YEAR_X_MODULES_WORKSHEET.row_values(1)))
         return year_x_modules
+
+    @classmethod
+    def retrieve_active_year_x_modules(cls, x, programme):
+        """
+        Returns a list of the currently active academic module titles for the programme 'MSci' or 'BSc', and year x: 1<=x<=4, retrieved from the unigrade google sheet.
+        """
+        module_information_worksheet = SHEET.worksheet('module properties')
+        year_x_module_titles_col_number = module_information_worksheet.find(f'Year {x} Module Titles').col
+
+        if programme == 'MSci':
+            module_info = module_information_worksheet.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number + 2)[:-1]}'],
+                                                                 major_dimension='ROWS')
+        elif programme == 'BSc':
+            module_info = module_information_worksheet.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number + 1)[:-1]}',
+                                                                 f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 5)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number + 5)[:-1]}'],
+                                                                 major_dimension='ROWS')
+            available_on_bsc_list = module_info.pop()
+            for i in range(0, len(available_on_bsc_list), 1):
+                module_info[0][i].extend(available_on_bsc_list[i])
+
+        active_modules = [list[0] for list in module_info[0] if list.count('X') == 2]
+        return active_modules
