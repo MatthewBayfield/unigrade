@@ -96,4 +96,19 @@ class AcademicModule:
         active_and_compulsory_modules = [module_title for module_title in compulsory_modules if module_title in active_modules]
         return active_and_compulsory_modules
 
-print(AcademicModule.retrieve_active_year_x_modules(2, 'BSc Physics'))
+    @classmethod
+    def retrieve_year_x_module_credits(cls, x):
+        """
+        Returns a dictionary containing the module credits for modules of a chosen year x parameter.
+        """
+        module_properties_worksheet = SHEET.worksheet('module properties')
+        year_x_module_titles_col_number = module_properties_worksheet.find(f'Year {x} Module Titles').col
+
+        module_credits_info = module_properties_worksheet.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number)[:-1]}',
+                                                                    f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 6)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number + 6)[:-1]}'],
+                                                                     major_dimension='ROWS')
+        year_x_module_credits_dict = {}
+        credits_list = module_credits_info.pop()
+        for i in range(0, len(credits_list), 1):
+            year_x_module_credits_dict[module_credits_info[0][i][0]] = int(credits_list[i][0])
+        return year_x_module_credits_dict
