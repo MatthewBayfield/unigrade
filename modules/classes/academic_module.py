@@ -61,7 +61,7 @@ class AcademicModule:
                                                                  major_dimension='ROWS')
         elif programme == 'BSc Physics':
             module_info = module_information_worksheet.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number + 1)[:-1]}',
-                                                                 f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 5)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number + 5)[:-1]}'],
+                                                                 f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 4)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number + 4)[:-1]}'],
                                                                  major_dimension='ROWS')
             available_on_bsc_list = module_info.pop()
             for i in range(0, len(available_on_bsc_list), 1):
@@ -81,11 +81,11 @@ class AcademicModule:
 
         if programme == 'MSci Physics':
             module_info = module_information_worksheet.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number)[:-1]}',
-                                                                  f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 4)}:{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 4)[:-1]}'],
+                                                                  f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 3)}:{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 3)[:-1]}'],
                                                                  major_dimension='ROWS')
         elif programme == 'BSc Physics':
             module_info = module_information_worksheet.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number)[:-1]}', 
-                                                                  f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 7)}:{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 7)[:-1]}'],
+                                                                  f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 5)}:{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 5)[:-1]}'],
                                                                  major_dimension='ROWS')
 
         compulsory_on_programme_list = module_info.pop()
@@ -95,3 +95,5 @@ class AcademicModule:
         compulsory_modules = [list[0] for list in module_info[0] if list.count('X') == 1]
         active_and_compulsory_modules = [module_title for module_title in compulsory_modules if module_title in active_modules]
         return active_and_compulsory_modules
+
+print(AcademicModule.retrieve_active_year_x_modules(2, 'BSc Physics'))
