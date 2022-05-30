@@ -68,6 +68,7 @@ gspread.worksheet.Worksheet.col_values = gspread_api_error_exception_handling(gs
 gspread.worksheet.Worksheet.add_rows = gspread_api_error_exception_handling(gspread.worksheet.Worksheet.add_rows)
 gspread.worksheet.Worksheet.delete_rows = gspread_api_error_exception_handling(gspread.worksheet.Worksheet.delete_rows)
 gspread.worksheet.Worksheet.row_values = gspread_api_error_exception_handling(gspread.worksheet.Worksheet.row_values)
+gspread.worksheet.Worksheet.get = gspread_api_error_exception_handling(gspread.worksheet.Worksheet.get)
 gspread.worksheet.Worksheet.batch_get = gspread_api_error_exception_handling(gspread.worksheet.Worksheet.batch_get)
 gspread.worksheet.Worksheet.batch_update = gspread_api_error_exception_handling(gspread.worksheet.Worksheet.batch_update)
 gspread.worksheet.Worksheet.batch_clear = gspread_api_error_exception_handling(gspread.worksheet.Worksheet.batch_clear)
