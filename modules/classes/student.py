@@ -11,7 +11,7 @@ general_functions_dir = os.path.join(student_dir, '..')
 sys.path.insert(1, general_functions_dir)
 import general_functions as gen_functions
 import decorated_gspread_methods
-
+import classes.academic_module as academic_module
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive.file",
@@ -304,7 +304,6 @@ class Student(StudentMixin):
         first_table_module_info = list(zip(module_info_cohort_year, module_info_module_status))
         second_table_module_info = list(zip(module_info_mark, module_info_grade))
 
-
         first_table_content = dict(zip(formatted_module_titles_enrolled, first_table_module_info))
         second_table_content = dict(zip(formatted_module_titles_enrolled, second_table_module_info))
         module_numeric_labels = [label for label in range(1, len(module_titles_enrolled) + 1, 1)]
@@ -510,3 +509,112 @@ class Student(StudentMixin):
         print('Enter any key to continue.')
         input('->')
         return 'student_information_top_level_interface'
+
+    def enrol_student_on_module(self, auto=False):
+        """
+        auto parameter is True: enrols the student (in the unigrade google sheet) on all active and compulsory modules for their
+        current academic year. auto parameter is False: prompts the user to select to enrol the student object on one of the
+        optional modules for the student's current academic year, provided they have not exceeded their module credit allowance.
+        The method must be called within the view_or_edit_student_module_info_and_grades_interface function when the auto parameter is False.
+        """
+        student_academic_year = self.student_current_year()[0]
+        if student_academic_year in [1,2,3,4]:
+        
+            active_and_compulsory_modules_this_year = academic_module.AcademicModule.retrieve_active_and_compulsory_year_x_modules(student_academic_year, self.study_programme)
+            this_year_modules_worksheet = SHEET.worksheet(f'year {student_academic_year} modules')
+            student_entry_row = this_year_modules_worksheet.find(self.student_id).row
+
+            if auto:
+                for module in active_and_compulsory_modules_this_year:
+                    module_cell_col_num = this_year_modules_worksheet.find(module, in_row=1).col
+                    batch_update_range = f'{gspread.utils.rowcol_to_a1(student_entry_row, module_cell_col_num)}:{gspread.utils.rowcol_to_a1(student_entry_row, module_cell_col_num + 4)}'
+                    batch_update_values = ['X',f'{(int(self.start_year) + student_academic_year) - 1}', 'not yet completed', '-', '-']
+                    this_year_modules_worksheet.batch_update([{'range': batch_update_range, 'values': [batch_update_values]}])
+                
+            else:
+                system('clear')
+                print('Student enrolment:\n')
+                print(f"""Please note enrolment on optional modules in the unigrade system can only be performed for modules on the student's current academic year, which updates
+at the beginning of each new academic year, the next year starting on {datetime.date(datetime.date.today().year, 9, 27)}.\n""")
+                print('Enter any key to continue.')
+                input('->')
+                repeat = True
+                while repeat:
+                    system('clear')
+                    module_properties_worksheet = SHEET.worksheet('module properties')
+                    active_modules_this_year = academic_module.AcademicModule.retrieve_active_year_x_modules(student_academic_year, self.study_programme)
+                    student_currently_enrolled_modules_this_year = self.enrolled_modules[f'year {student_academic_year}']
+                    credit_allowance_optional_modules_col = module_properties_worksheet.find(f'Year {student_academic_year} {self.study_programme} Optional Module Credits Available').col
+                    credit_allowance_optional_modules = int(module_properties_worksheet.get(gspread.utils.rowcol_to_a1(2, credit_allowance_optional_modules_col))[0][0])
+                    student_current_enrolled_optional_modules_this_year = [module for module in student_currently_enrolled_modules_this_year if (module not in active_and_compulsory_modules_this_year)]
+                    module_credits_dict = academic_module.AcademicModule.retrieve_year_x_module_credits(student_academic_year)
+                    student_optional_module_credit_sum = 0
+
+                    for module in student_current_enrolled_optional_modules_this_year:
+                        student_optional_module_credit_sum += module_credits_dict[module]
+
+                    available_credits = credit_allowance_optional_modules - student_optional_module_credit_sum
+                    print(f'Optional module credits still available for the student: {available_credits}.\n')
+                    time.sleep(2)
+
+                    if available_credits > 0:
+                        optional_modules_this_year = [module for module in active_modules_this_year if module not in active_and_compulsory_modules_this_year]
+                        available_optional_modules_this_year = {key: value for key, value in module_credits_dict.items()
+                        if (value <= available_credits and key in optional_modules_this_year and key not in student_current_enrolled_optional_modules_this_year)}
+                        formatted_available_optional_modules_this_year = {key.replace(': ', ':\n'): value for key, value in available_optional_modules_this_year.items()}
+                        table_data = [[label, module_title, credits] for label, (module_title, credits) in enumerate(formatted_available_optional_modules_this_year.items(), 1)]
+                        table_headings = [' ', 'Module Title', 'Credits']
+                        table_data.insert(0, table_headings)
+                        available_optional_modules_table = tabulate(table_data, headers='firstrow', tablefmt='pretty', stralign='left', numalign='left')
+                        print('Remaining available optional modules for the student:')
+                        time.sleep(2)
+                        print(available_optional_modules_table)
+                        time.sleep(2)
+                        print('Enter a number from the table corresponding to the module you wish to enrol the student on;')
+                        print(f'or enter {len(available_optional_modules_this_year) + 1} to go back.')
+
+                        correct_module = False
+                        while not correct_module:
+                            valid_input = False
+                            while not valid_input:
+                                valid_input = gen_functions.validate_numeric_input(len(available_optional_modules_this_year) + 1)
+                            if int(valid_input) == len(available_optional_modules_this_year) + 1:
+                                return 'view_or_edit_student_module_info_and_grades_interface'
+                            print(f"'Module {list(available_optional_modules_this_year.keys())[int(valid_input) - 1]}' selected.")
+                            print('Is this correct? Enter 1 for yes, 2 for no.\n')
+                            correct_module = gen_functions.is_this_correct_checker(valid_input, 'number corresponding to the module in the table you wish to enrol the student on')
+
+                        module_cell_col_num = this_year_modules_worksheet.find(list(available_optional_modules_this_year.keys())[int(valid_input) - 1], in_row=1).col
+                        batch_update_range = f'{gspread.utils.rowcol_to_a1(student_entry_row, module_cell_col_num)}:{gspread.utils.rowcol_to_a1(student_entry_row, module_cell_col_num + 4)}'
+                        batch_update_values = ['X',f'{(int(self.start_year) + student_academic_year) - 1}', 'not yet completed', '-', '-']
+                        this_year_modules_worksheet.batch_update([{'range': batch_update_range, 'values': [batch_update_values]}])
+                        self.enrolled_modules[f'year {student_academic_year}'].append(list(available_optional_modules_this_year.keys())[int(valid_input) - 1])
+                        print(f"Student successfully enrolled on '{list(available_optional_modules_this_year.keys())[int(valid_input) - 1]}.'\n" )
+                        print('Do you want to enrol the student on any other modules. Enter 1 for yes, 2 for no.\n')
+                        valid_entry = False
+                        while not valid_entry:
+                            valid_entry = gen_functions.validate_numeric_input(2)
+                        if valid_entry == '1':
+                            system('clear')
+                        else:
+                            return 'student_information_top_level_interface'
+
+                    else:
+                        print('Student is already enrolled on the correct number of optional modules for this year and this programme.\n')
+                        print('Enter any key to continue.')
+                        input('->')
+                        return 'student_information_top_level_interface'
+        else:
+            if auto == False:
+                system('clear')
+                print('Student enrolment:\n')
+                if student_academic_year == 'yet to start':
+                    print(f"""Please note enrolment on optional modules in the unigrade system can only be performed for modules on the student's current academic year, which updates
+at the beginning of each new academic year, the next year starting on {datetime.date(datetime.date.today().year, 9, 27)}.\n""")
+                    print('Enter any key to continue.')
+                    input('->')
+                    print('')
+                print(f'Cannot enrol the student on any modules, as the student has {student_academic_year}.')
+                print('Enter any key to continue.')
+                input('->')
+            return 'student_information_top_level_interface'    
