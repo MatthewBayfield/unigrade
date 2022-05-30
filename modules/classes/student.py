@@ -543,7 +543,8 @@ the module commenced.\n''')
         auto parameter is True: enrols the student (in the unigrade google sheet) on all active and compulsory modules for their
         current academic year. auto parameter is False: prompts the user to select to enrol the student object on one of the
         optional modules for the student's current academic year, provided they have not exceeded their module credit allowance.
-        The method must be called within the view_or_edit_student_module_info_and_grades_interface function when the auto parameter is False.
+        The method must be called within the view_or_edit_student_module_info_and_grades_interface function, or within
+        the unenrol_student_from_module method, when the auto parameter is False.
         """
         student_academic_year = self.student_current_year()[0]
         if student_academic_year in [1,2,3,4]:
@@ -576,11 +577,10 @@ at the beginning of each new academic year, the next year starting on {datetime.
                     credit_allowance_optional_modules = int(module_properties_worksheet.get(gspread.utils.rowcol_to_a1(2, credit_allowance_optional_modules_col))[0][0])
                     student_current_enrolled_optional_modules_this_year = [module for module in student_currently_enrolled_modules_this_year if (module not in active_and_compulsory_modules_this_year)]
                     module_credits_dict = academic_module.AcademicModule.retrieve_year_x_module_credits(student_academic_year)
+                    
                     student_optional_module_credit_sum = 0
-
                     for module in student_current_enrolled_optional_modules_this_year:
                         student_optional_module_credit_sum += module_credits_dict[module]
-
                     available_credits = credit_allowance_optional_modules - student_optional_module_credit_sum
                     print(f'Optional module credits still available for the student: {available_credits}.\n')
                     time.sleep(2)
@@ -618,20 +618,31 @@ at the beginning of each new academic year, the next year starting on {datetime.
                         this_year_modules_worksheet.batch_update([{'range': batch_update_range, 'values': [batch_update_values]}])
                         self.enrolled_modules[f'year {student_academic_year}'].append(list(available_optional_modules_this_year.keys())[int(valid_input) - 1])
                         print(f"Student successfully enrolled on '{list(available_optional_modules_this_year.keys())[int(valid_input) - 1]}.'\n" )
-                        print('Do you want to enrol the student on any other modules. Enter 1 for yes, 2 for no.\n')
+                        print('Enter a number corresponding to one of the following options:\n')
+                        print('1. Enrol the student on another optional module.')
+                        print('2. Unenrol the student from an optional module.')
+                        print('3. go back.')
+                        valid_entry = False
+                        while not valid_entry:
+                            valid_entry = gen_functions.validate_numeric_input(3)
+                        if valid_entry == '2':
+                            returned_next_function_string = self.unenrol_student_from_module()
+                            return returned_next_function_string
+                        elif valid_entry == '3':
+                            return 'view_or_edit_student_module_info_and_grades_interface'
+
+                    else:
+                        print('Student is already enrolled on the correct number of optional modules for this year and this programme.\n')
+                        print('Enter a number corresponding to one of the following options:\n')
+                        print('1. Unenrol the student from an optional module.')
+                        print('2. go back.')
                         valid_entry = False
                         while not valid_entry:
                             valid_entry = gen_functions.validate_numeric_input(2)
                         if valid_entry == '1':
-                            system('clear')
-                        else:
-                            return 'student_information_top_level_interface'
-
-                    else:
-                        print('Student is already enrolled on the correct number of optional modules for this year and this programme.\n')
-                        print('Enter any key to continue.')
-                        input('->')
-                        return 'student_information_top_level_interface'
+                            returned_next_function_string = self.unenrol_student_from_module()
+                            return returned_next_function_string
+                        return 'view_or_edit_student_module_info_and_grades_interface'
         else:
             if auto == False:
                 system('clear')
