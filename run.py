@@ -70,7 +70,7 @@ def student_information_top_level_interface():
     global last_function_call
     last_function_call = 'student_information_top_level_interface'
     next_function([['1', 'view_or_edit_student_details_interface'], ['2', 'student_registration_interface'],['3', 'view_or_edit_student_module_info_and_grades_interface'],
-    ['4', 'top_level_interface'], ['5', 'exit_the_program']])
+                   ['4', 'top_level_interface'], ['5', 'exit_the_program']])
 
 
 def register_student(registration_status, new_student_object, valid_entry, user_options, user_options_index):
@@ -264,25 +264,54 @@ def view_or_edit_student_module_info_and_grades_interface():
             def print_info():
                 system('clear')
                 print("Student's details:")
+                time.sleep(1)
                 new_student_object.retrieve_student_details()
+                time.sleep(1)
                 print('')
                 print(new_student_object.student_current_year()[1])
                 print('')
                 time.sleep(2)
                 print("Module information for all the student's currently enrolled modules:")
+                time.sleep(2)
                 print('')
                 if list(modules_enrolled.values()) == [[], [], [], []]:
                     print('Student is not enrolled on any modules.')
                 else:
                     for key, value in module_info.items():
                         if value[2] != []:
-                            print(f'{key} modules:')
+                            print(f'{key} modules:\n')
+                            time.sleep(1.1)
+                            print(str('Module status table:').center(60))
+                            time.sleep(1.1)
                             print(value[0])
-                            time.sleep(2)
+                            time.sleep(1.1)
+                            print('')
+                            print(str('Module grades table:').center(60))
+                            time.sleep(1.1)
                             print(value[1])
                             print('')
-                            time.sleep(2)
+                            time.sleep(1.1)
             print_info()
+            time.sleep(1)
+            print('Inspect the above tables, and then enter a number corresponding to one of the following options:\n')
+            print("1. Update the student's module status and mark for a module.")
+            print("""2. View the available optional module credits left for a student in their current academic year,
+    and enrol the student on an optional module.""")
+            print("""3. View the student's currently enrolled optional modules for their current academic year, and
+    unenrol the student from an optional module .""")
+            print('4. Go back.')
+            valid_input = False
+            while not valid_input:
+                valid_input = gen_functions.validate_numeric_input(4)
+            if valid_input == '1':
+                next_function_call = new_student_object.edit_student_module_info(print_info)
+            elif valid_input == '2':
+                next_function_call = new_student_object.enrol_student_on_module()
+            elif valid_input == '3':
+                next_function_call = new_student_object.unenrol_student_from_module()
+            else:
+                next_function_call = 'student_information_top_level_interface'
+
 
 
 def next_function(option_pair_list):
