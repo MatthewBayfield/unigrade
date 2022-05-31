@@ -226,6 +226,9 @@ def modules_interface():
 
 def view_or_edit_student_module_info_and_grades_interface():
     """
+    Allows a user to view a registered student's enrolled module information, by printing the information, including tables,
+    to the terminal. The user is then given options to update a student's module status and mark, as well an enrol/unenrol
+    on/from an optional module on their current academic year.
     """
     system('clear')
     print('Student module information and grades:', '\n')
@@ -246,21 +249,25 @@ def view_or_edit_student_module_info_and_grades_interface():
                 next_function_call = 'student_information_top_level_interface'
         else:
             time.sleep(2.0)
-            system('clear')
-            print('Loading student details, module information and grades...')
             module_info = {}
-            for year in range(1, 5, 1):
-                print(f'Loading year {year} enrolled module information...')
-                time.sleep(2)
-                module_info[f'year {year}'] = new_student_object.retrieve_student_enrolled_module_info(year)
-                print(f'year {year} enrolled module information loaded.')
-                time.sleep(2)
-
             modules_enrolled ={}
-            for key, value in module_info.items():
-                modules_enrolled.update({key: value[2]})
-            new_student_object.enrolled_modules = modules_enrolled
+            def load_and_prepare_module_information():
+                system('clear')
+                print('Loading student details, module information and grades...')
+                nonlocal module_info
+                for year in range(1, 5, 1):
+                    print(f'Loading year {year} enrolled module information...')
+                    time.sleep(2)
+                    module_info[f'year {year}'] = new_student_object.retrieve_student_enrolled_module_info(year)
+                    print(f'year {year} enrolled module information loaded.')
+                    time.sleep(2)
 
+                nonlocal modules_enrolled
+                for key, value in module_info.items():
+                    modules_enrolled.update({key: value[2]})
+                new_student_object.enrolled_modules = modules_enrolled
+
+            load_and_prepare_module_information()
             def print_info():
                 system('clear')
                 print("Student's details:")
@@ -304,14 +311,13 @@ def view_or_edit_student_module_info_and_grades_interface():
             while not valid_input:
                 valid_input = gen_functions.validate_numeric_input(4)
             if valid_input == '1':
-                next_function_call = new_student_object.edit_student_module_info(print_info)
+                next_function_call = new_student_object.edit_student_module_info(print_info, load_and_prepare_module_information)
             elif valid_input == '2':
                 next_function_call = new_student_object.enrol_student_on_module()
             elif valid_input == '3':
                 next_function_call = new_student_object.unenrol_student_from_module()
             else:
                 next_function_call = 'student_information_top_level_interface'
-
 
 
 def next_function(option_pair_list):
