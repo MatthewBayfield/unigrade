@@ -484,20 +484,26 @@ the module commenced.\n''')
                 student_current_enrolled_optional_modules_this_year = [module for module in student_currently_enrolled_modules_this_year 
                 if (module not in active_and_compulsory_modules_this_year)]
                 student_entry_row = this_year_modules_worksheet.find(self.student_id).row
+                student_not_completed_enrolled_optional_modules_this_year = []
+                for module in student_current_enrolled_optional_modules_this_year:
+                    module_status = this_year_modules_worksheet.get(gspread.utils.rowcol_to_a1(student_entry_row, this_year_modules_worksheet.find(module, in_row=1).col + 2))[0][0]
+                    if module_status != 'completed':
+                        student_not_completed_enrolled_optional_modules_this_year.append(module)
+                
 
-                formatted_student_current_enrolled_optional_modules_this_year = [title.replace(': ', ':\n') for title in student_current_enrolled_optional_modules_this_year]
+                formatted_student_not_completed_enrolled_optional_modules_this_year = [title.replace(': ', ':\n') for title in student_not_completed_enrolled_optional_modules_this_year]
                 table_headings = [' ', 'Module title']
-                table_data = [[label, module_title] for label, module_title in enumerate(formatted_student_current_enrolled_optional_modules_this_year, 1)]
+                table_data = [[label, module_title] for label, module_title in enumerate(formatted_student_not_completed_enrolled_optional_modules_this_year, 1)]
                 table_data.insert(0, table_headings)
-                labelled_currently_enrolled_optional_modules_table = tabulate(table_data, headers='firstrow', tablefmt='pretty', stralign='left', numalign='left')
-                print("Student's currently enrolled optional modules for their current academic year:")
+                labelled_not_completed_enrolled_optional_modules_table = tabulate(table_data, headers='firstrow', tablefmt='pretty', stralign='left', numalign='left')
+                print("Student's currently enrolled and not completed optional modules, for their current academic year:")
                 time.sleep(1)
-                print(labelled_currently_enrolled_optional_modules_table)
+                print(labelled_not_completed_enrolled_optional_modules_table)
                 time.sleep(2)
                 print('')
 
-                if len(student_current_enrolled_optional_modules_this_year) == 0:
-                    print('Student is not currently enrolled on any optional modules\n')
+                if len(student_not_completed_enrolled_optional_modules_this_year) == 0:
+                    print('Student is not currently enrolled on any not yet completed optional modules\n')
                     print('Enter a number corresponding to one of the following options:\n')
                     print('1. Enrol the student on an optional module.')
                     print('2. go back')
@@ -511,26 +517,26 @@ the module commenced.\n''')
                         return 'view_or_edit_student_module_info_and_grades_interface'
 
                 print(f"Enter the numeric label corresponding to the module title of the module you wish to unenrol the student from;")
-                print(f'or enter {len(student_current_enrolled_optional_modules_this_year) + 1} to go back.')
+                print(f'or enter {len(student_not_completed_enrolled_optional_modules_this_year) + 1} to go back.')
                 correct_module_chosen = False
                 while not correct_module_chosen:
                     chosen_module = False
                     while not chosen_module:
-                        chosen_module = gen_functions.validate_numeric_input(len(student_current_enrolled_optional_modules_this_year) + 1)
-                    if int(chosen_module) == len(student_current_enrolled_optional_modules_this_year) + 1:
+                        chosen_module = gen_functions.validate_numeric_input(len(student_not_completed_enrolled_optional_modules_this_year) + 1)
+                    if int(chosen_module) == len(student_not_completed_enrolled_optional_modules_this_year) + 1:
                                     return 'view_or_edit_student_module_info_and_grades_interface'
-                    print(f"'Module {student_current_enrolled_optional_modules_this_year[int(chosen_module) - 1]}' selected.")
+                    print(f"'Module {student_not_completed_enrolled_optional_modules_this_year[int(chosen_module) - 1]}' selected.")
                     print('Is this correct? Enter 1 for yes, 2 for no.\n')
                     correct_module_chosen = gen_functions.is_this_correct_checker(chosen_module,
-                    f'number corresponding to one of the modules, or the number {len(student_current_enrolled_optional_modules_this_year) + 1} to go back.')
+                    f'number corresponding to one of the modules, or the number {len(student_not_completed_enrolled_optional_modules_this_year) + 1} to go back.')
                 
-                module_info_cell_range_start_col = this_year_modules_worksheet.find(student_current_enrolled_optional_modules_this_year[int(chosen_module) - 1], in_row=1).col
+                module_info_cell_range_start_col = this_year_modules_worksheet.find(student_not_completed_enrolled_optional_modules_this_year[int(chosen_module) - 1], in_row=1).col
                 module_info_cell_range_start_address = gspread.utils.rowcol_to_a1(student_entry_row, module_info_cell_range_start_col)
                 module_info_cell_range_end_address = gspread.utils.rowcol_to_a1(student_entry_row, module_info_cell_range_start_col + 4)
                 this_year_modules_worksheet.batch_clear([f'{module_info_cell_range_start_address}:{module_info_cell_range_end_address}'])
-                self.enrolled_modules[f'year {student_academic_year}'].remove(student_current_enrolled_optional_modules_this_year[int(chosen_module) - 1])
+                self.enrolled_modules[f'year {student_academic_year}'].remove(student_not_completed_enrolled_optional_modules_this_year[int(chosen_module) - 1])
                 
-                print(f"Student successfully unenrolled from the module: '{student_current_enrolled_optional_modules_this_year[int(chosen_module) - 1]}'.\n")
+                print(f"Student successfully unenrolled from the module: '{student_not_completed_enrolled_optional_modules_this_year[int(chosen_module) - 1]}'.\n")
                 print('Enter a number corresponding to one of the following options:\n')
                 print('1. Unenrol the student from another optional module.')
                 print('2. Enrol the student on another optional module.')
