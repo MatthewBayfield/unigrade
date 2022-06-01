@@ -326,125 +326,134 @@ class Student(StudentMixin):
 
         return [modules_enrolled_info_first_table, modules_enrolled_info_second_table, module_titles_enrolled]
     
-    def edit_student_module_info(self, print_info_function):
+    def edit_student_module_info(self, print_info_function, load_and_prepare_module_info_function):
         """
         Allows the user to select to modify the module status and mark for a chosen module for which the student is enrolled:
         First reprints the students enrolled module information tables, then provides prompts to choose a module and then
         alter the module status and mark, before updating the unigrade google sheet. To be called on a student object within the
         view_or_edit_student_module_info_and_grades_interface func.
         """
-        system('clear')
-        print('Reprinting student module info...')
-        print('')
-        time.sleep(3)
-        print_info_function()
-        print('')
-        print("Inspect the above tables, then enter a number corresponding to one of the following options:\n")
-        correct_year_chosen = False
-        while not correct_year_chosen:
-            option_index = 1
-            for key in self.enrolled_modules.keys():
-                print(f'{option_index}. modfiy a {key} module')
-                option_index += 1
-            print(f'{option_index}. go back')
+        while True:
+            system('clear')
+            print('Reprinting student module info...')
             print('')
-            chosen_year = False
-            while not chosen_year:
-                chosen_year = gen_functions.validate_numeric_input(5)
-            if chosen_year != '5':
-                print(f"'modify a year {chosen_year} module' selected.")
-                print('Is this correct? Enter 1 for yes, 2 for no.\n')
-                correct_year_chosen = gen_functions.is_this_correct_checker(chosen_year, 'number corresponding to one of the following options')
-            else:
-                return 'view_or_edit_student_module_info_and_grades_interface'
+            time.sleep(3)
+            print_info_function()
+            print('')
+            print("Inspect the above tables, then enter a number corresponding to one of the following options:\n")
+            correct_year_chosen = False
+            while not correct_year_chosen:
+                option_index = 1
+                for key in self.enrolled_modules.keys():
+                    print(f'{option_index}. modfiy a {key} module')
+                    option_index += 1
+                print(f'{option_index}. go back')
+                print('')
+                chosen_year = False
+                while not chosen_year:
+                    chosen_year = gen_functions.validate_numeric_input(5)
+                if chosen_year != '5':
+                    print(f"'modify a year {chosen_year} module' selected.")
+                    print('Is this correct? Enter 1 for yes, 2 for no.\n')
+                    correct_year_chosen = gen_functions.is_this_correct_checker(chosen_year, 'number corresponding to one of the following options')
+                else:
+                    return 'view_or_edit_student_module_info_and_grades_interface'
 
-        print('')
-        print(f"Enter the numeric label corresponding to the module title in the year {chosen_year} modules tables, for the module you wish to edit for the student:\n")
-        correct_module_chosen = False
-        while not correct_module_chosen:
-            chosen_module = False
-            while not chosen_module:
-                chosen_module = gen_functions.validate_numeric_input(len(self.enrolled_modules[f'year {chosen_year}']))
-            print(f"'{self.enrolled_modules[f'year {chosen_year}'][int(chosen_module) - 1]}' module selected.")
-            print('Is this correct? Enter 1 for yes, 2 for no.\n')
-            correct_module_chosen = gen_functions.is_this_correct_checker(chosen_module, 'label corresponding to the relevant module title')
+            print('')
+            print(f"Enter the numeric label corresponding to the module title in the year {chosen_year} modules tables, for the module you wish to edit for the student:\n")
+            correct_module_chosen = False
+            while not correct_module_chosen:
+                chosen_module = False
+                while not chosen_module:
+                    chosen_module = gen_functions.validate_numeric_input(len(self.enrolled_modules[f'year {chosen_year}']))
+                print(f"'{self.enrolled_modules[f'year {chosen_year}'][int(chosen_module) - 1]}' module selected.")
+                print('Is this correct? Enter 1 for yes, 2 for no.\n')
+                correct_module_chosen = gen_functions.is_this_correct_checker(chosen_module, 'label corresponding to the relevant module title')
+            
+            chosen_module_worksheet = SHEET.worksheet(f'year {chosen_year} modules')
+            chosen_module_title_col = chosen_module_worksheet.find(self.enrolled_modules[f'year {chosen_year}'][int(chosen_module) - 1], 1).col
+            student_entry_row = chosen_module_worksheet.find(self.student_id).row
+            student_module_info_cell_reference_range = f'{gspread.utils.rowcol_to_a1(student_entry_row, chosen_module_title_col + 1)}:{gspread.utils.rowcol_to_a1(student_entry_row, chosen_module_title_col + 4)}'
+            student_module_info = chosen_module_worksheet.batch_get([student_module_info_cell_reference_range])
+            table_headings = ['Cohort\nyear', 'Module\nstatus', 'Mark\n(%)', 'Grade']
+            student_module_info_table = tabulate([table_headings, student_module_info[0][0]], headers='firstrow', tablefmt='pretty', stralign='left', numalign='left')
+            system('clear')
+            print('Student module information:')
+            print(student_module_info_table)
+            print('')
+            cohort_year = (int(self.start_year) + int(chosen_year)) - 1
+                
+            print('Enter the number corresponding to the current module status for the student:\n')
+            module_status_options = ['not yet completed', 'completed']
+            for option_index in range(1, 3, 1):
+                print(f'{option_index}. {module_status_options[option_index - 1]}')
+            print('')
+            correct_status = False
+            while not correct_status:
+                    chosen_status = False
+                    while not chosen_status:
+                        chosen_status = gen_functions.validate_numeric_input(2)
+                    print(f'Module status: {module_status_options[int(chosen_status) - 1]}')
+                    print('Is this correct? Enter 1 for yes, 2 for no.\n')
+                    correct_status = gen_functions.is_this_correct_checker(chosen_status, 'number corresponding to the correct module status')
+
+            print('')
+            if module_status_options[int(chosen_status) - 1] == 'completed':
+                print('Enter the percentage mark for the student in this module, as a number between 0-100 to 1dp, for example 56.5')
+                correct_mark = False
+                while not correct_mark:
+                    valid_mark = False
+                    while not valid_mark:
+                            try:
+                                valid_mark = input('->')
+                                if (valid_mark.count('.') != 1):
+                                    raise ValueError('Invalid input: the mark must be given to 1dp, for example 78.8')
+                                components = valid_mark.split('.')
+                                if not ((1 <= len(components[0]) <= 2) and len(components[1]) == 1):
+                                    raise ValueError('Invalid input: Enter a number between 0-100 to 1dp, for example 56.5\n')
+                                if not (components[0].isdigit() and components[1].isdigit()):
+                                    raise ValueError('Invalid input: Enter a number between 0-100 to 1dp, for example 56.5\n')
+                            except ValueError as error:
+                                print(f'{error}\n')
+                                valid_mark = False                     
+                            
+                            else:
+                                print(f"Mark (%): {valid_mark}")
+                                print('Is this correct? Enter 1 for yes, 2 for no.\n')
+                                correct_mark = gen_functions.is_this_correct_checker(valid_mark, 'mark')
+                valid_mark = float(valid_mark)
+                if valid_mark >= 70.0:
+                    valid_grade = '1st'
+                elif valid_mark >= 60.0:
+                    valid_grade = '2:1'
+                elif valid_mark >= 50.0:
+                    valid_grade = '2:2'
+                elif valid_mark >= 40.0:
+                    valid_grade = '3rd'
+                else:
+                    valid_grade = 'fail' 
+                
+            else:
+                valid_mark = '-'
+                valid_grade = '-'
+
+            chosen_module_worksheet.batch_update([{'range': student_module_info_cell_reference_range, 'values': [[cohort_year, module_status_options[int(chosen_status) - 1], valid_mark, valid_grade]]}])
+            print('Student module information updated.\n')
+            student_module_info = chosen_module_worksheet.batch_get([student_module_info_cell_reference_range])
+            student_module_info_table = tabulate([table_headings, student_module_info[0][0]], headers='firstrow', tablefmt='pretty', stralign='left', numalign='left')
+            print(student_module_info_table)
+            print('')
+            print('To modify the status and mark of another module for the same student, enter 1; or to go back enter 2.')
+            valid_input = False
+            while not valid_input:
+                valid_input = gen_functions.validate_numeric_input(2)
+            if valid_input == '2':
+                return 'student_information_top_level_interface'
+            else:
+                module_info = {}
+                modules_enrolled ={}
+                load_and_prepare_module_info_function()
         
-        chosen_module_worksheet = SHEET.worksheet(f'year {chosen_year} modules')
-        chosen_module_title_col = chosen_module_worksheet.find(self.enrolled_modules[f'year {chosen_year}'][int(chosen_module) - 1], 1).col
-        student_entry_row = chosen_module_worksheet.find(self.student_id).row
-        student_module_info_cell_reference_range = f'{gspread.utils.rowcol_to_a1(student_entry_row, chosen_module_title_col + 1)}:{gspread.utils.rowcol_to_a1(student_entry_row, chosen_module_title_col + 4)}'
-        student_module_info = chosen_module_worksheet.batch_get([student_module_info_cell_reference_range])
-        table_headings = ['Cohort\nyear', 'Module\nstatus', 'Mark\n(%)', 'Grade']
-        student_module_info_table = tabulate([table_headings, student_module_info[0][0]], headers='firstrow', tablefmt='pretty', stralign='left', numalign='left')
-        system('clear')
-        print('Student module information:')
-        print(student_module_info_table)
-        print('')
-        cohort_year = (int(self.start_year) + int(chosen_year)) - 1
-            
-        print('Enter the number corresponding to the current module status for the student:\n')
-        module_status_options = ['not yet completed', 'completed']
-        for option_index in range(1, 3, 1):
-            print(f'{option_index}. {module_status_options[option_index - 1]}')
-        print('')
-        correct_status = False
-        while not correct_status:
-                chosen_status = False
-                while not chosen_status:
-                    chosen_status = gen_functions.validate_numeric_input(2)
-                print(f'Module status: {module_status_options[int(chosen_status) - 1]}')
-                print('Is this correct? Enter 1 for yes, 2 for no.\n')
-                correct_status = gen_functions.validate_numeric_input(2)
-
-        print('')
-        if module_status_options[int(chosen_status) - 1] == 'completed':
-            print('Enter the percentage mark for the student in this module, as a number between 0-100 to 1dp, for example 56.5')
-            correct_mark = False
-            while not correct_mark:
-                valid_mark = False
-                while not valid_mark:
-                        try:
-                            valid_mark = input('->')
-                            if (valid_mark.count('.') != 1):
-                                raise ValueError('Invalid input: the mark must be given to 1dp, for example 78.8')
-                            components = valid_mark.split('.')
-                            if not ((1 <= len(components[0]) <= 2) and len(components[1]) == 1):
-                                raise ValueError('Invalid input: Enter a number between 0-100 to 1dp, for example 56.5\n')
-                            if not (components[0].isdigit() and components[1].isdigit()):
-                                raise ValueError('Invalid input: Enter a number between 0-100 to 1dp, for example 56.5\n')
-                        except ValueError as error:
-                            print(f'{error}\n')
-                            valid_mark = False                     
-                        
-                        else:
-                            print(f"Mark (%): {valid_mark}")
-                            print('Is this correct? Enter 1 for yes, 2 for no.\n')
-                            correct_mark = gen_functions.is_this_correct_checker(valid_mark, 'mark')
-            valid_mark = float(valid_mark)
-            if valid_mark >= 70.0:
-                valid_grade = '1st'
-            elif valid_mark >= 60.0:
-                valid_grade = '2:1'
-            elif valid_mark >= 50.0:
-                valid_grade = '2:2'
-            elif valid_mark >= 40.0:
-                valid_grade = '3rd'
-            else:
-                valid_grade = 'fail' 
-            
-        else:
-            valid_mark = '-'
-            valid_grade = '-'
-
-        chosen_module_worksheet.batch_update([{'range': student_module_info_cell_reference_range, 'values': [[cohort_year, module_status_options[int(chosen_status) - 1], valid_mark, valid_grade]]}])
-        print('Student module information updated.\n')
-        student_module_info = chosen_module_worksheet.batch_get([student_module_info_cell_reference_range])
-        student_module_info_table = tabulate([table_headings, student_module_info[0][0]], headers='firstrow', tablefmt='pretty', stralign='left', numalign='left')
-        print(student_module_info_table)
-        print('press any key to continue')
-        input('->')
-        return 'student_information_top_level_interface' 
-    
     def unenrol_student_from_module(self):
         """
         Prompts the user to select an optional module, for the student's current academic year, to unenrol the student object from,
