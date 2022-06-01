@@ -344,34 +344,37 @@ class Student(StudentMixin):
             correct_year_chosen = False
             while not correct_year_chosen:
                 option_index = 1
+                years_with_enrolled_modules = []
                 for key in self.enrolled_modules.keys():
-                    print(f'{option_index}. modfiy a {key} module')
-                    option_index += 1
+                    if len(self.enrolled_modules[key]) != 0:
+                        print(f'{option_index}. modfiy a {key} module')
+                        option_index += 1
+                        years_with_enrolled_modules.append(key)
                 print(f'{option_index}. go back')
                 print('')
                 chosen_year = False
                 while not chosen_year:
-                    chosen_year = gen_functions.validate_numeric_input(5)
-                if chosen_year != '5':
-                    print(f"'modify a year {chosen_year} module' selected.")
+                    chosen_year = gen_functions.validate_numeric_input(option_index)
+                if int(chosen_year) != option_index:
+                    print(f"'modify a {years_with_enrolled_modules[int(chosen_year) - 1]} module' selected.")
                     print('Is this correct? Enter 1 for yes, 2 for no.\n')
                     correct_year_chosen = gen_functions.is_this_correct_checker(chosen_year, 'number corresponding to one of the following options')
                 else:
                     return 'view_or_edit_student_module_info_and_grades_interface'
 
             print('')
-            print(f"Enter the numeric label corresponding to the module title in the year {chosen_year} modules tables, for the module you wish to edit for the student:\n")
+            print(f"Enter the numeric label corresponding to the module title in the {years_with_enrolled_modules[int(chosen_year) - 1]} modules tables, for the module you wish to edit for the student:\n")
             correct_module_chosen = False
             while not correct_module_chosen:
                 chosen_module = False
                 while not chosen_module:
-                    chosen_module = gen_functions.validate_numeric_input(len(self.enrolled_modules[f'year {chosen_year}']))
-                print(f"'{self.enrolled_modules[f'year {chosen_year}'][int(chosen_module) - 1]}' module selected.")
+                    chosen_module = gen_functions.validate_numeric_input(len(self.enrolled_modules[years_with_enrolled_modules[int(chosen_year) - 1]]))
+                print(f"'{self.enrolled_modules[years_with_enrolled_modules[int(chosen_year) - 1]][int(chosen_module) - 1]}' module selected.")
                 print('Is this correct? Enter 1 for yes, 2 for no.\n')
                 correct_module_chosen = gen_functions.is_this_correct_checker(chosen_module, 'label corresponding to the relevant module title')
             
-            chosen_module_worksheet = SHEET.worksheet(f'year {chosen_year} modules')
-            chosen_module_title_col = chosen_module_worksheet.find(self.enrolled_modules[f'year {chosen_year}'][int(chosen_module) - 1], 1).col
+            chosen_module_worksheet = SHEET.worksheet(f'{years_with_enrolled_modules[int(chosen_year) - 1]} modules')
+            chosen_module_title_col = chosen_module_worksheet.find(self.enrolled_modules[years_with_enrolled_modules[int(chosen_year) - 1]][int(chosen_module) - 1], 1).col
             student_entry_row = chosen_module_worksheet.find(self.student_id).row
             student_module_info_cell_reference_range = f'{gspread.utils.rowcol_to_a1(student_entry_row, chosen_module_title_col + 1)}:{gspread.utils.rowcol_to_a1(student_entry_row, chosen_module_title_col + 4)}'
             student_module_info = chosen_module_worksheet.batch_get([student_module_info_cell_reference_range])
@@ -381,7 +384,7 @@ class Student(StudentMixin):
             print('Student module information:')
             print(student_module_info_table)
             print('')
-            cohort_year = (int(self.start_year) + int(chosen_year)) - 1
+            cohort_year = (int(self.start_year) + int(years_with_enrolled_modules[int(chosen_year) - 1][-1])) - 1
                 
             print('Enter the number corresponding to the current module status for the student:\n')
             module_status_options = ['not yet completed', 'completed']
