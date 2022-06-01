@@ -236,7 +236,15 @@ class Student(StudentMixin):
         """
         STUDENT_DETAILS = SHEET.worksheet('student details')
         student_name_cell = STUDENT_DETAILS.find(self.student_name)
-        registered_student_details = tabulate([STUDENT_DETAILS.row_values(1), STUDENT_DETAILS.row_values(student_name_cell.row)], headers='firstrow', tablefmt='pretty', stralign='left', numalign='left')
+        student_details_headings = STUDENT_DETAILS.row_values(1)
+        formatted_student_details_headings = []
+        for heading in student_details_headings:
+            formatted_student_details_headings.append(heading.replace(' ', '\n'))
+        student_details = STUDENT_DETAILS.row_values(student_name_cell.row)
+        formatted_student_details = []
+        for student_detail in student_details:
+            formatted_student_details.append(student_detail.replace(' ', '\n'))
+        registered_student_details = tabulate([formatted_student_details_headings, formatted_student_details], headers='firstrow', tablefmt='pretty', stralign='left', numalign='left')
         print(registered_student_details)
 
     def edit_student_details(self):
