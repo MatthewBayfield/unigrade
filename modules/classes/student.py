@@ -298,10 +298,11 @@ class Student(StudentMixin):
         module_titles_enrolled = [sheet.cell(1, index).value for index in crossed_cells_col_index]
         formatted_module_titles_enrolled = [title.replace(': ', ':\n') for title in module_titles_enrolled]
         module_info_cohort_year = [sheet.cell(student_entry_row, index + 1).value for index in crossed_cells_col_index]
-        module_info_module_status = [sheet.cell(student_entry_row, index + 2).value for index in crossed_cells_col_index]
+        module_info_status = [sheet.cell(student_entry_row, index + 2).value for index in crossed_cells_col_index]
+        formatted_module_info_status = [status.replace('yet ', 'yet\n') for status in module_info_status]
         module_info_mark = [sheet.cell(student_entry_row, index + 3).value for index in crossed_cells_col_index]
         module_info_grade = [sheet.cell(student_entry_row, index + 4).value for index in crossed_cells_col_index]
-        first_table_module_info = list(zip(module_info_cohort_year, module_info_module_status))
+        first_table_module_info = list(zip(module_info_cohort_year, formatted_module_info_status))
         second_table_module_info = list(zip(module_info_mark, module_info_grade))
 
         first_table_content = dict(zip(formatted_module_titles_enrolled, first_table_module_info))
