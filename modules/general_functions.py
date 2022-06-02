@@ -1,5 +1,5 @@
 import gspread
-
+from os import system
 
 def validate_numeric_input(number_of_options):
     '''
@@ -144,3 +144,19 @@ def update_sheet_borders(worksheet, google_sheet):
         ]
     }
     google_sheet.batch_update(borders_update_body)
+
+
+def clear():
+    """
+    Clears the visible portion of the terminal, and then prints empty rows as well as a
+    'top of terminal banner' to visually separate future printed content, from the scrollback
+    history.
+    """
+    system('clear')
+    print('\n' * 24)
+    print('-----------------------------------------------------------------')
+    print('                            TOP')
+    print('-----------------------------------------------------------------')
+    print('\n' * 24)
+    system('clear')
+    
