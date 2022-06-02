@@ -300,12 +300,13 @@ def view_or_edit_student_module_info_and_grades_interface():
                             time.sleep(1.1)
             print_info()
             time.sleep(1)
-            print('Inspect the above tables, and then enter a number corresponding to one of the following options:\n')
+            print('''Inspect the above tables, and then enter a number corresponding to one of the
+following options:\n''')
             print("1. Update the student's module status and mark for a module.")
-            print("""2. View the available optional module credits left for a student in their current academic year,
-    and enrol the student on an optional module.""")
-            print("""3. View the student's currently enrolled optional modules for their current academic year, and
-    unenrol the student from an optional module .""")
+            print("""2. View the available optional module credits left for a student in their
+current academic year, and enrol the student on an optional module.""")
+            print("""3. View the student's currently enrolled optional modules for their current
+academic year, and unenrol the student from an optional module .""")
             print('4. Go back.')
             valid_input = False
             while not valid_input:
