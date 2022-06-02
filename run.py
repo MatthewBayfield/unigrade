@@ -24,10 +24,10 @@ the unigrade google sheet. The unigrade program will now terminate.
 Please try running the program again. If the error persists try again later.\n''')
     print('Enter any key to initiate exiting the unigrade program.')
     input('->')
-    system('clear')
+    gen_functions.clear()
     print('Quitting the unigrade program...')
     time.sleep(3.0)
-    system('clear')
+    gen_functions.clear()
     sys.exit()
 
 
@@ -36,7 +36,7 @@ def top_level_interface():
     Displays the top-level interface, after clearing the console.
     The user is prompted to choose one of two options: either view module information, or view and or edit/add student information.
     """
-    system('clear')
+    gen_functions.clear()
     print("""
          _    _  _   _  _____  _____  _____             _____   ______ 
         | |  | || \ | ||_   _|/ ____||  __ \     /\    |  __ \ |  ____|
@@ -54,7 +54,7 @@ def student_information_top_level_interface():
     Prompts the user to select to alter student registration, or to view/edit existing student information,
     as well as 'return to the top program interface' or 'exit' the program.
     """
-    system('clear')
+    gen_functions.clear()
     print("""
                       ___  _             _            _   
                      / __|| |_  _  _  __| | ___  _ _ | |_ 
@@ -69,7 +69,7 @@ def student_information_top_level_interface():
     \n""")
     global last_function_call
     last_function_call = 'student_information_top_level_interface'
-    next_function([['1', 'view_or_edit_student_details_interface'], ['2', 'student_registration_interface'],['3', 'view_or_edit_student_module_info_and_grades_interface'],
+    next_function([['1', 'view_or_edit_student_details_interface'], ['2', 'student_registration_interface'], ['3', 'view_or_edit_student_module_info_and_grades_interface'],
                    ['4', 'top_level_interface'], ['5', 'exit_the_program']])
 
 
@@ -109,7 +109,7 @@ def student_registration_interface():
     confirms whether the student is currently registered in the unigrade google sheet, before allowing the user to register or unregister a
     student by perfoming the registration process.
     """
-    system('clear')
+    gen_functions.clear()
     print('Student Registration:', '\n')
     print('Do you want to continue? 1 for yes, 2 for no',)
     valid_input = False
@@ -173,7 +173,7 @@ def view_or_edit_student_details_interface():
     is registered, their details are displayed in a table printed to the terminal. The user is then able to edit
     the mutable details if they desire, which are then updated in the unigrade google sheet.
     """
-    system('clear')
+    gen_functions.clear()
     print('Student Details:', '\n')
     print('Do you want to continue? 1 for yes, 2 for no',)
     valid_input = False
@@ -205,7 +205,7 @@ def modules_interface():
     Displays the modules terminal interface to the user.
     Prompts the user to select to view a list of year 1, year 2, year 3, or year 4 module titles; or 'go back' or 'exit' the program.
     """
-    system('clear')
+    gen_functions.clear()
     print("""
                       __  __          _        _          
                      |  \/  | ___  __| | _  _ | | ___  ___
@@ -230,7 +230,7 @@ def view_or_edit_student_module_info_and_grades_interface():
     to the terminal. The user is then given options to update a student's module status and mark, as well an enrol/unenrol
     on/from an optional module on their current academic year.
     """
-    system('clear')
+    gen_functions.clear()
     print('Student module information and grades:', '\n')
     print('Do you want to continue? 1 for yes, 2 for no',)
     valid_input = False
@@ -252,7 +252,7 @@ def view_or_edit_student_module_info_and_grades_interface():
             module_info = {}
             modules_enrolled ={}
             def load_and_prepare_module_information():
-                system('clear')
+                gen_functions.clear()
                 print('Loading student details, module information and grades...')
                 nonlocal module_info
                 for year in range(1, 5, 1):
@@ -269,7 +269,7 @@ def view_or_edit_student_module_info_and_grades_interface():
 
             load_and_prepare_module_information()
             def print_info():
-                system('clear')
+                gen_functions.clear()
                 print("Student's details:")
                 time.sleep(1)
                 new_student_object.retrieve_student_details()
@@ -330,7 +330,7 @@ def next_function(option_pair_list):
     for option_pair in option_pair_list:
         print(f"{option_pair[0]}: {FUNCTION_USER_DESCRIPTION_DICTIONARY[option_pair[1]]}.")
 
-    print('\n')
+    print('')
     valid_input = False
     while (not valid_input):
         valid_input = gen_functions.validate_numeric_input(len(option_pair_list)) 
@@ -358,10 +358,10 @@ def exit_the_program():
     When called clears the terminal, informs the user the program is quitting, pauses,
     before clearing the terminal again, and terminating the program.
     """
-    system('clear')
+    gen_functions.clear()
     print('Quitting the unigrade program...')
     time.sleep(3.0)
-    system('clear')
+    gen_functions.clear()
     sys.exit()
 
 

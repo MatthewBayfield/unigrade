@@ -29,10 +29,10 @@ the unigrade google sheet. The unigrade program will now terminate.
 Please try running the program again. If the error persists try again later.\n''')
     print('Enter any key to initiate exiting the unigrade program.')
     input('->')
-    system('clear')
+    gen_functions.clear()
     print('Quitting the unigrade program...')
     time.sleep(3.0)
-    system('clear')
+    gen_functions.clear()
     sys.exit()
 
 
@@ -343,7 +343,7 @@ class Student(StudentMixin):
         view_or_edit_student_module_info_and_grades_interface func.
         """
         while True:
-            system('clear')
+            gen_functions.clear()
             print('Reprinting student module info...')
             print('')
             time.sleep(3)
@@ -389,7 +389,7 @@ class Student(StudentMixin):
             student_module_info = chosen_module_worksheet.batch_get([student_module_info_cell_reference_range])
             table_headings = ['Cohort\nyear', 'Module\nstatus', 'Mark\n(%)', 'Grade']
             student_module_info_table = tabulate([table_headings, student_module_info[0][0]], headers='firstrow', tablefmt='pretty', stralign='left', numalign='left')
-            system('clear')
+            gen_functions.clear()
             print('Student module information:')
             print(student_module_info_table)
             print('')
@@ -473,7 +473,7 @@ class Student(StudentMixin):
         the necessary updates to the unigrade google sheet are performed, namely clearing the data cells for this module for this student.
         """
         student_academic_year = self.student_current_year()[0]
-        system('clear')
+        gen_functions.clear()
         print('Student module unenrolment:\n')
         print('''You can unenrol a student from any optional module on their current academic year, for which they have yet to complete.
 This unenrolment should accompany enrolling a student on another available optional module, normally within the first month that
@@ -588,7 +588,7 @@ the module commenced.\n''')
                     this_year_modules_worksheet.batch_update([{'range': batch_update_range, 'values': [batch_update_values]}])
                 
             else:
-                system('clear')
+                gen_functions.clear()
                 print('Student enrolment:\n')
                 print(f"""Please note enrolment on optional modules in the unigrade system can only be performed for modules on the student's current academic year, which updates
 at the beginning of each new academic year, the next year starting on {datetime.date(datetime.date.today().year, 9, 27)}.\n""")
@@ -596,7 +596,7 @@ at the beginning of each new academic year, the next year starting on {datetime.
                 input('->')
                 repeat = True
                 while repeat:
-                    system('clear')
+                    gen_functions.clear()
                     module_properties_worksheet = SHEET.worksheet('module properties')
                     active_modules_this_year = academic_module.AcademicModule.retrieve_active_year_x_modules(student_academic_year, self.study_programme)
                     student_currently_enrolled_modules_this_year = self.enrolled_modules[f'year {student_academic_year}']
@@ -672,7 +672,7 @@ at the beginning of each new academic year, the next year starting on {datetime.
                         return 'view_or_edit_student_module_info_and_grades_interface'
         else:
             if auto == False:
-                system('clear')
+                gen_functions.clear()
                 print('Student enrolment:\n')
                 if student_academic_year == 'yet to start':
                     print(f"""Please note enrolment on optional modules in the unigrade system can only be performed for modules on the student's current academic year, which updates

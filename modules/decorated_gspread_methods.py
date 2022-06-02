@@ -1,5 +1,5 @@
 import gspread
-from os import system
+import modules.general_functions as gen_functions
 import time
 import sys
 
@@ -20,7 +20,7 @@ def gspread_api_error_exception_handling(gspread_method_or_request):
                 time_left = 60
             except gspread.exceptions.APIError as error:
                 if error.args[0]['code'] == 429:
-                    system('clear')
+                    gen_functions.clear()
                     print('Loading...')
                     print(f'Max time left: {time_left}s')
                     time_left -= 1
@@ -34,10 +34,10 @@ and try to complete the desired action again.
 If the error persists try again later.\n''')
                     print('Enter any key to initiate exiting the unigrade program.')
                     input('->')
-                    system('clear')
+                    gen_functions.clear()
                     print('Quitting the unigrade program...')
                     time.sleep(3.0)
-                    system('clear')
+                    gen_functions.clear()
                     sys.exit()
                     
             except gspread.exceptions.GSpreadException:
@@ -48,10 +48,10 @@ and try to complete the desired action again.
 If the error persists try again later.\n''')
                 print('Enter any key to initiate exiting the unigrade program.')
                 input('->')
-                system('clear')
+                gen_functions.clear()
                 print('Quitting the unigrade program...')
                 time.sleep(3.0)
-                system('clear')
+                gen_functions.clear()
                 sys.exit()
                
             else:

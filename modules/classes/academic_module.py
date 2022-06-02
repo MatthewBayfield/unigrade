@@ -1,6 +1,5 @@
 import sys
 import os
-from os import system
 import time
 import gspread
 from google.oauth2.service_account import Credentials
@@ -27,10 +26,10 @@ the unigrade google sheet. The unigrade program will now terminate.
 Please try running the program again. If the error persists try again later.\n''')
     print('Enter any key to initiate exiting the unigrade program.')
     input('->')
-    system('clear')
+    gen_functions.clear()
     print('Quitting the unigrade program...')
     time.sleep(3.0)
-    system('clear')
+    gen_functions.clear()
     sys.exit()
 
 
