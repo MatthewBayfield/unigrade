@@ -698,7 +698,9 @@ at the beginning of each new academic year, the next year starting on {datetime.
         the student on any compulsory modules that they are not yet enrolled on.
         """
         print('''Checking and updating the enrolment status of the compulsory modules
-for the student's current academic year...''')
+for the student's current academic year...
+Please wait...''')
+        print('')
         time.sleep(2)
         if self.student_current_year()[0] in [1,2,3,4]:
             current_year_enrolled_modules = self.retrieve_student_enrolled_module_info(self.student_current_year()[0])[2]
