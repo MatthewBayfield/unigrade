@@ -684,3 +684,20 @@ at the beginning of each new academic year, the next year starting on {datetime.
                 print('Enter any key to continue.')
                 input('->')
             return 'student_information_top_level_interface'    
+
+    def compulsory_module_enrolment_checker_and_updater(self):
+        """
+        Checks whether the student object is enrolled on all active compulsory modules for
+        their current academic year and programme, in the unigrade google sheet. Then enrols
+        the student on any compulsory modules that they are not yet enrolled on.
+        """
+        print('''Checking and updating the enrolment status of the compulsory modules
+for the student's current academic year...''')
+        time.sleep(2)
+        if self.student_current_year()[0] in [1,2,3,4]:
+            current_year_enrolled_modules = self.retrieve_student_enrolled_module_info(self.student_current_year()[0])[2]
+            if len(current_year_enrolled_modules) == 0:
+                self.enrol_student_on_module(True)
+        print('Student is now enrolled on all the required compulsory modules for this year.')
+        print('Enter any key to continue.')
+        input('->')
