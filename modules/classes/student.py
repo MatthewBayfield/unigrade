@@ -200,12 +200,16 @@ class Student(StudentMixin):
 
     def register(self, identifier, identifier_type):
         """
-        Adds the student, as well as the student's details, associated with the student object to the unigrade-physics
-        google sheet: First sets the instance properties, then updates the google sheet;
+        Adds the student's details to the unigrade-physics google sheet:
+        First sets the instance properties, then updates the google sheet;
         using methods from the StudentMixin class, along with user inputs.
+
+        param identifier_type: 'name' or 'ID'
+        param identifier: student name/ID str
         """
         print('starting the registration process:\n')
         self.set_student_identifiers(identifier, identifier_type, True)
+        print('')
         self.set_study_programme()
         self.set_year('start')
         self.set_year('end')
@@ -213,6 +217,8 @@ class Student(StudentMixin):
         self.retrieve_student_details()
         print('Enter any key to continue.')
         input('->')
+        print('')
+        self.compulsory_module_enrolment_checker_and_updater()
 
     def unregister(self):
         """
