@@ -92,6 +92,7 @@ class StudentMixin(object):
                 next_empty_row_number = len(used_ids_str) + 2
                 STUDENT_DETAILS.update_cell(next_empty_row_number, 2, self.student_name)
                 UNIGRADE_WORKSHEETS = SHEET.worksheets()
+                print('Adding student identifiers to the unigrade google sheet, please wait...')
                 for sheet in UNIGRADE_WORKSHEETS:
                     if sheet.title != 'module properties':
                         sheet.add_rows(1)
@@ -100,7 +101,8 @@ class StudentMixin(object):
                             sheet.update_cell(next_empty_row_number, 1, self.student_id)
                         else:
                             sheet.update_cell(next_empty_row_number + 1, 1, self.student_id)
-
+                print('Student identifiers added.')
+                time.sleep(1.5)
             else:
                 return 'Student not registered.\n'
 
@@ -698,7 +700,7 @@ at the beginning of each new academic year, the next year starting on {datetime.
         the student on any compulsory modules that they are not yet enrolled on.
         """
         print('''Checking and updating the enrolment status of the compulsory modules
-for the student's current academic year...
+for the student's current academic year.
 Please wait...''')
         print('')
         time.sleep(2)
@@ -706,6 +708,7 @@ Please wait...''')
             current_year_enrolled_modules = self.retrieve_student_enrolled_module_info(self.student_current_year()[0])[2]
             if len(current_year_enrolled_modules) == 0:
                 self.enrol_student_on_module(True)
-        print('Student is now enrolled on all the required compulsory modules for this year.')
+        print('''Student is now enrolled on all the required compulsory modules for their
+current academic year.''')
         print('Enter any key to continue.')
         input('->')
