@@ -249,6 +249,7 @@ def view_or_edit_student_module_info_and_grades_interface():
                 next_function_call = 'student_information_top_level_interface'
         else:
             time.sleep(2.0)
+            new_student_object.compulsory_module_enrolment_checker_and_updater()
             module_info = {}
             modules_enrolled ={}
             def load_and_prepare_module_information():
