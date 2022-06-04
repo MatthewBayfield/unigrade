@@ -76,13 +76,12 @@ def student_information_top_level_interface():
 def register_student(registration_status, new_student_object, valid_entry, user_options, user_options_index):
     """
     Registers a student in the unigrade google sheet, by invoking the student class methods,
-    on the new_student_object param. Should only be called within the
-    student_registration_interface function.
+    on the new_student_object param. Should only be called within the student_registration_interface function.
     """
     if registration_status != 'Student is currently registered.\n':
         new_student_object.register(valid_entry, user_options[user_options_index])
         global next_function_call
-        next_function_call = 'student_registration_interface'
+        next_function_call = 'go_back'
     else:
         print('Student is currently registered.\n')
         next_function([['1', 'unregister_student'], ['2', 'go_back']])
@@ -90,14 +89,14 @@ def register_student(registration_status, new_student_object, valid_entry, user_
 
 def unregister_student(registration_status, new_student_object, valid_entry, user_options, user_options_index):
     """
-    Unregisters a student in the unigrade google sheet, by invoking the student class methods,
-    on the new_student_object param. Should only be called within the
-    student_registration_interface function; unused params allow the function to be called within this function .
+    Unregisters a student in the unigrade google sheet, by invoking the student class methods, on the new_student_object param.
+    Should only be called within the student_registration_interface function --- unused params allow the function to be called
+    within this function .
     """
     if registration_status == 'Student is currently registered.\n':
         new_student_object.unregister()
         global next_function_call
-        next_function_call = 'student_registration_interface'
+        next_function_call = 'go_back'
     else:
         print('Student is already not registered.\n')
         next_function([['1', 'register_student'], ['2', 'go_back']])
