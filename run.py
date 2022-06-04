@@ -168,7 +168,7 @@ def registration_status_checker():
 
 def view_or_edit_student_details_interface():
     """
-    Prompts the user to input a student's name or ID, which is searched for within the unigrade google sheet.
+    Prompts the user to input a student's name or ID, for a query within the unigrade google sheet.
     If the student is not registered, the user is given the option of registering the student. If the student
     is registered, their details are displayed in a table printed to the terminal. The user is then able to edit
     the mutable details if they desire, which are then updated in the unigrade google sheet.
@@ -194,10 +194,19 @@ def view_or_edit_student_details_interface():
         else:
             while True:
                 new_student_object.retrieve_student_details()
-                returned_next_function_call = new_student_object.edit_student_details()
-                if returned_next_function_call == 'go_back':
+                valid_input = False
+                print("Enter a number to edit student details, or to go back :\n")
+                options = ["Alter the student's study programme, and their start and end year", 'go back']
+                for i in range(0, 2, 1):
+                    print(f"{i+1}: {options[i]}")
+                print('')
+                while not valid_input:
+                    valid_input = gen_functions.validate_numeric_input(2)
+                if valid_input == '2':
                     next_function_call = 'go_back'
                     break
+                elif valid_input == '1':
+                    new_student_object.edit_student_details()
 
 
 def modules_interface():
