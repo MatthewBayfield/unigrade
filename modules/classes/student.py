@@ -257,24 +257,21 @@ class Student(StudentMixin):
 
     def edit_student_details(self):
         """
-        Prompts the user for input to select to edit the student's mutable details,
-        or to go back. Performs the editing process using existing student class methods, that
+        Allows the user to edit the student's mutable details. Performs the editing process using existing student class methods, that
         through user input first alter the instance properties, before then updating the google sheet.
         """
-        valid_input = False
-        print("Enter a number to edit student details, or to go back :\n")
-        options = ["Alter the student's study programme, and their start and end year", 'go back']
-        for i in range(0, 2, 1):
-            print(f"{i+1}: {options[i]}")
+        print('''A student's study programme, start and end year dates, should only be altered under certain circustances:
+1. If in the student is not yet in year 3, they may change programme, and thus necessarily their end year.
+2. If the student's start year is still in the future, both the start year and end year may be deferred.\n''')
+        print('Enter any key to continue.')
+        input('->')
         print('')
-        while not valid_input:
-            valid_input = gen_functions.validate_numeric_input(2)
-        if valid_input == '2':
-            return 'go_back'
-        elif valid_input == '1':
-            self.set_study_programme()
-            self.set_year('start')
-            self.set_year('end')
+        self.set_study_programme()
+        self.set_year('start')
+        self.set_year('end')
+        print('Student details successfully updated.')
+        time.sleep(2.5)
+        gen_functions.clear()
     
     def student_current_year(self):
         """
