@@ -35,9 +35,30 @@ Please try running the program again. If the error persists try again later.\n''
 
 class AcademicModule:
     """
-    Represents an academic module. Class/instance methods and properties featured pertain to changing module properties,
-    and producing module statistics; .
+    Represents an academic module.
+    
+    Methods and attributes featured pertain to changing the module properties of existing modules in the unigrade google sheet,
+    as well as adding new modules. Also includes class methods required by the Student class for processes such as
+    student module enrolment. Finally includes methods and attributes necessary for producing module statistics.
+
+    Attributes:
+        title (str): the full title of the module.
+        year (int): the year the module belongs to.
+        activity (bool): indicating whether the module is currently active.
+        availability (dict): a dictionary with 'study programme key':'boolean value' pairs indicating the module availability
+                            on each programme.
+        compulsory_status (dict): a dictionary with 'study programme key':'boolean value' pairs indicating if the module is
+                                compulsory on each programme.
+        module_credits (int): credits the module is worth.
     """
+    def __init__(self, year, title, availablity, module_credits, compulsory_status, activity=True):
+        self.title = title
+        self.year = year
+        self.activity = activity
+        self.availablity = availablity
+        self.compulsory_status = compulsory_status
+        self.module_credits = module_credits
+
     @classmethod
     def retrieve_year_x_modules(cls, x):
         """
