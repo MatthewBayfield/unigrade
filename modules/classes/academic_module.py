@@ -62,25 +62,25 @@ class AcademicModule:
     @classmethod
     def retrieve_year_x_modules(cls, x):
         """
-        Produces a list of all academic module titles for a chosen year x: 1<=x<=4, retrieved from the unigrade google sheet.
+        Returns a list of all academic module titles for a chosen year x: 1<=x<=4, retrieved from the unigrade google sheet.
         """
         YEAR_X_MODULES_WORKSHEET = SHEET.worksheet(f'year {x} modules')
         year_x_modules = list(filter(lambda title: title != "", YEAR_X_MODULES_WORKSHEET.row_values(1)))
         return year_x_modules
 
     @classmethod
-    def retrieve_active_year_x_modules(cls, x, programme):
+    def retrieve_active_year_x_modules(cls, x, study_programme):
         """
-        Returns a list of the currently active academic module titles for the programme 'MSci Physics' or 'BSc Physics', and year x: 1<=x<=4, retrieved from the unigrade google sheet.
+        Returns a list of the active module titles for a programme and year x: 1<=x<=4, retrieved from the unigrade google sheet.
         """
-        module_information_worksheet = SHEET.worksheet('module properties')
-        year_x_module_titles_col_number = module_information_worksheet.find(f'Year {x} Module Titles').col
+        MODULE_PROPERTIES_WORKSHEET = SHEET.worksheet('module properties')
+        year_x_module_titles_col_number = MODULE_PROPERTIES_WORKSHEET.find(f'Year {x} Module Titles').col
 
-        if programme == 'MSci Physics':
-            module_info = module_information_worksheet.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number + 2)[:-1]}'],
+        if study_programme == 'MSci Physics':
+            module_info = MODULE_PROPERTIES_WORKSHEET.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number + 2)[:-1]}'],
                                                                  major_dimension='ROWS')
-        elif programme == 'BSc Physics':
-            module_info = module_information_worksheet.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number + 1)[:-1]}',
+        elif study_programme == 'BSc Physics':
+            module_info = MODULE_PROPERTIES_WORKSHEET.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number + 1)[:-1]}',
                                                                  f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 4)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number + 4)[:-1]}'],
                                                                  major_dimension='ROWS')
             available_on_bsc_list = module_info.pop()
@@ -91,20 +91,25 @@ class AcademicModule:
         return active_modules
 
     @classmethod
-    def retrieve_active_and_compulsory_year_x_modules(cls, x, programme):
+    def retrieve_active_and_compulsory_year_x_modules(cls, x, study_programme):
         """
-        Returns a list of the currently active and compulsory academic module titles for the programme 'MSci Physics' or 'BSc Physics', and year x: 1<=x<=4, retrieved from the unigrade google sheet.
-        """
-        active_modules = AcademicModule.retrieve_active_year_x_modules(x, programme)
-        module_information_worksheet = SHEET.worksheet('module properties')
-        year_x_module_titles_col_number = module_information_worksheet.find(f'Year {x} Module Titles').col
+        Returns a list of the active and compulsory module titles for a programme and year x, retrieved from the unigrade google sheet.
 
-        if programme == 'MSci Physics':
-            module_info = module_information_worksheet.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number)[:-1]}',
+        Args:
+            x (int): the academic year the modules belong to, where 1<=x<=4.
+            study_programme (str): the study programme the modules must be available on. Has the value 'MSci Physics' or 'BSc Physics'.
+
+        """
+        active_modules = AcademicModule.retrieve_active_year_x_modules(x, study_programme)
+        MODULE_PROPERTIES_WORKSHEET = SHEET.worksheet('module properties')
+        year_x_module_titles_col_number = MODULE_PROPERTIES_WORKSHEET.find(f'Year {x} Module Titles').col
+
+        if study_programme == 'MSci Physics':
+            module_info = MODULE_PROPERTIES_WORKSHEET.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number)[:-1]}',
                                                                   f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 3)}:{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 3)[:-1]}'],
                                                                  major_dimension='ROWS')
-        elif programme == 'BSc Physics':
-            module_info = module_information_worksheet.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number)[:-1]}', 
+        elif study_programme == 'BSc Physics':
+            module_info = MODULE_PROPERTIES_WORKSHEET.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number)[:-1]}', 
                                                                   f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 5)}:{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 5)[:-1]}'],
                                                                  major_dimension='ROWS')
 
@@ -119,12 +124,12 @@ class AcademicModule:
     @classmethod
     def retrieve_year_x_module_credits(cls, x):
         """
-        Returns a dictionary containing the module credits for modules of a chosen year x parameter.
+        Returns a dictionary containing the module credits for modules of a chosen year x: 1<=x<=4.
         """
-        module_properties_worksheet = SHEET.worksheet('module properties')
-        year_x_module_titles_col_number = module_properties_worksheet.find(f'Year {x} Module Titles').col
+        MODULE_PROPERTIES_WORKSHEET = SHEET.worksheet('module properties')
+        year_x_module_titles_col_number = MODULE_PROPERTIES_WORKSHEET.find(f'Year {x} Module Titles').col
 
-        module_credits_info = module_properties_worksheet.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number)[:-1]}',
+        module_credits_info = MODULE_PROPERTIES_WORKSHEET.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number)[:-1]}',
                                                                     f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 6)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number + 6)[:-1]}'],
                                                                      major_dimension='ROWS')
         year_x_module_credits_dict = {}
