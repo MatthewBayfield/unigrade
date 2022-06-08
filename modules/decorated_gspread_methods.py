@@ -1,7 +1,24 @@
 import gspread
-import modules.general_functions as gen_functions
 import time
 import sys
+from os import system
+
+
+def clear():
+    """
+    Effectively clears the terminal.
+    
+    Clears the visible portion of the terminal, and then prints empty rows as well as a
+    'top of terminal banner' to visually separate future printed content, from the scrollback
+    history.
+    """
+    system('clear')
+    print('\n' * 24)
+    print('-----------------------------------------------------------------')
+    print('                            TOP')
+    print('-----------------------------------------------------------------')
+    print('\n' * 24)
+    system('clear')
 
 
 def gspread_api_error_exception_handling(gspread_method_or_request):
@@ -20,7 +37,7 @@ def gspread_api_error_exception_handling(gspread_method_or_request):
                 time_left = 60
             except gspread.exceptions.APIError as error:
                 if error.args[0]['code'] == 429:
-                    gen_functions.clear()
+                    clear()
                     print('Loading...')
                     print(f'Max time left: {time_left}s')
                     time_left -= 1
@@ -34,10 +51,10 @@ and try to complete the desired action again.
 If the error persists try again later.\n''')
                     print('Enter any key to initiate exiting the unigrade program.')
                     input('->')
-                    gen_functions.clear()
+                    clear()
                     print('Quitting the unigrade program...')
                     time.sleep(3.0)
-                    gen_functions.clear()
+                    clear()
                     sys.exit()
                     
             except gspread.exceptions.GSpreadException:
@@ -48,10 +65,10 @@ and try to complete the desired action again.
 If the error persists try again later.\n''')
                 print('Enter any key to initiate exiting the unigrade program.')
                 input('->')
-                gen_functions.clear()
+                clear()
                 print('Quitting the unigrade program...')
                 time.sleep(3.0)
-                gen_functions.clear()
+                clear()
                 sys.exit()
                
             else:
