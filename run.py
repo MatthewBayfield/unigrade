@@ -328,7 +328,7 @@ def modules_interface():
     \n""")
     global last_function_call
     last_function_call = 'modules_interface'
-    next_function([['1', 'add_module_interface'], ['2', 'edit_module_properties_interface'], ['3', 'module_statistics_interface'], ['4', 'go_back']
+    next_function([['1', 'add_module_interface'], ['2', 'edit_module_properties_interface'], ['3', 'module_statistics_interface'], ['4', 'go_back'],
                    ['5', 'exit_the_program']])
 
 
@@ -668,6 +668,7 @@ def main():
                             'register_student': register_student, 'unregister_student': unregister_student, 
                             'view_or_edit_student_details_interface': view_or_edit_student_details_interface,
                             'view_or_edit_student_module_info_and_grades_interface': view_or_edit_student_module_info_and_grades_interface,
+                            'add_module_interface': add_module_interface, 'edit_module_properties_interface': edit_module_properties_interface,
                             'exit_the_program': exit_the_program, 'go_back' : go_back}
     
     global FUNCTION_USER_DESCRIPTION_DICTIONARY
@@ -676,8 +677,8 @@ def main():
                                         'modules_interface': 'view module information and statistics','student_registration_interface': 'register or unregister a student',                                        'register_student': 'register the student',
                                         'unregister_student': 'unregister the student', 'view_or_edit_student_details_interface': 'view and edit student details',
                                         'view_or_edit_student_module_info_and_grades_interface': 'view/edit student module information, including grades and enrolment status',
-                                        'exit_the_program': 'exit the unigrade program',
-                                        'go_back': 'go back'}
+                                        'add_module_interface': 'add a new module', 'edit_module_properties_interface': 'update the module properties of an existing module',
+                                        'exit_the_program': 'exit the unigrade program', 'go_back': 'go back'}
     global last_function_call
     last_function_call = ''
     global next_function_call
