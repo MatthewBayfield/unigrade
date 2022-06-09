@@ -1,5 +1,7 @@
-import gspread
 from os import system
+import gspread
+import decorated_gspread_methods
+
 
 def validate_numeric_input(number_of_options):
     '''
@@ -61,6 +63,43 @@ def is_this_correct_checker(user_input, user_input_description):
             else:
                 print(f'Enter the correct {user_input_description}:\n')
                 return False
+
+
+def validate_module_title_input(component):
+    """
+    Prompts the user to input a module code or module name for a module, and validates the input.
+
+    Args:
+        component (str): Has the value 'code' or 'name'. Determines which input is requested.
+    
+    Returns:
+        In the absence of exceptions, returns a formatted form of the requested input.
+    
+    Raises:
+        ValueError: if non-alphanumeric characters are used in the module code or module name.
+    """
+    if component == 'code':
+        try:
+            code = input('->')
+            if not code.isalnum():
+                raise ValueError('Invalid input. Please use only standard alphanumeric characters in the module code.')
+        except ValueError as error:
+            print(f"{error}\n")
+        else:
+            return f"{code.upper()}"
+    
+    if component == 'name':
+        try:
+            name = input('->')
+            name_words = name.split(',')
+            filtered_name_words = list(filter(lambda word: word != '', name_words))
+            for word in filtered_name_words:
+                if not word.isalnum():
+                    raise ValueError('Invalid input. Please use only standard alphanumeric characters in the module name.')
+        except ValueError as error:
+            print(f"{error}\n")
+        else:
+            return f"{' '.join(filtered_name_words).title()}"
 
 
 def update_sheet_borders(worksheet, google_sheet):
