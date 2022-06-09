@@ -4,6 +4,7 @@ from google.oauth2.service_account import Credentials
 import sys
 import time
 import modules.classes.student as student
+import modules.classes.academic_module as academic_module
 import modules.general_functions as gen_functions
 import modules.decorated_gspread_methods
 
@@ -208,30 +209,6 @@ def view_or_edit_student_details_interface():
                     new_student_object.edit_student_details()
 
 
-def modules_interface():
-    """
-    Displays the modules terminal interface to the user.
-    Prompts the user to select to view a list of year 1, year 2, year 3, or year 4 module titles; or 'go back' or 'exit' the program.
-    """
-    gen_functions.clear()
-    print("""
-                      __  __          _        _          
-                     |  \/  | ___  __| | _  _ | | ___  ___
-                     | |\/| |/ _ \/ _` || || || |/ -_)(_-<
-                     |_|  |_|\___/\__,_| \_,_||_|\___|/__/
-                                                          
-            ___         __                         _    _            
-           |_ _| _ _   / _| ___  _ _  _ __   __ _ | |_ (_) ___  _ _  
-            | | | ' \ |  _|/ _ \| '_|| '  \ / _` ||  _|| |/ _ \| ' \ 
-           |___||_||_||_|  \___/|_|  |_|_|_|\__,_| \__||_|\___/|_||_|
-    \n""")
-    print('''To view a list of year 1, year 2, year 3, or year 4 module titles;\nenter 1,2,3, or 4 respectively.\n''')
-    print('''To go back a step, return to the initial interface,\nor exit the program; enter 5,6 and 7 respectively.\n''')
-    valid_input = False
-    while (not valid_input):
-        valid_input = gen_functions.validate_numeric_input(7)
-
-
 def view_or_edit_student_module_info_and_grades_interface():
     """
     Allows a user to view a registered student's enrolled module information, by printing the information, including tables,
@@ -329,6 +306,105 @@ academic year, and unenrol the student from an optional module .""")
             else:
                 next_function_call = 'student_information_top_level_interface'
 
+
+def modules_interface():
+    """
+    Displays the modules terminal interface to the user.
+    Prompts the user to select to view a list of year 1, year 2, year 3, or year 4 module titles; or 'go back' or 'exit' the program.
+    """
+    gen_functions.clear()
+    print("""
+                      __  __          _        _          
+                     |  \/  | ___  __| | _  _ | | ___  ___
+                     | |\/| |/ _ \/ _` || || || |/ -_)(_-<
+                     |_|  |_|\___/\__,_| \_,_||_|\___|/__/
+                                                          
+            ___         __                         _    _            
+           |_ _| _ _   / _| ___  _ _  _ __   __ _ | |_ (_) ___  _ _  
+            | | | ' \ |  _|/ _ \| '_|| '  \ / _` ||  _|| |/ _ \| ' \ 
+           |___||_||_||_|  \___/|_|  |_|_|_|\__,_| \__||_|\___/|_||_|
+    \n""")
+    print('''To view a list of year 1, year 2, year 3, or year 4 module titles;\nenter 1,2,3, or 4 respectively.\n''')
+    print('''To go back a step, return to the initial interface,\nor exit the program; enter 5,6 and 7 respectively.\n''')
+    valid_input = False
+    while (not valid_input):
+        valid_input = gen_functions.validate_numeric_input(7)
+
+
+def set_subset_of_module_properties(module_year):
+    """
+    Allows the user to assign/reassign all mutable module properties of a module.
+
+    Requests user inputs in order to set a subset of all the module properties.
+
+    Args:
+        module_year (int): The academic year on which the module is taught.
+
+    Returns:
+        A list containing the assigned/reassigned mutable properties. 
+    """
+    correct_activity = False
+    while not correct_activity:
+        print('Is the module currently being taught?')
+        print('Enter 1 for yes, 2 for no.')
+        valid_input = False
+        while not valid_input:
+            valid_input = gen_functions.validate_numeric_input(2)
+        activity = True if valid_input == '1' else False
+        print(f"Module is being taught: {activity}. ")
+        print('is this correct? Enter 1 for yes, 2 for no.')
+        correct_activity = gen_functions.is_this_correct_checker(valid_input, 'module activity')
+    print('')
+
+    study_programmes = ['MSci Physics', 'BSc Physics']
+    availability = {}
+    compulsory_status = {}
+    for programme in study_programmes:
+        if module_year!= 4:
+            correct_availability = False
+            while not correct_availability:
+                print(f'Is the module available on the {programme} programme?')
+                print('Enter 1 for yes, 2 for no.')
+                valid_input = False
+                while not valid_input:
+                    valid_input = gen_functions.validate_numeric_input(2)
+                availability[f'{programme}'] = True if valid_input == '1' else False
+                print(f"Module available on {programme}:", f"{availability[programme]}.")
+                print('is this correct? Enter 1 for yes, 2 for no.')
+                correct_availability = gen_functions.is_this_correct_checker(valid_input, 'availability')
+                print('')
+        else:
+            availability[f'{programme}'] = True if programme == 'MSci Physics' else False
+        
+
+        if availability[programme]:
+            correct_compulsory_status = False
+            while not correct_compulsory_status:
+                print(f'Is the module compulsory on the {programme} programme?')
+                print('Enter 1 for yes, 2 for no.')
+                valid_input = False
+                while not valid_input:
+                    valid_input = gen_functions.validate_numeric_input(2)
+                compulsory_status[f'{programme}'] = True if valid_input == '1' else False
+                print(f"Module compulsory on {programme}:", f"{compulsory_status[programme]}.")
+                print('is this correct? Enter 1 for yes, 2 for no.')
+                correct_compulsory_status = gen_functions.is_this_correct_checker(valid_input, 'compulsory status')
+                print('')
+        else:
+            compulsory_status[f'{programme}'] = False
+
+    print('Enter the number of credits the module is worth; this should be a multiple of 15.\n')
+    correct_credits = False
+    while not correct_credits:
+        valid_credits = False
+        while not valid_credits:
+            valid_credits = gen_functions.validate_module_credits_input()
+        print(f'Module credits: {valid_credits}')
+        print('is this correct? Enter 1 for yes, 2 for no.')
+        correct_credits = gen_functions.is_this_correct_checker(valid_credits, 'number of credits the module is worth')
+    
+    return [activity, availability, compulsory_status, int(valid_credits)]
+        
 
 def next_function(option_pair_list):
     """
