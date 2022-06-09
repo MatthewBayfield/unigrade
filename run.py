@@ -309,8 +309,10 @@ academic year, and unenrol the student from an optional module .""")
 
 def modules_interface():
     """
-    Displays the modules terminal interface to the user.
-    Prompts the user to select to view a list of year 1, year 2, year 3, or year 4 module titles; or 'go back' or 'exit' the program.
+    Displays the modules terminal interface to the user. Provides options to the user.
+    
+    Prompts the user to select to add a new module to or edit an existing module in the unigrade google sheet;
+    to view module statistics; or to 'go back' or 'exit' the program.
     """
     gen_functions.clear()
     print("""
@@ -324,11 +326,10 @@ def modules_interface():
             | | | ' \ |  _|/ _ \| '_|| '  \ / _` ||  _|| |/ _ \| ' \ 
            |___||_||_||_|  \___/|_|  |_|_|_|\__,_| \__||_|\___/|_||_|
     \n""")
-    print('''To view a list of year 1, year 2, year 3, or year 4 module titles;\nenter 1,2,3, or 4 respectively.\n''')
-    print('''To go back a step, return to the initial interface,\nor exit the program; enter 5,6 and 7 respectively.\n''')
-    valid_input = False
-    while (not valid_input):
-        valid_input = gen_functions.validate_numeric_input(7)
+    global last_function_call
+    last_function_call = 'modules_interface'
+    next_function([['1', 'add_module_interface'], ['2', 'edit_module_properties_interface'], ['3', 'module_statistics_interface'], ['4', 'go_back']
+                   ['5', 'exit_the_program']])
 
 
 def set_subset_of_module_properties(module_year):
