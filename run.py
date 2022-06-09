@@ -500,7 +500,117 @@ def add_module_interface(module_title=None):
         time.sleep(1)
         print('Enter any key to continue.')
         input('->')
-       
+
+
+def edit_module_properties_interface(module_title=None):
+    """
+    Executes the process of editing the mutable properties of a module in the unigrade google sheet.
+
+    First prompts the user to enter a valid module title, and then checks the module exists in
+    the google sheet. (If the module does not exist, the user is given the option to add the module.)
+    The module properties for the module are then retrieved and printed to the terminal, and the user
+    can confirm to edit the properties. A new AcademicModule instance object is then initialised using
+    these properties as parameters. The edit_module_properties method is then called on the object.
+
+    Args:
+        module_title (str): An optional parameter, that when passed has a value equal to a valid module title.
+                            It should be passed in a function call inside the add_module_interface.
+    """
+    gen_functions.clear()
+    print('Commencing view/edit module properties:', '\n')
+    print('Do you want to continue? 1 for yes, 2 for no.')
+    valid_input = False
+    while not valid_input:
+        valid_input = gen_functions.validate_numeric_input(2)
+    if valid_input == '2':
+        next_function([['1', 'go_back'],['2', 'top_level_interface'], ['3', 'exit_the_program']])
+        return
+    else:
+        if module_title is None:
+            correct_title = False
+            while not correct_title:
+                print('')
+                print('Enter the module code, for example PHAS0019.\n')
+                correct_code = False
+                while not correct_code:
+                    valid_code = False
+                    while not valid_code:
+                            valid_code = gen_functions.validate_module_title_input('code')
+                    print(f"Module code: {valid_code} ")
+                    print('is this correct? Enter 1 for yes, 2 for no.\n')
+                    correct_code = gen_functions.is_this_correct_checker(valid_code, 'module code')
+                print('')
+                print('Enter the module name, with each word in the name separated by a comma; for example Planetary,Science.\n')
+                correct_name = False
+                while not correct_name:
+                    valid_name = False
+                    while not valid_name:
+                            valid_name = gen_functions.validate_module_title_input('name')
+                    print(f"Module name: {valid_name} ")
+                    print('is this correct? Enter 1 for yes, 2 for no.')
+                    correct_name = gen_functions.is_this_correct_checker(valid_name, 'module name')
+                valid_title = f'{valid_code}: {valid_name}'
+                print('')
+                print(f'Module title: {valid_title}')
+                print('is this correct? Enter 1 for yes, 2 for no.')
+                correct_title = gen_functions.is_this_correct_checker(valid_title, 'module code and name')
+            title_exists = False
+            for year in [1, 2, 3, 4]:
+                module_year_modules_sheet = SHEET.worksheet(f'year {year} modules')
+                if module_year_modules_sheet.find(valid_title, in_row=1):
+                    title_exists = True
+                    break
+            if not title_exists:
+                print('')
+                print('No module with this title exists in the unigrade google sheet.\n')
+                print('Enter a number corresponding to one of the following options:')
+                print('1. Add this module.')
+                print('2. Go back.')
+                valid_input = False
+                while not valid_input:
+                    valid_input = gen_functions.validate_numeric_input(2)
+                if valid_input == '1':
+                    add_module_interface(valid_title)
+                global next_function_call
+                next_function_call = 'go_back'
+                return
+        else:
+            valid_title = module_title
+    
+        MODULE_PROPERTIES_WORKSHEET = SHEET.worksheet('module properties')
+        module_title_entry_cell = MODULE_PROPERTIES_WORKSHEET.find(f'{valid_title}')
+        module_properties_batch_get_range = f"{gspread.utils.rowcol_to_a1(module_title_entry_cell.row, module_title_entry_cell.col + 1)}:{gspread.utils.rowcol_to_a1(module_title_entry_cell.row, module_title_entry_cell.col + 6)}"
+        module_properties = MODULE_PROPERTIES_WORKSHEET.batch_get([module_properties_batch_get_range], major_dimension='ROWS')[0][0]
+        module_properties_descriptors = ['Module currently active', 'Available on MSci Physics','Compulsory on MSci Physics',
+                                            'Available on BSc Physics', 'Compulsory on BSc Physics', 'Module credits']
+        module_year = int(MODULE_PROPERTIES_WORKSHEET.cell(1, module_title_entry_cell.col).value.split(' ')[1])
+        print('')                                  
+        print(f"'{valid_title}' current module properties:".center(60))
+        print('')
+        print(f'Module year: {module_year}')
+        for property_num in range(0, len(module_properties) - 1, 1):
+            property_value = 'YES' if module_properties[property_num] == 'X' else 'NO'
+            print(f'{module_properties_descriptors[property_num]}:', f'{property_value}')
+        print(f'{module_properties_descriptors[len(module_properties) - 1]}:', f'{module_properties[len(module_properties) - 1]}')
+        print('')
+        print('Enter 1 to edit the mutable module properties, or enter 2 to go back.')
+        valid_input = False
+        while not valid_input:
+            valid_input = gen_functions.validate_numeric_input(2)
+        if valid_input == '2':
+            next_function_call = 'go_back'
+            return
+        module_properties_subset = set_subset_of_module_properties(module_year)
+        new_module_object = academic_module.AcademicModule(module_year, valid_title, module_properties_subset[1], module_properties_subset[3],
+                                        module_properties_subset[2], module_properties_subset[0])
+        print('')
+        print('Updating module properties in the unigrade google sheet...')
+        new_module_object.edit_module_properties()
+        print('Module properties successfully updated.')
+        time.sleep(1)
+        print('Enter any key to continue.')
+        input('->')
+
 
 def next_function(option_pair_list):
     """
