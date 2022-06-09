@@ -99,7 +99,11 @@ def validate_module_title_input(component):
         except ValueError as error:
             print(f"{error}\n")
         else:
-            return f"{' '.join(filtered_name_words).title()}"
+            filtered_name_words = [word.lower() for word in filtered_name_words]
+            for word_index in range(0, len(filtered_name_words), 1):
+                if filtered_name_words[word_index] not in ['of', 'the', 'and']:
+                    filtered_name_words[word_index] = filtered_name_words[word_index].capitalize()  
+            return f"{' '.join(filtered_name_words)}"
 
 
 def validate_module_credits_input():
