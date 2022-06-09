@@ -404,7 +404,103 @@ def set_subset_of_module_properties(module_year):
         correct_credits = gen_functions.is_this_correct_checker(valid_credits, 'number of credits the module is worth')
     
     return [activity, availability, compulsory_status, int(valid_credits)]
+
+
+def add_module_interface(module_title=None):
+    """
+    Executes the process of adding a new module to the unigrade google sheet.
+
+    First prompts the user to enter a valid module title, and then checks that this module does not already exist.
+    (If the module already exists, the user is given the option of editing its module properties.)
+    The user is then prompted to enter valid module properties for the new module. A new AcademicModule instance
+    object is then initialised using these properties as parameters. The add_module method is then called on the object.
+    
+    Args:
+        module_title (str): An optional parameter, that when passed has a value equal to a valid module title.
+                            It should be passed in a function call inside the edit_module_properties_interface.
+    """
+    gen_functions.clear()
+    print('Commencing add a module:\n')
+    print('Do you want to continue? 1 for yes, 2 for no.')
+    valid_input = False
+    while not valid_input:
+        valid_input = gen_functions.validate_numeric_input(2)
+    if valid_input == '2':
+        next_function([['1', 'go_back'],['2', 'top_level_interface'], ['3', 'exit_the_program']])
+        return
+    else:
+        if module_title is None:
+            correct_title = False
+            while not correct_title:
+                print('')
+                print('Enter the module code, for example PHAS0019.\n')
+                correct_code = False
+                while not correct_code:
+                    valid_code = False
+                    while not valid_code:
+                            valid_code = gen_functions.validate_module_title_input('code')
+                    print(f"Module code: {valid_code} ")
+                    print('is this correct? Enter 1 for yes, 2 for no.\n')
+                    correct_code = gen_functions.is_this_correct_checker(valid_code, 'module code')
+                print('')
+                print('Enter the module name, with each word in the name separated by a comma; for example Planetary,Science.\n')
+                correct_name = False
+                while not correct_name:
+                    valid_name = False
+                    while not valid_name:
+                            valid_name = gen_functions.validate_module_title_input('name')
+                    print(f"Module name: {valid_name} ")
+                    print('is this correct? Enter 1 for yes, 2 for no.')
+                    correct_name = gen_functions.is_this_correct_checker(valid_name, 'module name')
+                valid_title = f'{valid_code}: {valid_name}'
+                print('')
+                print(f'Module title: {valid_title}')
+                print('is this correct? Enter 1 for yes, 2 for no.')
+                correct_title = gen_functions.is_this_correct_checker(valid_title, 'module title')
+
+            MODULE_PROPERTIES_WORKSHEET = SHEET.worksheet('module properties')
+            if MODULE_PROPERTIES_WORKSHEET.find(valid_title):
+                print('')
+                print('A module with this module title already exists.\n')
+                print('Enter a number corresponding to one of the following options:')
+                print('1. Edit/View this modules properties.')
+                print('2. Go back')
+                valid_input = False
+                while not valid_input:
+                    valid_input = gen_functions.validate_numeric_input(2)
+                if valid_input == '1':
+                    edit_module_properties_interface(valid_title)
+                global next_function_call
+                next_function_call = 'go_back'
+                return
+        else:
+            valid_title = module_title
+
+        print('')
+        print('Enter the academic year on which the module is to be taught, thus a number 1-4.')
+        correct_year = False
+        while not correct_year:
+            valid_year = False
+            while not valid_year:
+                valid_year = gen_functions.validate_numeric_input(4)
+            print(f"Module year: {valid_year} ")
+            print('is this correct? Enter 1 for yes, 2 for no.')
+            correct_year = gen_functions.is_this_correct_checker(valid_year, 'module year')
+        print('')
+
+        module_properties_subset = set_subset_of_module_properties(int(valid_year))
         
+        
+        new_module_object = academic_module.AcademicModule(int(valid_year), valid_title, module_properties_subset[1], module_properties_subset[3],
+                                           module_properties_subset[2], module_properties_subset[0])
+        print('')
+        print('Adding module to the unigrade google sheet...')
+        new_module_object.add_module()
+        print('Module successfully added.')
+        time.sleep(1)
+        print('Enter any key to continue.')
+        input('->')
+       
 
 def next_function(option_pair_list):
     """
