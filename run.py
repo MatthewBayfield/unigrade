@@ -326,7 +326,7 @@ def modules_interface():
             | | | ' \ |  _|/ _ \| '_|| '  \ / _` ||  _|| |/ _ \| ' \ 
            |___||_||_||_|  \___/|_|  |_|_|_|\__,_| \__||_|\___/|_||_|
     \n""")
-    next_function([['1', 'add_module_interface'], ['2', 'edit_module_properties_interface'], ['3', 'go_back'],
+    next_function([['1', 'add_module_interface'], ['2', 'edit_module_properties_interface'], ['3', 'top_level_interface'],
                    ['4', 'exit_the_program']])
     global last_function_call
     last_function_call = 'modules_interface'
