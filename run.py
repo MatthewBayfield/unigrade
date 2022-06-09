@@ -394,7 +394,8 @@ def set_subset_of_module_properties(module_year):
         else:
             compulsory_status[f'{programme}'] = False
 
-    print('Enter the number of credits the module is worth; this should be a multiple of 15.\n')
+    print('''Enter the number of credits the module is worth; this should be a multiple
+of 15.\n''')
     correct_credits = False
     while not correct_credits:
         valid_credits = False
@@ -430,6 +431,7 @@ def add_module_interface(module_title=None):
         next_function([['1', 'go_back'],['2', 'top_level_interface'], ['3', 'exit_the_program']])
         return
     else:
+        global next_function_call
         if module_title is None:
             correct_title = False
             while not correct_title:
@@ -444,7 +446,8 @@ def add_module_interface(module_title=None):
                     print('is this correct? Enter 1 for yes, 2 for no.\n')
                     correct_code = gen_functions.is_this_correct_checker(valid_code, 'module code')
                 print('')
-                print('Enter the module name, with each word in the name separated by a comma; for example Planetary,Science.\n')
+                print('''Enter the module name, with each word in the name separated by a comma;
+for example Planetary,Science.\n''')
                 correct_name = False
                 while not correct_name:
                     valid_name = False
@@ -471,7 +474,6 @@ def add_module_interface(module_title=None):
                     valid_input = gen_functions.validate_numeric_input(2)
                 if valid_input == '1':
                     edit_module_properties_interface(valid_title)
-                global next_function_call
                 next_function_call = 'go_back'
                 return
         else:
@@ -501,6 +503,7 @@ def add_module_interface(module_title=None):
         time.sleep(1)
         print('Enter any key to continue.')
         input('->')
+        next_function_call = 'go_back'
 
 
 def edit_module_properties_interface(module_title=None):
@@ -527,6 +530,7 @@ def edit_module_properties_interface(module_title=None):
         next_function([['1', 'go_back'],['2', 'top_level_interface'], ['3', 'exit_the_program']])
         return
     else:
+        global next_function_call
         if module_title is None:
             correct_title = False
             while not correct_title:
@@ -541,7 +545,8 @@ def edit_module_properties_interface(module_title=None):
                     print('is this correct? Enter 1 for yes, 2 for no.\n')
                     correct_code = gen_functions.is_this_correct_checker(valid_code, 'module code')
                 print('')
-                print('Enter the module name, with each word in the name separated by a comma; for example Planetary,Science.\n')
+                print('''Enter the module name, with each word in the name separated by a comma;
+for example Planetary,Science.\n''')
                 correct_name = False
                 while not correct_name:
                     valid_name = False
@@ -572,7 +577,6 @@ def edit_module_properties_interface(module_title=None):
                     valid_input = gen_functions.validate_numeric_input(2)
                 if valid_input == '1':
                     add_module_interface(valid_title)
-                global next_function_call
                 next_function_call = 'go_back'
                 return
         else:
@@ -611,6 +615,7 @@ def edit_module_properties_interface(module_title=None):
         time.sleep(1)
         print('Enter any key to continue.')
         input('->')
+        next_function_call = 'go_back'
 
 
 def next_function(option_pair_list):
