@@ -328,8 +328,8 @@ def modules_interface():
     \n""")
     global last_function_call
     last_function_call = 'modules_interface'
-    next_function([['1', 'add_module_interface'], ['2', 'edit_module_properties_interface'], ['3', 'module_statistics_interface'], ['4', 'go_back'],
-                   ['5', 'exit_the_program']])
+    next_function([['1', 'add_module_interface'], ['2', 'edit_module_properties_interface'], ['3', 'go_back'],
+                   ['4', 'exit_the_program']])
 
 
 def set_subset_of_module_properties(module_year):
