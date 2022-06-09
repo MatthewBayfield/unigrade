@@ -260,3 +260,15 @@ class AcademicModule:
                                'X' if self.availablity['BSc Physics'] else '', 'X' if self.compulsory_status['BSc Physics'] else '', self.module_credits]
         MODULE_PROPERTIES_WORKSHEET.batch_update([{'range': batch_update_range, 'values': [batch_update_values]}])
         MODULE_PROPERTIES_WORKSHEET.add_rows(1)
+
+    def edit_module_properties(self):
+        """
+        Uses instance properties to update the properties of the module, represented by the instance, in the unigrade google sheet.
+        """
+        MODULE_PROPERTIES_WORKSHEET = SHEET.worksheet('module properties')
+        module_title_entry_cell = MODULE_PROPERTIES_WORKSHEET.find(f'{self.title}')
+        module_properties_batch_update_range = f"{gspread.utils.rowcol_to_a1(module_title_entry_cell.row, module_title_entry_cell.col + 1)}:{gspread.utils.rowcol_to_a1(module_title_entry_cell.row, module_title_entry_cell.col + 6)}"
+        module_properties_batch_update_values = ['X' if self.activity else '', 'X' if self.availablity['MSci Physics'] else '',
+                                                 'X' if self.compulsory_status['MSci Physics'] else '', 'X' if self.availablity['BSc Physics'] else '',
+                                                 'X' if self.compulsory_status['BSc Physics'] else '', self.module_credits]
+        MODULE_PROPERTIES_WORKSHEET.batch_update([{'range': module_properties_batch_update_range, 'values': [module_properties_batch_update_values]}])
