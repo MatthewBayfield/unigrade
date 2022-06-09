@@ -35,7 +35,7 @@ Please try running the program again. If the error persists try again later.\n''
 
 class AcademicModule:
     """
-    Represents an academic module.
+    Represents an academic module in the unigrade google sheet.
     
     Methods and attributes featured pertain to changing the module properties of existing modules in the unigrade google sheet,
     as well as adding new modules. Also includes class methods required by the Student class for processes such as
@@ -78,11 +78,11 @@ class AcademicModule:
 
         if study_programme == 'MSci Physics':
             module_info = MODULE_PROPERTIES_WORKSHEET.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number + 2)[:-1]}'],
-                                                                 major_dimension='ROWS')
+                                                                major_dimension='ROWS')
         elif study_programme == 'BSc Physics':
             module_info = MODULE_PROPERTIES_WORKSHEET.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number + 1)[:-1]}',
-                                                                 f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 4)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number + 4)[:-1]}'],
-                                                                 major_dimension='ROWS')
+                                                                f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 4)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number + 4)[:-1]}'],
+                                                                major_dimension='ROWS')
             available_on_bsc_list = module_info.pop()
             for i in range(0, len(available_on_bsc_list), 1):
                 module_info[0][i].extend(available_on_bsc_list[i])
@@ -106,12 +106,12 @@ class AcademicModule:
 
         if study_programme == 'MSci Physics':
             module_info = MODULE_PROPERTIES_WORKSHEET.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number)[:-1]}',
-                                                                  f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 3)}:{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 3)[:-1]}'],
-                                                                 major_dimension='ROWS')
+                                                                f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 3)}:{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 3)[:-1]}'],
+                                                                major_dimension='ROWS')
         elif study_programme == 'BSc Physics':
             module_info = MODULE_PROPERTIES_WORKSHEET.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number)[:-1]}', 
-                                                                  f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 5)}:{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 5)[:-1]}'],
-                                                                 major_dimension='ROWS')
+                                                                f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 5)}:{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 5)[:-1]}'],
+                                                                major_dimension='ROWS')
 
         compulsory_on_programme_list = module_info.pop()
         for i in range(0, len(compulsory_on_programme_list), 1):
@@ -131,9 +131,132 @@ class AcademicModule:
 
         module_credits_info = MODULE_PROPERTIES_WORKSHEET.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number)[:-1]}',
                                                                     f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 6)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number + 6)[:-1]}'],
-                                                                     major_dimension='ROWS')
+                                                                    major_dimension='ROWS')
         year_x_module_credits_dict = {}
         credits_list = module_credits_info.pop()
         for i in range(0, len(credits_list), 1):
             year_x_module_credits_dict[module_credits_info[0][i][0]] = int(credits_list[i][0])
         return year_x_module_credits_dict
+
+    def add_module(self):
+        """
+        Adds a new module, represented by the AcademicModule instance, to the unigrade google sheet.
+
+        Uses instance properties, and appends a new module section to the 'year {self.year} modules worksheet' of the
+        unigrade google sheet. Also adds a new row, containing the module properties, in the 'module properties worksheet'.
+        Uses various gspread methods to preserve the formatting and layout of each unigrade worksheet.
+        """
+        MODULE_YEAR_MODULES_SHEET = SHEET.worksheet(f'year {self.year} modules')
+        last_module_title = list(filter(lambda title: title != "", MODULE_YEAR_MODULES_SHEET.row_values(1)))[-1]
+        last_occupied_column_index = MODULE_YEAR_MODULES_SHEET.find(last_module_title).col + 4
+        
+        append_columns_body = {
+            "requests": [
+                {
+                    "appendDimension": {
+                        "sheetId": MODULE_YEAR_MODULES_SHEET.id,
+                        "dimension": "COLUMNS",
+                        "length": 6
+                    }
+                }
+            ]
+        }
+        SHEET.batch_update(append_columns_body)
+        
+        copy_paste_body = {
+            "requests": [
+                {
+                    "copyPaste": {
+                        "source": {
+                            "sheetId": MODULE_YEAR_MODULES_SHEET.id,
+                            "startRowIndex": 0,
+                            "endRowIndex": 2,
+                            "startColumnIndex": last_occupied_column_index - 5,
+                            "endColumnIndex": last_occupied_column_index
+
+                        },
+                        "destination": {
+                            "sheetId": MODULE_YEAR_MODULES_SHEET.id,
+                            "startRowIndex": 0,
+                            "endRowIndex": 2,
+                            "startColumnIndex": last_occupied_column_index + 1,
+                            "endColumnIndex": last_occupied_column_index + 5
+                        },
+                        "pasteType": "PASTE_NORMAL",
+                        "pasteOrientation": "NORMAL"
+                    }
+                }
+            ]
+        }
+        # copies module section headings and formatting, and pastes them at the top of the newly created columns
+        SHEET.batch_update(copy_paste_body)
+        gen_functions.update_sheet_borders(MODULE_YEAR_MODULES_SHEET, SHEET)
+
+        background_color_body = {
+            "backgroundColor": {
+                "red": 0,
+                "green": 0,
+                "blue": 0,
+            }
+        }
+        # gives a black fill to the column separator between the newly created and previous module sections
+        MODULE_YEAR_MODULES_SHEET.format(f"{gspread.cell.Cell(1, last_occupied_column_index + 1).address}:{gspread.cell.Cell(MODULE_YEAR_MODULES_SHEET.row_count, last_occupied_column_index + 1).address}",
+                                         background_color_body)
+
+        column_sizing_body = {
+            "requests": [
+                {
+                    "updateDimensionProperties": {
+                        "range": {
+                            "sheetId": MODULE_YEAR_MODULES_SHEET.id,
+                            "dimension": "COLUMNS",
+                            "startIndex": last_occupied_column_index,
+                            "endIndex": last_occupied_column_index + 1
+                        },
+                        "properties": {
+                            "pixelSize": 13
+                        },
+                        "fields": "pixelSize"
+
+                    }
+                },
+                {
+                    "updateDimensionProperties": {
+                        "range": {
+                            "sheetId": MODULE_YEAR_MODULES_SHEET.id,
+                            "dimension": "COLUMNS",
+                            "startIndex": last_occupied_column_index + 1,
+                            "endIndex": last_occupied_column_index + 2
+                        },
+                        "properties": {
+                            "pixelSize": 100
+                        },
+                        "fields": "pixelSize"
+
+                    }
+                },
+                {
+                    "autoResizeDimensions": {
+                        "dimensions": {
+                            "sheetId": MODULE_YEAR_MODULES_SHEET.id,
+                            "dimension": "COLUMNS",
+                            "startIndex": last_occupied_column_index + 2,
+                            "endIndex": last_occupied_column_index + 6
+                        }
+
+                    }
+                }
+            ]
+        }
+        SHEET.batch_update(column_sizing_body)
+        
+        MODULE_YEAR_MODULES_SHEET.update_cell(1, last_occupied_column_index + 2, self.title)
+
+        MODULE_PROPERTIES_WORKSHEET = SHEET.worksheet('module properties')
+        module_year_module_titles_col_num = MODULE_PROPERTIES_WORKSHEET.find(f'Year {self.year} Module Titles').col
+        next_empty_row_num = len(MODULE_PROPERTIES_WORKSHEET.col_values(module_year_module_titles_col_num)) + 1
+        batch_update_range = f'{gspread.utils.rowcol_to_a1(next_empty_row_num, module_year_module_titles_col_num)}:{gspread.utils.rowcol_to_a1(next_empty_row_num, module_year_module_titles_col_num + 6)}'
+        batch_update_values = [self.title, 'X' if self.activity else '', 'X' if self.availablity['MSci Physics'] else '', 'X' if self.compulsory_status['MSci Physics'] else '',
+                               'X' if self.availablity['BSc Physics'] else '', 'X' if self.compulsory_status['BSc Physics'] else '', self.module_credits]
+        MODULE_PROPERTIES_WORKSHEET.batch_update([{'range': batch_update_range, 'values': [batch_update_values]}])
+        MODULE_PROPERTIES_WORKSHEET.add_rows(1)
