@@ -102,6 +102,29 @@ def validate_module_title_input(component):
             return f"{' '.join(filtered_name_words).title()}"
 
 
+def validate_module_credits_input():
+    """
+    Prompts the user to input the module credits for a module and validates the input.
+
+    Returns:
+        In the absence of exceptions, returns the input.
+
+    Raises:
+        ValueError: if the credits input is not a number.
+        ValueError: if the credits input is not divisable by 15.
+    """
+    try:
+        num_of_credits = input('->')
+        if not num_of_credits.isdigit():
+            raise ValueError('Invalid input. The credits must be a number, that is a multiple of 15.')
+        if int(num_of_credits) % 15 != 0:
+            raise ValueError('Invalid input. The number of credits must be a multiple of 15.')
+    except ValueError as error:
+        print(f'{error}\n')
+    else:
+        return num_of_credits
+
+
 def update_sheet_borders(worksheet, google_sheet):
     """
     Updates the border formatting of a worksheet, supplied as a paramater, in a google sheet. In particular it gives all cells a black border.
