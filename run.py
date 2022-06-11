@@ -326,8 +326,8 @@ def modules_interface():
             | | | ' \ |  _|/ _ \| '_|| '  \ / _` ||  _|| |/ _ \| ' \ 
            |___||_||_||_|  \___/|_|  |_|_|_|\__,_| \__||_|\___/|_||_|
     \n""")
-    next_function([['1', 'add_module_interface'], ['2', 'edit_module_properties_interface'], ['3', 'top_level_interface'],
-                   ['4', 'exit_the_program']])
+    next_function([['1', 'add_module_interface'], ['2', 'edit_module_properties_interface'], ['3', 'view_modules_list_interface'], ['4', 'top_level_interface'],
+                   ['5', 'exit_the_program']])
     global last_function_call
     last_function_call = 'modules_interface'
 
@@ -776,7 +776,7 @@ def main():
                                         'unregister_student': 'unregister the student', 'view_or_edit_student_details_interface': 'view and edit student details',
                                         'view_or_edit_student_module_info_and_grades_interface': 'view/edit student module information, including grades and enrolment status',
                                         'add_module_interface': 'add a new module', 'edit_module_properties_interface': 'update the module properties of an existing module',
-                                        'view_modules_list_interface': 'view filtered lists of the existing module titles in the ungrade google sheet',
+                                        'view_modules_list_interface': 'view filtered lists of the existing module titles in the unigrade google sheet',
                                         'exit_the_program': 'exit the unigrade program', 'go_back': 'go back'}
     global last_function_call
     last_function_call = ''
