@@ -138,6 +138,22 @@ class AcademicModule:
             year_x_module_credits_dict[module_credits_info[0][i][0]] = int(credits_list[i][0])
         return year_x_module_credits_dict
 
+    @classmethod
+    def retrieve_active_and_optional_year_x_modules(cls, x, study_programme):
+        """
+        Returns a list of the active optional modules for the academic year x and specified study programme.
+        
+        Retrieved from the unigrade google sheet.
+
+        Args:
+            x (int): the academic year to which the modules belong.
+            study programme (str): the programme the modules must be taught on.
+        """
+        active_modules_this_year = AcademicModule.retrieve_active_year_x_modules(x, study_programme)
+        active_and_compulsory_modules_this_year = AcademicModule.retrieve_active_and_compulsory_year_x_modules(x, study_programme)
+        active_optional_modules_this_year_and_programme = [module for module in active_modules_this_year if module not in active_and_compulsory_modules_this_year]
+        return active_optional_modules_this_year_and_programme
+
     def add_module(self):
         """
         Adds a new module, represented by the AcademicModule instance, to the unigrade google sheet.
