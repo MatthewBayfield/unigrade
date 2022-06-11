@@ -286,8 +286,8 @@ def view_or_edit_student_module_info_and_grades_interface():
                             time.sleep(1.1)
             print_info()
             time.sleep(1)
-            print('''Inspect the above tables, and then enter a number corresponding to one of the
-following options:\n''')
+            print('''Inspect the above tables, and then enter a number corresponding
+to one of the following options:\n''')
             print("1. Update the student's module status and mark for a module.")
             print("""2. View the available optional module credits left for a student in their
 current academic year, and enrol the student on an optional module.""")
@@ -648,7 +648,8 @@ the module titles you wish to to view.''')
             programme_options_descriptors_dict = {'1': 'all programmes' , '2': 'MSci Physics', '3': 'BSc Physics'}
             programme_options_dict = {'1': ['MSci Physics', 'BSc Physics'] , '2': ['MSci Physics'], '3': ['BSc Physics']}
             if valid_year != '4':
-                print('''Enter 1 to view module titles for regardless of programme; enter 2 for MSci Physics only;
+                print('''Enter 1 to view module titles for regardless of programme;
+enter 2 for MSci Physics only;
 enter 3 for BSc Physics only.''')
                 valid_input = False
                 while not valid_input:

@@ -354,7 +354,8 @@ class Student(StudentMixin):
             time.sleep(3)
             print_info_function()
             print('')
-            print("Inspect the above tables, then enter a number corresponding to one of the following options:\n")
+            print("""Inspect the above tables, then enter a number corresponding
+to one of the following options:\n""")
             correct_year_chosen = False
             while not correct_year_chosen:
                 option_index = 1
