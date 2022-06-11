@@ -192,6 +192,12 @@ class Student(StudentMixin):
     retrieved student information; the various instance methods exist for this purpose.
     """
     def __init__(self, identifier, identifier_type, register=False):
+        self.student_name = None
+        self.student_id = None
+        self.study_programme = None
+        self.start_year = None
+        self.end_year = None
+        self.enrolled_modules = None
         result = self.set_student_identifiers(identifier, identifier_type, register)
         if result is not None:
             print(result)
@@ -260,9 +266,12 @@ class Student(StudentMixin):
         Allows the user to edit the student's mutable details. Performs the editing process using existing student class methods, that
         through user input first alter the instance properties, before then updating the google sheet.
         """
-        print('''A student's study programme, start and end year dates, should only be altered under certain circustances:
-1. If in the student is not yet in year 3, they may change programme, and thus necessarily their end year.
-2. If the student's start year is still in the future, both the start year and end year may be deferred.\n''')
+        print('''A student's study programme, start and end year dates, should only be altered
+under certain circustances:
+1. If the student is not yet in year 3, they may change programme, and thus necessarily
+their end year.
+2. If the student's start year is still in the future, both the start year and
+end year may be deferred.\n''')
         print('Enter any key to continue.')
         input('->')
         print('')
