@@ -135,7 +135,7 @@ class StudentMixin(object):
                 STUDENT_DETAILS.update_cell(student_name_cell.row, student_name_cell.col + 1, self.study_programme)
             print('study programme confirmed.\n')
 
-    def set_year(self, point, assignment='edit'):
+    def set_year(self, programme_change=False, assignment='edit'):
         """
         For an initial assignment param value, searches the unigrade google sheet for the student, and if they exist, assigns the
         start_year or end_year instance property for a student class instance, using the corresponding google sheet student property.
@@ -146,42 +146,52 @@ class StudentMixin(object):
         student_name_cell = STUDENT_DETAILS.find(self.student_name)
         if assignment == 'initial':
             if not isinstance(student_name_cell, type(None)):
-                if point == 'start':
-                    self.start_year = STUDENT_DETAILS.cell(student_name_cell.row, student_name_cell.col + 2).value
-                else:
-                    self.end_year = STUDENT_DETAILS.cell(student_name_cell.row, student_name_cell.col + 3).value
+                self.start_year = STUDENT_DETAILS.cell(student_name_cell.row, student_name_cell.col + 2).value
+                self.end_year = STUDENT_DETAILS.cell(student_name_cell.row, student_name_cell.col + 3).value
 
         else:
-            correct = False
-            while not correct:
-                print(f"Enter a {point} year; for example 2022.\n")
-                valid_input = False
-                while not valid_input:
-                    try:
-                        user_input = input('->')
-                        if not (user_input.isdigit() and len(user_input) == 4):
-                            raise ValueError('Invalid input. Enter a valid year.\n')
-                        elif point == 'end' and (int(user_input) - int(self.start_year))  not in (3, 4):
-                            raise ValueError(f'Invalid input; the end year must be 3 or 4 years later than the start year.\nStudent start year: {self.start_year}.')
-                    except ValueError as error:
-                        print(f'{error}\n')                     
-                    else:
-                        valid_input = True
-                if point == 'start':
-                    self.start_year = user_input
-                    print(f" start year: {self.start_year}")
-                    print('Is this correct? Enter 1 for yes, 2 for no.\n')
-                    correct = gen_functions.is_this_correct_checker(self.start_year, 'start year')
+            if not programme_change:
+                if self.start_year is None or (self.start_year is not None and self.student_current_year() == 'yet to start'):
+                    correct = False
+                    while not correct:
+                        print("Enter a start year; for example 2022.\n")
+                        while True:
+                            try:
+                                user_input = input('->')
+                                if not (user_input.isdigit() and len(user_input) == 4):
+                                    raise ValueError('Invalid input. Enter a valid year.\n')
+                            except ValueError as error:
+                                print(f'{error}\n')                     
+                            else:
+                                break
+
+                        self.start_year = user_input
+                        print(f" start year: {self.start_year}")
+                        print('Is this correct? Enter 1 for yes, 2 for no.\n')
+                        correct = gen_functions.is_this_correct_checker(self.start_year, 'start year')
+                        print('')
+                        STUDENT_DETAILS.update_cell(student_name_cell.row, student_name_cell.col + 2, self.start_year)
+                        print(' start year confirmed.\n')
+                        time.sleep(0.5)
+                        print('Automatically setting student end year...')
+                        time.sleep(0.5)
+                        if self.study_programme == 'BSc Physics':
+                            self.end_year = str(int(self.start_year) + 3)
+                        else:
+                            self.end_year = str(int(self.start_year) + 4)
+                        STUDENT_DETAILS.update_cell(student_name_cell.row, student_name_cell.col + 3, self.end_year)
+                        print(f'end year: {self.end_year}. Confirmed.')
                 else:
-                    self.end_year = user_input
-                    print(f"end year: {self.end_year}")
-                    print('Is this correct? Enter 1 for yes, 2 for no.\n')
-                    correct = gen_functions.is_this_correct_checker(self.end_year, 'end year')
-            if point == 'start':
-                STUDENT_DETAILS.update_cell(student_name_cell.row, student_name_cell.col + 2, self.start_year)
+                    print("""Cannot edit the student's start year, as they have already
+started their programme.""")
+                    print('Enter any key to continue.')
+                    input('->')
             else:
+                if self.study_programme == 'BSc Physics':
+                    self.end_year = str(int(self.start_year) + 3)
+                else:
+                    self.end_year = str(int(self.start_year) + 4)
                 STUDENT_DETAILS.update_cell(student_name_cell.row, student_name_cell.col + 3, self.end_year)
-            print('year confirmed.\n')
 
 
 class Student(StudentMixin):
@@ -203,8 +213,7 @@ class Student(StudentMixin):
             print(result)
         if result == 'Student is currently registered.\n':
             self.set_study_programme('initial')
-            self.set_year('start', 'initial')
-            self.set_year('end', 'initial')
+            self.set_year(assignment='initial')
 
     def register(self, identifier, identifier_type):
         """
@@ -219,8 +228,7 @@ class Student(StudentMixin):
         self.set_student_identifiers(identifier, identifier_type, True)
         print('')
         self.set_study_programme()
-        self.set_year('start')
-        self.set_year('end')
+        self.set_year()
         print("Student registered:\n")
         self.retrieve_student_details()
         print('Enter any key to continue.')
@@ -276,8 +284,7 @@ end year may be deferred.\n''')
         input('->')
         print('')
         self.set_study_programme()
-        self.set_year('start')
-        self.set_year('end')
+        self.set_year()
         print('Student details successfully updated.')
         time.sleep(2.5)
         gen_functions.clear()
