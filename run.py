@@ -618,6 +618,99 @@ for example Planetary,Science.\n''')
         next_function_call = 'go_back'
 
 
+def view_modules_list_interface():
+    """
+    Allows the user to view sets of modules, filtered by year, programme and other module properties.
+
+    Prompts the user to select a range of filter options, including module year, study programme,
+    module activity and compulsory/optional status. Then prints the list of filtered module titles to
+    the terminal.
+    """
+    while True:
+        gen_functions.clear()
+        print('View module title list interface:\n')
+        print('Do you want to continue? 1 for yes, 2 for no.')
+        valid_input = False
+        while not valid_input:
+            valid_input = gen_functions.validate_numeric_input(2)
+        if valid_input == '2':
+            next_function([['1', 'go_back'],['2', 'top_level_interface'], ['3', 'exit_the_program']])
+            return
+        else:
+            print('')
+            print('''Enter a number in the range 1-4, corresponding to the academic year of
+the module titles you wish to to view.''')
+            valid_year = False
+            while not valid_year:
+                valid_year = gen_functions.validate_numeric_input(4)
+            print('')
+
+            programme_options_descriptors_dict = {'1': 'all programmes' , '2': 'MSci Physics', '3': 'BSc Physics'}
+            programme_options_dict = {'1': ['MSci Physics', 'BSc Physics'] , '2': ['MSci Physics'], '3': ['BSc Physics']}
+            if valid_year != '4':
+                print('''Enter 1 to view module titles for regardless of programme; enter 2 for MSci Physics only;
+enter 3 for BSc Physics only.''')
+                valid_input = False
+                while not valid_input:
+                    valid_input = gen_functions.validate_numeric_input(3) 
+            else:
+                valid_input = '2'
+            chosen_programme_option_descriptor = programme_options_descriptors_dict[valid_input]
+            chosen_programme_option = programme_options_dict[valid_input]
+            print('')
+
+            property_filters_descriptors_dict = {'1': 'active modules only', '2': 'active compulsory modules only', '3': 'active optional modules only',
+                                                '4': 'active and inactive modules'}
+            property_filters_funcs_dict = {'1': academic_module.AcademicModule.retrieve_active_year_x_modules,
+                                    '2': academic_module.AcademicModule.retrieve_active_and_compulsory_year_x_modules,
+                                    '3': academic_module.AcademicModule.retrieve_active_and_optional_year_x_modules, '4': academic_module.AcademicModule.retrieve_year_x_modules}
+            print('Enter a number corresponding to one of the following options:')
+            for key in property_filters_descriptors_dict.keys():
+                if key != '4':
+                    print(f'{key}. view {property_filters_descriptors_dict[key]}')
+            if chosen_programme_option_descriptor == 'all programmes':
+                print(f"4. {property_filters_descriptors_dict['4']}")
+            valid_input = False
+            while not valid_input:
+                valid_input = gen_functions.validate_numeric_input(4 if chosen_programme_option_descriptor == 'all programmes' else 3)
+            chosen_property_filter_descriptor = property_filters_descriptors_dict[valid_input]
+            chosen_property_filter_func = property_filters_funcs_dict[valid_input]     
+            print('')
+            print('Loading modules...')
+            print('')
+            time.sleep(0.5)           
+
+            module_titles = set()
+            for programme in chosen_programme_option:
+                if chosen_property_filter_descriptor == 'active and inactive modules':
+                    module_list = chosen_property_filter_func(valid_year)
+                    module_titles.update(module_list)
+                else:
+                    module_list = chosen_property_filter_func(valid_year, programme)
+                    module_titles.update(module_list)
+            print(f'Year {valid_year}, {chosen_programme_option_descriptor}, {chosen_property_filter_descriptor}:'.center(60))
+            time.sleep(1)
+            print('')
+            if len(module_titles) == 0:
+                print('No such modules.')
+            else:     
+                for module_title in module_titles:                   
+                    print(f'{module_title}')
+                    time.sleep(0.5)
+            
+            print('')
+            time.sleep(0.5)
+            print('''To view a different set of filtered modules, enter 1;
+or to go back, enter 2.''')
+            valid_input = False
+            while not valid_input:
+                valid_input = gen_functions.validate_numeric_input(2)
+            if valid_input == '2':
+                global next_function_call
+                next_function_call = 'go_back'
+                return
+            
+
 def next_function(option_pair_list):
     """
     Prints a list of indexed options, provided using the option_pair_list param - a list of 2-item lists, to the user,
