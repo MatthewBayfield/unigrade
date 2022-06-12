@@ -106,7 +106,7 @@ class StudentMixin(object):
             else:
                 return 'Student not registered.\n'
 
-    def set_study_programme(self, assignment='edit',):
+    def set_study_programme(self, assignment='edit', programme_change=False):
         """
         For an initial assignment param value, searches the unigrade google sheet for the student, and if they exist, assigns the
         study_programme instance property for a student class instance, using the corresponding google sheet student property.
@@ -119,21 +119,41 @@ class StudentMixin(object):
             if not isinstance(student_name_cell, type(None)):
                 self.study_programme = STUDENT_DETAILS.cell(student_name_cell.row, student_name_cell.col + 1).value
         else:
-            correct = False
-            print("Enter the student's study programme:\n")
-            while not correct:
-                print("For MSci Physics enter 1.\n")
-                print("For BSc Physics enter 2.\n")
-                user_options = {'1': 'MSci Physics', '2': 'BSc Physics'}
-                valid_input = False
-                while not valid_input:
-                    valid_input = gen_functions.validate_numeric_input(2)
-                self.study_programme = user_options[valid_input]
-                print(f"{self.student_name} study programme: {self.study_programme}")
-                print('Is this correct? Enter 1 for yes, 2 for no.\n')
-                correct = gen_functions.is_this_correct_checker(self.study_programme, 'study programme')
-                STUDENT_DETAILS.update_cell(student_name_cell.row, student_name_cell.col + 1, self.study_programme)
-            print('study programme confirmed.\n')
+            def execute_programme_change():
+                correct = False
+                print("Enter the student's study programme:\n")
+                while not correct:
+                    print("For MSci Physics enter 1.\n")
+                    print("For BSc Physics enter 2.\n")
+                    user_options = {'1': 'MSci Physics', '2': 'BSc Physics'}
+                    valid_input = False
+                    while not valid_input:
+                        valid_input = gen_functions.validate_numeric_input(2)
+                    self.study_programme = user_options[valid_input]
+                    print(f"{self.student_name} study programme: {self.study_programme}")
+                    print('Is this correct? Enter 1 for yes, 2 for no.\n')
+                    correct = gen_functions.is_this_correct_checker(self.study_programme, 'study programme')
+                    STUDENT_DETAILS.update_cell(student_name_cell.row, student_name_cell.col + 1, self.study_programme)
+                print('study programme confirmed.\n')
+            
+            if not programme_change:
+                execute_programme_change()
+                return
+            else:
+                print('Student study programme:'.center(60))
+                print('')
+                student_current_academic_year = self.student_current_year()[0]
+                if (isinstance(student_current_academic_year, int) and student_current_academic_year < 3) or student_current_academic_year == 'yet to start':
+                    execute_programme_change()
+                    self.set_year(programme_change=True)
+                    return
+                else:
+                    print(f"student current academic year: {student_current_academic_year}.")
+                    print("Too late to change the student's programme.")
+                    print('Enter any key to continue.')
+                    input('->')
+                    print('')
+                    return
 
     def set_year(self, programme_change=False, assignment='edit'):
         """
@@ -274,16 +294,15 @@ class Student(StudentMixin):
         Allows the user to edit the student's mutable details. Performs the editing process using existing student class methods, that
         through user input first alter the instance properties, before then updating the google sheet.
         """
-        print('''A student's study programme, start and end year dates, should only be altered
+        print('''A student's study programme and start date, can only be altered
 under certain circustances:
-1. If the student is not yet in year 3, they may change programme, and thus necessarily
-their end year.
-2. If the student's start year is still in the future, both the start year and
-end year may be deferred.\n''')
+1. If the student is not yet in year 3, they may change programme.
+2. If the student's start year is still in the future, it may be
+deferred.\n''')
         print('Enter any key to continue.')
         input('->')
         print('')
-        self.set_study_programme()
+        self.set_study_programme(programme_change=True)
         self.set_year()
         print('Student details successfully updated.')
         time.sleep(2.5)
