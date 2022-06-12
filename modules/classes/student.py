@@ -171,7 +171,9 @@ class StudentMixin(object):
 
         else:
             if not programme_change:
-                if self.start_year is None or (self.start_year is not None and self.student_current_year() == 'yet to start'):
+                current_year = datetime.date.today().year
+                academic_year_start_date_this_year = datetime.date(current_year, 9, 27)
+                if self.start_year is None or (self.start_year is not None and self.student_current_year()[0] == 'yet to start'):
                     correct = False
                     while not correct:
                         print("Enter a start year; for example 2022.\n")
@@ -180,28 +182,36 @@ class StudentMixin(object):
                                 user_input = input('->')
                                 if not (user_input.isdigit() and len(user_input) == 4):
                                     raise ValueError('Invalid input. Enter a valid year.\n')
+                                if datetime.date(int(user_input), 9, 27) < academic_year_start_date_this_year:
+                                    raise ValueError('''Invalid input. The start date for the entered year has already past.
+Please enter a valid year.''')
                             except ValueError as error:
                                 print(f'{error}\n')                     
                             else:
                                 break
 
                         self.start_year = user_input
-                        print(f" start year: {self.start_year}")
+                        print(f"start year: {self.start_year}")
                         print('Is this correct? Enter 1 for yes, 2 for no.\n')
                         correct = gen_functions.is_this_correct_checker(self.start_year, 'start year')
-                        print('')
-                        STUDENT_DETAILS.update_cell(student_name_cell.row, student_name_cell.col + 2, self.start_year)
-                        print(' start year confirmed.\n')
-                        time.sleep(0.5)
-                        print('Automatically setting student end year...')
-                        time.sleep(0.5)
-                        if self.study_programme == 'BSc Physics':
-                            self.end_year = str(int(self.start_year) + 3)
-                        else:
-                            self.end_year = str(int(self.start_year) + 4)
-                        STUDENT_DETAILS.update_cell(student_name_cell.row, student_name_cell.col + 3, self.end_year)
-                        print(f'end year: {self.end_year}. Confirmed.')
+                    print('')
+                    STUDENT_DETAILS.update_cell(student_name_cell.row, student_name_cell.col + 2, self.start_year)
+                    print('start year confirmed.\n')
+                    time.sleep(0.5)
+                    print('Automatically setting student end year...')
+                    time.sleep(1.5)
+                    if self.study_programme == 'BSc Physics':
+                        self.end_year = str(int(self.start_year) + 3)
+                    else:
+                        self.end_year = str(int(self.start_year) + 4)
+                    STUDENT_DETAILS.update_cell(student_name_cell.row, student_name_cell.col + 3, self.end_year)
+                    print(f'end year: {self.end_year}. Confirmed.')
+                    time.sleep(1.5)
                 else:
+                    student_current_academic_year = self.student_current_year()[0]
+                    print('Student start year:'.center(60))
+                    print('')
+                    print(f"student current academic year: {student_current_academic_year}.")
                     print("""Cannot edit the student's start year, as they have already
 started their programme.""")
                     print('Enter any key to continue.')
