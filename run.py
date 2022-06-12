@@ -195,8 +195,8 @@ def view_or_edit_student_details_interface():
             while True:
                 new_student_object.retrieve_student_details()
                 valid_input = False
-                print("Enter a number to edit student details, or to go back :\n")
-                options = ["Alter the student's study programme, and their start and end year", 'go back']
+                print("Enter a number to edit student details, or to go back:\n")
+                options = ["Alter the student's study programme and their start year", 'go back']
                 for i in range(0, 2, 1):
                     print(f"{i+1}: {options[i]}")
                 print('')
@@ -206,6 +206,7 @@ def view_or_edit_student_details_interface():
                     next_function_call = 'go_back'
                     break
                 elif valid_input == '1':
+                    print('')
                     new_student_object.edit_student_details()
 
 
