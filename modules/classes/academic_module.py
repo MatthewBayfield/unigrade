@@ -1,6 +1,7 @@
 import sys
 import os
 import time
+import numpy
 import gspread
 from google.oauth2.service_account import Credentials
 academic_module_dir = os.path.dirname(__file__)
@@ -51,11 +52,11 @@ class AcademicModule:
                                 compulsory on each programme.
         module_credits (int): credits the module is worth.
     """
-    def __init__(self, year, title, availablity, module_credits, compulsory_status, activity=True):
+    def __init__(self, year, title, availability, module_credits, compulsory_status, activity=True):
         self.title = title
         self.year = year
         self.activity = activity
-        self.availablity = availablity
+        self.availability = availability
         self.compulsory_status = compulsory_status
         self.module_credits = module_credits
 
@@ -153,6 +154,43 @@ class AcademicModule:
         active_and_compulsory_modules_this_year = AcademicModule.retrieve_active_and_compulsory_year_x_modules(x, study_programme)
         active_optional_modules_this_year_and_programme = [module for module in active_modules_this_year if module not in active_and_compulsory_modules_this_year]
         return active_optional_modules_this_year_and_programme
+
+    @classmethod
+    def fetch_module(cls, module_title):
+        """
+        Returns an AcademicModule instance with the requested module_title, if it exists.
+
+        Searches the unigrade google sheet for a module with the specified module title; if it exists,
+        its properties in the 'module properties worksheet' are retrieved and used to create an
+        instance which is then returned. If it does not exist, a string is returned.
+
+        Args:
+            module_title (str): The module title of the module to fetch.
+        """
+        MODULE_PROPERTIES_WORKSHEET = SHEET.worksheet('module properties')
+        module_title_entry_cell = MODULE_PROPERTIES_WORKSHEET.find(f'{module_title}')
+        if module_title_entry_cell is not None:
+            module_properties_batch_get_range = f"{gspread.utils.rowcol_to_a1(module_title_entry_cell.row, module_title_entry_cell.col + 1)}:{gspread.utils.rowcol_to_a1(module_title_entry_cell.row, module_title_entry_cell.col + 6)}"
+            module_properties_raw = MODULE_PROPERTIES_WORKSHEET.batch_get([module_properties_batch_get_range], major_dimension='ROWS')[0][0]
+            module_year = int(MODULE_PROPERTIES_WORKSHEET.cell(1, module_title_entry_cell.col).value.split(' ')[1])
+            
+            programmes = ['MSci Physics', 'BSc Physics']
+            activity = True if module_properties_raw[0] == 'X' else False
+            module_credits = int(module_properties_raw[-1])
+            availability = {}
+            compulsory_status = {}
+            j = 1
+            i = 2
+            while j <= len(programmes):
+                availability[programmes[j - 1]] = True if module_properties_raw[i - 1] == 'X' else False
+                i += 1
+                compulsory_status[programmes[j - 1]] = True if module_properties_raw[i - 1] == 'X' else False
+                i += 1
+                j += 1
+            
+            return AcademicModule(module_year, module_title, availability, module_credits, compulsory_status, activity)
+        else:
+            return 'No module with this title exists.'
 
     def add_module(self):
         """
