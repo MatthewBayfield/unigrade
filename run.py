@@ -269,7 +269,7 @@ def view_or_edit_student_module_info_and_grades_interface():
                 time.sleep(2)
                 print('')
                 if list(modules_enrolled.values()) == [[], [], [], []]:
-                    print('Student is not enrolled on any modules.')
+                    print('Student is not enrolled on any modules.\n')
                 else:
                     for key, value in module_info.items():
                         if value[2] != []:
