@@ -1,7 +1,7 @@
 import sys
 import os
 import time
-import numpy
+import numpy as np
 import gspread
 from google.oauth2.service_account import Credentials
 academic_module_dir = os.path.dirname(__file__)
@@ -326,3 +326,73 @@ class AcademicModule:
                                                  'X' if self.compulsory_status['MSci Physics'] else '', 'X' if self.availablity['BSc Physics'] else '',
                                                  'X' if self.compulsory_status['BSc Physics'] else '', self.module_credits]
         MODULE_PROPERTIES_WORKSHEET.batch_update([{'range': module_properties_batch_update_range, 'values': [module_properties_batch_update_values]}])
+
+    def generate_module_statistics(self):
+        """
+        Generates and prints summary statistics for the AcademicModule instance, for any or all of its cohort years.
+
+        Retrieves all the relevant data for the module, if any exists, from the unigrade google sheet, and
+        prompts the user to select to view data for a single year, or for all years that data exists. Then generates
+        and prints to the terminal a set of summary statistics.
+        """
+        while True:
+            MODULE_YEAR_MODULES_SHEET = SHEET.worksheet(f'year {self.year} modules')
+            MODULE_TITLE_CELL_COL_NUM = MODULE_YEAR_MODULES_SHEET.find(f'{self.title}', in_row=1).col
+            batch_get_range = f"{gspread.utils.rowcol_to_a1(3, MODULE_TITLE_CELL_COL_NUM + 1)}:{gspread.utils.rowcol_to_a1(3, MODULE_TITLE_CELL_COL_NUM  + 4 )[:-1]}"
+            module_data = MODULE_YEAR_MODULES_SHEET.batch_get([batch_get_range])[0]
+            module_data = [data_row for data_row in module_data if data_row != []]
+            module_data = [data_row for data_row in module_data if data_row[1] == 'completed']
+            cohort_years = set()
+            print('')
+            for data_row in module_data:
+                cohort_years.add(data_row[0])
+            if len(cohort_years) == 0:
+                print('No data exists for this module yet.\n')
+                return
+            else:
+                print('Data exists for the following cohort years:', sorted(cohort_years))
+                print('')
+                print(f"""Enter the year you wish to view, for example {list(cohort_years)[0]};
+or enter 'all' to view data for all the years combined.""")
+                while True:
+                    try:
+                        user_input = input('->')
+                        if user_input != 'all' and user_input not in cohort_years:
+                            raise ValueError("Invalid input. Enter a year from the available cohort years, or enter 'all'.")
+                    except ValueError as error:
+                        print(f'{error}\n')
+                    else:
+                        if user_input != 'all':
+                            module_mark_data = [float(data_row[2]) for data_row in module_data if data_row[0] == user_input]
+                        else:
+                            module_mark_data = [float(data_row[2]) for data_row in module_data]
+                        dataset_size = len(module_mark_data)
+                        module_mark_data_array = np.array(module_mark_data, float)
+                        mean_mark = round(np.mean(module_mark_data_array), 1)
+                        mark_std = round(np.std(module_mark_data_array), 1)
+                        quartiles = np.percentile(module_mark_data_array, [25, 50, 75])
+                        interquartile_range = round(quartiles[2] - quartiles[0], 1)
+                        percentage_pass_or_better = round(100 * len([mark for mark in module_mark_data if mark >=40.0])/dataset_size, 1)
+                        percentage_lower_second_or_better =  round(100 * len([mark for mark in module_mark_data if mark >=50.0])/dataset_size, 1)
+                        percentage_upper_second_or_better = round(100 * len([mark for mark in module_mark_data if mark >=60.0])/dataset_size, 1)
+                        percentage_first_or_better = round(100 * len([mark for mark in module_mark_data if mark >=70.0])/dataset_size, 1)
+                        
+                        print('')
+                        print(f"'{self.title}' module statistics for {user_input} {'years:' if user_input == 'all' else ':'}\n".center(60))
+                        print(f'Dataset size: {dataset_size}\n')
+                        print(f'mean mark (%): {mean_mark}', f'mark standard deviation (%): {mark_std}\n', sep=' '.center(10))
+                        print(f'median mark (%): {round(quartiles[1], 1)}', f'interquartile range (%): {interquartile_range}\n', sep=' '.center(10))
+                        print(f'pass or better (%): {percentage_pass_or_better}', f'2:2 or better (%): {percentage_lower_second_or_better}\n', sep=' '.center(10))
+                        print(f'2:1 or better (%): {percentage_lower_second_or_better}', f'1st or better (%): {percentage_first_or_better}\n', sep=' '.center(10))
+                        if len(cohort_years) > 1:
+                            print('View statistics for another cohort year of this module? Enter 1 for yes, 2 for no.')
+                            valid_input = False
+                            while not valid_input:
+                                valid_input = gen_functions.validate_numeric_input(2)
+                            if valid_input == '2':
+                                gen_functions.clear()
+                                return
+                            else:
+                                break
+                        else:
+                            return  
