@@ -327,8 +327,8 @@ def modules_interface():
             | | | ' \ |  _|/ _ \| '_|| '  \ / _` ||  _|| |/ _ \| ' \ 
            |___||_||_||_|  \___/|_|  |_|_|_|\__,_| \__||_|\___/|_||_|
     \n""")
-    next_function([['1', 'add_module_interface'], ['2', 'edit_module_properties_interface'], ['3', 'view_modules_list_interface'], ['4', 'top_level_interface'],
-                   ['5', 'exit_the_program']])
+    next_function([['1', 'add_module_interface'], ['2', 'edit_module_properties_interface'], ['3', 'view_modules_list_interface'], ['4', 'module_statistics_interface'],
+                   ['5', 'top_level_interface'], ['6', 'exit_the_program']])
     global last_function_call
     last_function_call = 'modules_interface'
 
@@ -763,7 +763,7 @@ whose statistics you wish to view; or enter {len(modules_list) + 1} to select an
                 if int(valid_module) != len(modules_list) + 1:
                     print(f"View '{modules_list[int(valid_module) - 1]}' module statistics.")
                     print('is this correct? Enter 1 for yes, 2 for no.')
-                    correct_module = gen_functions.is_this_correct_checker(valid_module, 'number for a desired module, or enter {len(modules_list) + 1} to select another year.')
+                    correct_module = gen_functions.is_this_correct_checker(valid_module, f'number for a desired module, or enter {len(modules_list) + 1} to select another year.')
                 else:
                     break
             if int(valid_module) != len(modules_list) + 1:
