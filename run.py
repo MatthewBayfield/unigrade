@@ -838,7 +838,8 @@ def main():
                             'view_or_edit_student_details_interface': view_or_edit_student_details_interface,
                             'view_or_edit_student_module_info_and_grades_interface': view_or_edit_student_module_info_and_grades_interface,
                             'add_module_interface': add_module_interface, 'edit_module_properties_interface': edit_module_properties_interface,
-                            'view_modules_list_interface': view_modules_list_interface, 'exit_the_program': exit_the_program, 'go_back' : go_back}
+                            'view_modules_list_interface': view_modules_list_interface, 'module_statistics_interface': module_statistics_interface,
+                            'exit_the_program': exit_the_program, 'go_back' : go_back}
     
     global FUNCTION_USER_DESCRIPTION_DICTIONARY
     FUNCTION_USER_DESCRIPTION_DICTIONARY = {'top_level_interface': 'return to the top program interface',
@@ -848,7 +849,7 @@ def main():
                                         'view_or_edit_student_module_info_and_grades_interface': 'view/edit student module information, including grades and enrolment status',
                                         'add_module_interface': 'add a new module', 'edit_module_properties_interface': 'update the module properties of an existing module',
                                         'view_modules_list_interface': 'view filtered lists of the existing modules in the unigrade google sheet',
-                                        'exit_the_program': 'exit the unigrade program', 'go_back': 'go back'}
+                                        'module_statistics_interface': 'view module statistics', 'exit_the_program': 'exit the unigrade program', 'go_back': 'go back'}
     global last_function_call
     last_function_call = ''
     global next_function_call
