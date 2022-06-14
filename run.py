@@ -712,6 +712,75 @@ or to go back, enter 2.''')
                 next_function_call = 'go_back'
                 return
             
+def module_statistics_interface():
+    """
+    Allows a user to select a module from a chosen academic year, in order to view its module statistics.
+
+    Prompts a user for input to first choose an academic year; then prints the list of all modules
+    belonging to that year (active and inactive), retrieved from the unigrade google sheet, to the terminal.
+    The user is then prompted to select a module from the list, and can then view its statistics.
+    """
+    while True:
+        gen_functions.clear()
+        print('View module statistics:\n')
+        print('Do you want to continue? 1 for yes, 2 for no.')
+        valid_input = False
+        while not valid_input:
+            valid_input = gen_functions.validate_numeric_input(2)
+        if valid_input == '2':
+            next_function([['1', 'go_back'],['2', 'top_level_interface'], ['3', 'exit_the_program']])
+            return
+        else:
+            correct_year = False
+            while not correct_year:
+                print('Enter a number corresponding to one of the following options:\n')
+                for year in [1, 2, 3, 4]:
+                    print(f"{year}. View year {year} module statistics.")
+                
+                valid_year = False
+                while not valid_year:
+                    valid_year = gen_functions.validate_numeric_input(4)
+                print(f'View year {valid_year} module statistics.')
+                print('is this correct? Enter 1 for yes, 2 for no.')
+                correct_year = gen_functions.is_this_correct_checker(valid_year, 'year')
+            modules_list = academic_module.AcademicModule.retrieve_year_x_modules(int(valid_year))
+            
+            print('')
+            print(f'Year {valid_year} modules list:\n'.center(60))
+            time.sleep(0.5)
+            for label, module in enumerate(modules_list):
+                print(f'{label + 1}. {module}')
+                time.sleep(0.5)
+            
+            print('')
+            print(f'''Inspect the above list, and enter the number corresponding to the module
+whose statistics you wish to view; or enter {len(modules_list) + 1} to select another year.''')
+            correct_module = False
+            while not correct_module:
+                valid_module = False
+                while not valid_module:
+                    valid_module = gen_functions.validate_numeric_input(len(modules_list) + 1)
+                if int(valid_module) != len(modules_list) + 1:
+                    print(f"View '{modules_list[int(valid_module) - 1]}' module statistics.")
+                    print('is this correct? Enter 1 for yes, 2 for no.')
+                    correct_module = gen_functions.is_this_correct_checker(valid_module, 'number for a desired module, or enter {len(modules_list) + 1} to select another year.')
+                else:
+                    break
+            if int(valid_module) != len(modules_list) + 1:
+                print('Loading...')
+                time.sleep(0.5)
+                new_module_object = academic_module.AcademicModule.fetch_module(modules_list[int(valid_module) - 1])
+                new_module_object.generate_module_statistics()
+                print('''Do you want to view statistics for another module?
+Enter 1 for yes, enter 2 for no. ''')
+                valid_input = False
+                while not valid_input:
+                    valid_input = gen_functions.validate_numeric_input(2)
+                if valid_input == '2':
+                    global next_function_call
+                    next_function_call = 'go_back'
+                    return
+
 
 def next_function(option_pair_list):
     """
