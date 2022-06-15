@@ -283,8 +283,7 @@ class Student(StudentMixin):
     
     def retrieve_student_details(self):
         """
-        Retrieves the student details of a student from the unigrade google sheet. Prints the details as a table using
-        the tabulate module.
+        Retrieves the student details of a student from the unigrade google sheet. Prints the details as a table.
         """
         STUDENT_DETAILS = SHEET.worksheet('student details')
         student_name_cell = STUDENT_DETAILS.find(self.student_name)
@@ -296,7 +295,8 @@ class Student(StudentMixin):
         formatted_student_details = []
         for student_detail in student_details:
             formatted_student_details.append(student_detail.replace(' ', '\n'))
-        registered_student_details = tabulate([formatted_student_details_headings, formatted_student_details], headers='firstrow', tablefmt='pretty', stralign='left', numalign='left')
+        registered_student_details = tabulate([formatted_student_details_headings, formatted_student_details], headers='firstrow', tablefmt='pretty',
+                                              stralign='left', numalign='left')
         print(registered_student_details)
 
     def edit_student_details(self):
@@ -323,6 +323,10 @@ deferred.\n''')
     def student_current_year(self):
         """
         Calulates and returns the current academic year the student is in.
+
+        Returns:
+                A list of two items. The first an int corresponding to the calculated current student academic year;
+                the second a str containing a description prior to the current student academic year.
         """
         current_date = datetime.date.today()
         current_year = datetime.date.today().year
