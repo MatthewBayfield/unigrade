@@ -338,16 +338,17 @@ class Student(StudentMixin):
             identifier (str): equals the student's name or ID depending on the identifier_type value.
         """
         print('starting the registration process:\n')
-        self.set_student_identifiers(identifier, identifier_type, True)
-        print('')
-        self.set_study_programme()
-        self.set_year()
-        print("Student registered:\n")
-        self.retrieve_student_details()
-        print('Enter any key to continue.')
-        input('->')
-        print('')
-        self.compulsory_module_enrolment_checker_and_updater()
+        # If the registration is aborted during the set_student_identifiers method, it returns an 'abort' str.
+        if self.set_student_identifiers(identifier, identifier_type, True) != 'abort':
+            print('')
+            self.set_study_programme()
+            self.set_year()
+            print("Student registered:\n")
+            self.retrieve_student_details()
+            print('Enter any key to continue.')
+            input('->')
+            print('')
+            self.compulsory_module_enrolment_checker_and_updater()
 
     def unregister(self):
         """
