@@ -226,10 +226,22 @@ started their programme.""")
 
 class Student(StudentMixin):
     """
-    Creates student objects, that have instance properties assigned using a combination of input parameters, and methods from
-    the StudentMixin class. The student properties are those found in the student details worksheet of the unigrade-physics google sheet.
-    A student object is used to hold the results of user inputs or database queries, during the process of updating the google sheet, and for displaying
-    retrieved student information; the various instance methods exist for this purpose.
+    Represents a student registered or to be registered in the unigrade google sheet.
+    
+    Student instance attributes replicate those found in the student details worksheet of the unigrade google sheet.
+    A student instance is used to hold the results of user inputs or database queries, during the process of updating
+    the google sheet, and for displaying retrieved student information. The various instance methods allow the user
+    to view, modify, and add/delete student information contained in or derived from the unigrade google sheet.
+    The StudentMixin class provides additonal methods for assigning/reassigning instance attributes, and updating
+    the google sheet.
+
+    Attributes:
+        student_name (str): name of the student.
+        student_id (str): ID number of the student as a string.
+        study_programme (str): the study programme of the student, either 'MSci Physics' or 'BSc Physics'.
+        start_year (str): the year the student commences their programme.
+        end_year (str): the year the student finishes their programme.
+        enrolled_modules (dict): with 'student academic year: student enrolled modules list' 'key:value' pairs.
     """
     def __init__(self, identifier, identifier_type, register=False):
         self.student_name = None
