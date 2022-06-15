@@ -538,16 +538,23 @@ or to go back enter 2.''')
         
     def unenrol_student_from_module(self):
         """
-        Prompts the user to select an optional module, for the student's current academic year, to unenrol the student object from,
-        subject to constraints. First prints tables displaying the student's enrolled optional modules. Once a module is chosen,
-        the necessary updates to the unigrade google sheet are performed, namely clearing the data cells for this module for this student.
+        Prompts the user to select an optional module for the student's current academic year, to unenrol the student from.
+
+        First prints tables displaying the student's enrolled optional modules for their current academic year, and that they have
+        yet to complete. Once a module is chosen the necessary updates to the unigrade google sheet are performed,
+        namely clearing the data cells for this module for this student. User also has the option to switch to enrolling.
+
+        Returns:
+                One of several strings, that if set equal to the global next_function_call variable of run.py,
+                determines which interface the user sees next.
         """
         student_academic_year = self.student_current_year()[0]
         gen_functions.clear()
         print('Student module unenrolment:\n')
-        print('''You can unenrol a student from any optional module on their current academic year, for which they have yet to complete.
-This unenrolment should accompany enrolling a student on another available optional module, normally within the first month that
-the module commenced.\n''')
+        print('''You can unenrol a student from any optional module on their current
+academic year, for which they have yet to complete. This unenrolment
+should accompany enrolling a student on another available optional module,
+normally within the first month that the module commenced.\n''')
         print('Enter any key to continune.')
         input('->')
         print('')
@@ -561,7 +568,7 @@ the module commenced.\n''')
                 active_and_compulsory_modules_this_year = academic_module.AcademicModule.retrieve_active_and_compulsory_year_x_modules(student_academic_year, self.study_programme)
                 student_currently_enrolled_modules_this_year = self.enrolled_modules[f'year {student_academic_year}']
                 student_current_enrolled_optional_modules_this_year = [module for module in student_currently_enrolled_modules_this_year 
-                if (module not in active_and_compulsory_modules_this_year)]
+                                                                       if (module not in active_and_compulsory_modules_this_year)]
                 student_entry_row = this_year_modules_worksheet.find(self.student_id).row
                 student_not_completed_enrolled_optional_modules_this_year = []
                 for module in student_current_enrolled_optional_modules_this_year:
@@ -569,13 +576,14 @@ the module commenced.\n''')
                     if module_status != 'completed':
                         student_not_completed_enrolled_optional_modules_this_year.append(module)
                 
-
-                formatted_student_not_completed_enrolled_optional_modules_this_year = [title.replace(': ', ':\n') for title in student_not_completed_enrolled_optional_modules_this_year]
+                formatted_student_not_completed_enrolled_optional_modules_this_year = [title.replace(': ', ':\n') 
+                                                                                       for title in student_not_completed_enrolled_optional_modules_this_year]
                 table_headings = [' ', 'Module title']
                 table_data = [[label, module_title] for label, module_title in enumerate(formatted_student_not_completed_enrolled_optional_modules_this_year, 1)]
                 table_data.insert(0, table_headings)
                 labelled_not_completed_enrolled_optional_modules_table = tabulate(table_data, headers='firstrow', tablefmt='pretty', stralign='left', numalign='left')
-                print("Student's currently enrolled and not completed optional modules, for their current academic year:")
+                print("""Student's currently enrolled and not completed optional modules,
+for their current academic year:""")
                 time.sleep(1)
                 print(labelled_not_completed_enrolled_optional_modules_table)
                 time.sleep(2)
@@ -595,7 +603,8 @@ the module commenced.\n''')
                     else:
                         return 'view_or_edit_student_module_info_and_grades_interface'
 
-                print(f"Enter the numeric label corresponding to the module title of the module you wish to unenrol the student from;")
+                print(f"""Enter the numeric label corresponding to the module title of the module
+you wish to unenrol the student from;""")
                 print(f'or enter {len(student_not_completed_enrolled_optional_modules_this_year) + 1} to go back.')
                 correct_module_chosen = False
                 while not correct_module_chosen:
@@ -609,7 +618,8 @@ the module commenced.\n''')
                     correct_module_chosen = gen_functions.is_this_correct_checker(chosen_module,
                     f'number corresponding to one of the modules, or the number {len(student_not_completed_enrolled_optional_modules_this_year) + 1} to go back.')
                 
-                module_info_cell_range_start_col = this_year_modules_worksheet.find(student_not_completed_enrolled_optional_modules_this_year[int(chosen_module) - 1], in_row=1).col
+                module_info_cell_range_start_col = this_year_modules_worksheet.find(student_not_completed_enrolled_optional_modules_this_year[int(chosen_module) - 1],
+                                                                                    in_row=1).col
                 module_info_cell_range_start_address = gspread.utils.rowcol_to_a1(student_entry_row, module_info_cell_range_start_col)
                 module_info_cell_range_end_address = gspread.utils.rowcol_to_a1(student_entry_row, module_info_cell_range_start_col + 4)
                 this_year_modules_worksheet.batch_clear([f'{module_info_cell_range_start_address}:{module_info_cell_range_end_address}'])
