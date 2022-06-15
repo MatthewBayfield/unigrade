@@ -301,8 +301,10 @@ class Student(StudentMixin):
 
     def edit_student_details(self):
         """
-        Allows the user to edit the student's mutable details. Performs the editing process using existing student class methods, that
-        through user input first alter the instance properties, before then updating the google sheet.
+        Allows the user to edit the student's mutable details, namely their start year, and study programme under certain conditions.
+        
+        Performs the editing process using existing student class methods, that through user input first alter the instance
+        properties, before then updating the unigrade google sheet.
         """
         print('''A student's study programme and start date, can only be altered
 under certain circustances:
