@@ -320,8 +320,7 @@ deferred.\n''')
     
     def student_current_year(self):
         """
-        Calulates and returns the current academic year the student is in, using information
-        from the unigrade google sheet, stored in the student class instance properties.
+        Calulates and returns the current academic year the student is in.
         """
         current_date = datetime.date.today()
         current_year = datetime.date.today().year
