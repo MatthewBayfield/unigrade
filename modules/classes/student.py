@@ -247,12 +247,14 @@ class Student(StudentMixin):
 
     def register(self, identifier, identifier_type):
         """
-        Adds the student's details to the unigrade-physics google sheet:
-        First sets the instance properties, then updates the google sheet;
-        using methods from the StudentMixin class, along with user inputs.
+        Registers the student instance in the unigrade google sheet.
 
-        param identifier_type: 'name' or 'ID'
-        param identifier: student name/ID str
+        Adds the student's details to the google sheet, by first reassigning the instance properties, and
+        then updating the google sheet using methods from the StudentMixin class, along with user inputs.
+
+        Args:
+            identifier_type (str): has value 'name' or 'ID'.
+            identifier (str): equals the student's name or ID depending on the identifier_type value.
         """
         print('starting the registration process:\n')
         self.set_student_identifiers(identifier, identifier_type, True)
@@ -268,8 +270,9 @@ class Student(StudentMixin):
 
     def unregister(self):
         """
-        Deletes any rows in the unigrade-physics google sheet containing
-        the student object's associated student_id instance property.
+        Unregisters the student instance from the unigrade google sheet.
+
+        Deletes any rows in the unigrade google sheet containing the student_id instance property value.
         """
         UNIGRADE_WORKSHEETS = SHEET.worksheets()
         for sheet in UNIGRADE_WORKSHEETS:
