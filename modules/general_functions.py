@@ -5,9 +5,19 @@ import decorated_gspread_methods
 
 def validate_numeric_input(number_of_options):
     '''
+    Validates numeric user inputs: checks that a user enters an integer belonging to a specified range of integers.
+
     Prompts user input. Tests whether the user input is in the valid range of integers, as determined by the number_of_options parameter.
-    If it is not it raises an exception. Returns a boolean,  or the user input value, which will also
-    be used to evaluate to a boolean within the function in which this function is called.
+
+    Args:
+        number_of_options (int): determines the size of the range of integers, where the step is one.
+    
+    Returns:
+        Returns a False boolean if the user input is invalid, or the user input value for a valid input.
+
+    Raises:
+        ValueError: if the user input is not an integer belonging to the valid range of integers.
+
     '''
     try:
         user_selected_option = input("->")
@@ -22,8 +32,16 @@ def validate_numeric_input(number_of_options):
 
 def validate_student_name_input():
     """
-    Prompts a user for input. Checks whether a 'student name' user input is valid. Returns a boolean, or the student name input, which will also
-    be used to evaluate to a boolean within the function in which this function is called.
+    Validates student name user inputs: checks the input is in the correct format, and only contains alphabetic characters.
+
+    Prompts a user for input. Checks whether a 'student name' user input is valid.
+
+    Returns:
+        Returns a False boolean if the user input is invalid, or the user input value for a valid input.
+
+    Raises:
+        ValueError: if the user input is not in the correct format, or does not contain only alphabetic characters.
+
     """
     try:
         full_name = input('->')
@@ -51,9 +69,18 @@ def validate_student_name_input():
     
 def is_this_correct_checker(user_input, user_input_description):
     """
-    Called after a user input to prompt the user for further input to confirm whether they are happy with their input.
-    Returns a boolean, or the user input value, which will also be used to evaluate to a boolean within the function
-    in which this function is called.
+    Prompts the user for input in response to being asked to enter '1' for 'yes', '2' for 'no, to confirm their input is correct.
+
+    Called after a user input to prompt the user for further input to confirm whether the input they entered is correct.
+    Returns a boolean, or the user input value
+
+    Args:
+        user_input: the user input the user was asked to confirm is correct.
+        user_input_description (str): a description of the user input, that is printed as part of a string to the user
+        if they do not confirm their input, that instructs them to enter the correct input.
+
+    Returns:
+        Returns a False boolean if the user does not confirm their input, or the confirmed user input value if they do.
     """
     while True:
         valid_input = validate_numeric_input(2)
@@ -131,9 +158,14 @@ def validate_module_credits_input():
 
 def update_sheet_borders(worksheet, google_sheet):
     """
-    Updates the border formatting of a worksheet, supplied as a paramater, in a google sheet. In particular it gives all cells a black border.
-    This function will be called when new rows or columns are added to the google sheet.
-    Uses gspread batch_update API method.
+    Updates the border formatting of a worksheet in a google sheet. In particular it gives all cells a black border.
+    
+    This function should be called when new rows or columns are added to the worksheet in the google sheet.
+    Uses the gspread batch_update API method.
+
+    Args:
+        google_sheet: a gspread Spreadsheet class instance.
+           worksheet: a gspread Worksheet class instance, where the worksheet belongs to the spreadsheet.
     """
     borders_update_body = {
         "requests": [
@@ -214,6 +246,8 @@ def update_sheet_borders(worksheet, google_sheet):
 
 def clear():
     """
+    Effectively clears the terminal.
+    
     Clears the visible portion of the terminal, and then prints empty rows as well as a
     'top of terminal banner' to visually separate future printed content, from the scrollback
     history.
