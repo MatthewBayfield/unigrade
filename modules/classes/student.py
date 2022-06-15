@@ -44,10 +44,27 @@ class StudentMixin(object):
     """
     def set_student_identifiers(self, identifier, identifier_type, register=False):
         """
-        Searches the unigrade google sheet for a student using the identifier param; if the student exists, instance properties
-         of the student class instance are assigned with the student google sheet properties. Also when the register param value
-         is True, the user is prompted for input, to assign the instance properties, which are then used to update the
-         google sheet.
+        Reassigns the student_id and student_name instance attributes, using user input or the unigrade google sheet. Updates the sheet.
+
+        Searches the unigrade google sheet for a student using the identifier param; if the student exists, the student_id and
+        and student_name attributes are reassigned using the student's details in the unigrade google sheet.
+        When the register param value is True, the user is prompted for input, to reassign the name and ID attributes,
+        which are then used to update the google sheet.
+
+        Args:
+            identifier_type (str): has value 'name' or 'ID'.
+                 identifier (str): equals the student's name or ID depending on the identifier_type value.
+                  register (bool): Determines flow control. Indicates whether the student is being
+                                   registered in the unigrade sheet.
+
+        Returns:
+            Depending on the value of the parameters, and if the registration is not aborted, returns None
+            or a string indicating whether the student is currently registered in the unigrade google sheet.
+            If the registration is aborted, returns an 'abort' str.
+
+        Raises:
+            ValueError: if the the student_id input is not valid: not 9 digits or not unique in the unigrade sheet.
+            ValueError: if the student_name input is not unique in the unigrade google sheet.
         """
         STUDENT_DETAILS = SHEET.worksheet('student details')
         student_identifier_cell = STUDENT_DETAILS.find(identifier)
@@ -70,12 +87,21 @@ class StudentMixin(object):
                     while not valid_input:
                         try:
                             ID_input = input('->')
+                            if ID_input == '2':
+                                print('Registration aborted.')
+                                time.sleep(2)
+                                return 'abort'
                             if not (ID_input.isdigit() and len(ID_input) == 9):
-                                raise ValueError("""Invalid ID, please check you have entered the student's ID correctly: it should contain 9 digits and nothing else.\n""")
+                                raise ValueError("""Invalid ID, please check you have entered the student's ID correctly:
+it should contain 9 digits and nothing else. Then enter an ID again.""")
                             elif ID_input in used_ids_str:
-                                raise ValueError("This ID belongs to an already registered student, please check you have entered the student's ID correctly.\n")
+                                raise ValueError("""This ID belongs to an already registered student, check you have entered
+the student's ID correctly; or maybe you entered the wrong name previously.""")
                         except ValueError as error:
                             print(f"{error}\n")
+                            time.sleep(0.5)
+                            if ID_input in used_ids_str:
+                                print('Enter the correct ID, or enter 2 to abort the registration.')
                         else:
                             print(f"Student ID: {ID_input} ")
                             print('is this correct? Enter 1 for yes, 2 for no.\n')
@@ -86,8 +112,28 @@ class StudentMixin(object):
                     print('''Now enter the student's full name separated by a comma;\nfor example: John,Smith.\n''')
                     valid_input = False
                     while not valid_input:
-                        valid_input = gen_functions.validate_student_name_input()
-                    self.student_name = valid_input
+                        try:
+                            name_input = gen_functions.validate_student_name_input()
+                            if name_input:
+                                if STUDENT_DETAILS.find(name_input):
+                                    raise ValueError("""This name belongs to an already registered student, check you have entered
+the student's name correctly; or maybe you entered the wrong ID previously.""")
+                        except ValueError as error:
+                            print(f"{error}\n")
+                            time.sleep(0.5)
+                            print('Enter 1 to reenter an ID; or enter 2 to abort the registration.')
+                            valid_entry = False
+                            while not valid_entry:
+                                valid_entry = gen_functions.validate_numeric_input(2)
+                            if valid_entry == '2':
+                                print('Registration aborted.')
+                                time.sleep(2)
+                                return 'abort'
+                            else:
+                                print("Enter the student's full name separated by a comma;\nfor example: John,Smith.\n")
+                        else:
+                            if name_input:
+                                self.student_name = valid_input
 
                 next_empty_row_number = len(used_ids_str) + 2
                 STUDENT_DETAILS.update_cell(next_empty_row_number, 2, self.student_name)
