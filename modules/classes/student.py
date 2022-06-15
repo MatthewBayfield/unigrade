@@ -313,6 +313,19 @@ class Student(StudentMixin):
         enrolled_modules (dict): with 'student academic year: student enrolled modules list' 'key:value' pairs.
     """
     def __init__(self, identifier, identifier_type, register=False):
+        """
+        Creates Student instances.
+
+        Initially assigns all instance attributes a placeholder value of None. If the student is already
+        registered in the unigrade google sheet, all instances except 'enrolled_modules' are automatically
+        reassigned using the student's details retrieved from the google sheet.
+
+        Args:
+            identifier_type (str): has value 'name' or 'ID'.
+                 identifier (str): equals the student's name or ID depending on the identifier_type value.
+                  register (bool): Indicates whether the Student instance is being created for the
+                                   purpose of registering a student in the unigrade sheet.
+        """
         self.student_name = None
         self.student_id = None
         self.study_programme = None
