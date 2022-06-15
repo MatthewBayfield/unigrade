@@ -108,10 +108,20 @@ class StudentMixin(object):
 
     def set_study_programme(self, assignment='edit', programme_change=False):
         """
-        For an initial assignment param value, searches the unigrade google sheet for the student, and if they exist, assigns the
-        study_programme instance property for a student class instance, using the corresponding google sheet student property.
-        For an edit param value, prompts the user for input in order to assign the study_programme instance property, and update
-        the google sheet.
+        Reassigns the study_programme Student instance attribute using user input. Then updates the unigrade google sheet.
+
+        For an initial assignment param value: searches the unigrade google sheet for the student, and if they exist,
+        reassigns the study_programme attribute for a Student class instance, using the corresponding google sheet
+        student property. For an edit param value: prompts the user for input in order to reassign the study_programme
+        attribute, and then update the google sheet. If the programme_change param is True (assignment='edit'): the
+        programme can only be changed if the student is either yet to start, or not yet in their 3rd year.
+
+        Args:
+            programme_change (bool): determines flow control, by indicating whether the student's programme is being assigned
+            during student registration (False), or changed (True).            
+                   assignment (str): has the values 'initial' or 'edit'. Indicates whether the study_programme instance
+                                     attribute is being reassigned using the unigrade google sheet and used elsewhere;
+                                     or whether it is being reassigned, and then used to update the google sheet.
         """
         STUDENT_DETAILS = SHEET.worksheet('student details')
         student_name_cell = STUDENT_DETAILS.find(self.student_name)
@@ -120,8 +130,8 @@ class StudentMixin(object):
                 self.study_programme = STUDENT_DETAILS.cell(student_name_cell.row, student_name_cell.col + 1).value
         else:
             def execute_programme_change():
-                correct = False
                 print("Enter the student's study programme:\n")
+                correct = False
                 while not correct:
                     print("For MSci Physics enter 1.\n")
                     print("For BSc Physics enter 2.\n")
