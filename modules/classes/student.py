@@ -38,9 +38,11 @@ Please try running the program again. If the error persists try again later.\n''
 
 class StudentMixin(object):
     """
-    A mixin class, that contains methods used by student class instances for the initialisation and updating of
-    their properties, in the process of retrieving and displaying student information, and updating the unigrade-physics
-    google sheet, for example during student registration.
+    A mixin class with methods for use in the Student class, to reassign instance attributes, and update the unigrade google sheet.
+    
+    Contains methods that retrieve student information from the unigrade google sheet as well as user input, for the purpose
+    of reassigning Student instance attributes, as part of the process of generating and displaying student information to
+    the user, as well as editing student information in the unigrade google sheet.
     """
     def set_student_identifiers(self, identifier, identifier_type, register=False):
         """
