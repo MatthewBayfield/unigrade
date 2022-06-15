@@ -387,10 +387,25 @@ deferred.\n''')
     
     def edit_student_module_info(self, print_info_function, load_and_prepare_module_info_function):
         """
-        Allows the user to select to modify the module status and mark for a chosen module for which the student is enrolled:
-        First reprints the students enrolled module information tables, then provides prompts to choose a module and then
-        alter the module status and mark, before updating the unigrade google sheet. To be called on a student object within the
-        view_or_edit_student_module_info_and_grades_interface func.
+        Allows the user to select to modify the module status and mark for a chosen module for which the student is enrolled.
+
+        First reprints the student's enrolled module information tables; then provides prompts to choose a module and then
+        alter the module status and mark, before updating the unigrade google sheet. To be called on a Student instance within
+        the view_or_edit_student_module_info_and_grades_interface func of run.py.
+
+        Args:
+            print_info_function: The 'print_info' inner function of the 'view_or_edit_student_module_info_and_grades_interface'
+                                 func. Prints the student module information tables.
+            load_and_prepare_module_info_function: The 'load_and_prepare_module_info' inner function of the
+                                                   'view_or_edit_student_module_info_and_grades_interface func'. Generates
+                                                   the tables printed by the print_info func.
+        
+        Returns:
+                Returns a str that if set equal to the global next_function_call variable of run.py,
+                determines which interface the user sees next.
+        
+        Raises:
+                ValueError: If the student mark input does not contain only numbers, or the number entered is not given to 1dp.
         """
         while True:
             gen_functions.clear()
@@ -423,7 +438,8 @@ to one of the following options:\n""")
                     return 'view_or_edit_student_module_info_and_grades_interface'
 
             print('')
-            print(f"Enter the numeric label corresponding to the module title in the {years_with_enrolled_modules[int(chosen_year) - 1]} modules tables, for the module you wish to edit for the student:\n")
+            print(f"""Enter the numeric label corresponding to the module title in the
+{years_with_enrolled_modules[int(chosen_year) - 1]} modules tables, for the module you wish to edit for the student:\n""")
             correct_module_chosen = False
             while not correct_module_chosen:
                 chosen_module = False
@@ -462,7 +478,8 @@ to one of the following options:\n""")
 
             print('')
             if module_status_options[int(chosen_status) - 1] == 'completed':
-                print('Enter the percentage mark for the student in this module, as a number between 0-100 to 1dp, for example 56.5')
+                print('''Enter the percentage mark for the student in this module,
+as a number between 0-100 to 1dp, for example 56.5.''')
                 correct_mark = False
                 while not correct_mark:
                     valid_mark = False
@@ -500,13 +517,15 @@ to one of the following options:\n""")
                 valid_mark = '-'
                 valid_grade = '-'
 
-            chosen_module_worksheet.batch_update([{'range': student_module_info_cell_reference_range, 'values': [[cohort_year, module_status_options[int(chosen_status) - 1], valid_mark, valid_grade]]}])
+            chosen_module_worksheet.batch_update([{'range': student_module_info_cell_reference_range, 'values': [[cohort_year, module_status_options[int(chosen_status) - 1],
+                                                                                                                  valid_mark, valid_grade]]}])
             print('Student module information updated.\n')
             student_module_info = chosen_module_worksheet.batch_get([student_module_info_cell_reference_range])
             student_module_info_table = tabulate([table_headings, student_module_info[0][0]], headers='firstrow', tablefmt='pretty', stralign='left', numalign='left')
             print(student_module_info_table)
             print('')
-            print('To modify the status and mark of another module for the same student, enter 1; or to go back enter 2.')
+            print('''To modify the status and mark of another module for the same student, enter 1;
+or to go back enter 2.''')
             valid_input = False
             while not valid_input:
                 valid_input = gen_functions.validate_numeric_input(2)
