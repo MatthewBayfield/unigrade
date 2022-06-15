@@ -785,9 +785,10 @@ starting on {datetime.date(datetime.date.today().year, 9, 27)}.\n""")
 
     def compulsory_module_enrolment_checker_and_updater(self):
         """
-        Checks whether the student object is enrolled on all active compulsory modules for
-        their current academic year and programme, in the unigrade google sheet. Then enrols
-        the student on any compulsory modules that they are not yet enrolled on.
+        Checks whether the student instance is enrolled on all active compulsory modules. Performs enrolment if necessary.
+        
+        Checks the enrolement status of the active compulsory modules for their current academic year and programme, in the unigrade
+        google sheet. Then enrols the student on any active compulsory modules that they are not yet enrolled on.
         """
         print('''Checking and updating the enrolment status of the compulsory modules
 for the student's current academic year.
