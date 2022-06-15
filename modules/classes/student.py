@@ -157,10 +157,23 @@ class StudentMixin(object):
 
     def set_year(self, programme_change=False, assignment='edit'):
         """
-        For an initial assignment param value, searches the unigrade google sheet for the student, and if they exist, assigns the
-        start_year or end_year instance property for a student class instance, using the corresponding google sheet student property.
-        For an edit param value, prompts the user for input in order to assign the start_year or end_year instance property, and update
-        the google sheet.
+        Reassigns the start/end_year Student instance attributes either automatically, or using user input. Updates unigrade sheet.
+
+        For an initial assignment param value: searches the unigrade google sheet for the student, and if they exist, reassigns
+        the start_year and end_year attributes for a Student class instance, using the corresponding google sheet student
+        property. For an edit param value: prompts the user for input in order to reassign the start_year attribute, and
+        automatically sets the end_year attribute, before updating the google sheet. If the programme_change param is True:
+        automatically updates the end_year attribute according to the student programme and start_year attributes.
+
+        Args:
+            programme_change (bool): indicates whether the end_year is to be reassigned automatically in response to a
+                                     a change in the student's study programme.
+                   assignment (str): has the values 'initial' or 'edit'. Indicates whether the year instance attributes are
+                                     being reassigned using the unigrade google sheet and used elsewhere; or whether they
+                                     are being reassigned, and then used to update the google sheet.
+        
+        Raises:
+            ValueError: if the start year user input does not contain only 4 numbers, or if the start year is in the past.
         """
         STUDENT_DETAILS = SHEET.worksheet('student details')
         student_name_cell = STUDENT_DETAILS.find(self.student_name)
