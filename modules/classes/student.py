@@ -342,14 +342,24 @@ deferred.\n''')
     
     def retrieve_student_enrolled_module_info(self, year):
         """
-        Retrieves data from the unigrade google sheet pertainig to the enrolled modules of a student object, for a chosen year param.
+        Retrieves information on the enrolled modules of a student for a chosen year, and generates two tables containing it.
+
+        Retrieves data from the unigrade google sheet pertainig to the enrolled modules of a student instance, for a specified year.
         Uses the retrieved data to return a list, containing tables displaying all enrolled module titles
-        and associated information for the student, as well as the list of enrolled module titles.
+        and associated information for the student, as well as the list of module titles.
+
+        Args:
+            year (int): the academic year, to retrieve student enrolled module information for.
+
+        Returns:
+                A list, containing two tables containing the module information; and a list of the enrolled module titles for the
+                student for this year.
         """
         UNIGRADE_WORKSHEETS = SHEET.worksheets()
         sheet = UNIGRADE_WORKSHEETS[year]
 
         student_entry_row = sheet.find(self.student_id).row
+        # Finds all cells that contain 'X'
         crossed_cells = sheet.findall('X', in_row=student_entry_row)
         crossed_cells_col_index = [x.col for x in crossed_cells]
 
