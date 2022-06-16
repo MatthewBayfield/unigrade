@@ -9,8 +9,9 @@ student_dir = os.path.dirname(__file__)
 general_functions_dir = os.path.join(student_dir, '..')
 sys.path.insert(1, general_functions_dir)
 import general_functions as gen_functions
-import decorated_gspread_methods
 import classes.academic_module as academic_module
+import decorated_gspread_methods
+
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive.file",
@@ -43,7 +44,8 @@ class StudentMixin(object):
     of reassigning Student instance attributes, as part of the process of generating and displaying student information to
     the user, as well as editing student information in the unigrade google sheet.
     """
-    def set_student_identifiers(self, identifier, identifier_type, register=False):
+    def set_student_identifiers(self, identifier, identifier_type,
+                                register=False):
         """
         Reassigns the student_id and student_name instance attributes, using user input or the unigrade google sheet. Updates the sheet.
 
@@ -137,7 +139,8 @@ the student's name correctly; or maybe you entered the wrong ID previously.""")
                                 self.student_name = valid_input
 
                 next_empty_row_number = len(used_ids_str) + 2
-                STUDENT_DETAILS.update_cell(next_empty_row_number, 2, self.student_name)
+                STUDENT_DETAILS.update_cell(next_empty_row_number,
+                                            2, self.student_name)
                 UNIGRADE_WORKSHEETS = SHEET.worksheets()
                 print('Adding student identifiers to the unigrade google sheet, please wait...')
                 for sheet in UNIGRADE_WORKSHEETS:
@@ -145,9 +148,11 @@ the student's name correctly; or maybe you entered the wrong ID previously.""")
                         sheet.add_rows(1)
                         gen_functions.update_sheet_borders(sheet, SHEET)
                         if sheet.id == 0:
-                            sheet.update_cell(next_empty_row_number, 1, self.student_id)
+                            sheet.update_cell(next_empty_row_number,
+                                              1, self.student_id)
                         else:
-                            sheet.update_cell(next_empty_row_number + 1, 1, self.student_id)
+                            sheet.update_cell(next_empty_row_number + 1,
+                                              1, self.student_id)
                 print('Student identifiers added.')
                 time.sleep(1.5)
             else:
@@ -333,7 +338,8 @@ class Student(StudentMixin):
         self.start_year = None
         self.end_year = None
         self.enrolled_modules = None
-        result = self.set_student_identifiers(identifier, identifier_type, register)
+        result = self.set_student_identifiers(identifier,
+                                              identifier_type, register)
         if result is not None:
             print(result)
         if result == 'Student is currently registered.\n':
@@ -394,8 +400,12 @@ class Student(StudentMixin):
         formatted_student_details = []
         for student_detail in student_details:
             formatted_student_details.append(student_detail.replace(' ', '\n'))
-        registered_student_details = tabulate([formatted_student_details_headings, formatted_student_details], headers='firstrow', tablefmt='pretty',
-                                              stralign='left', numalign='left')
+        registered_student_details = tabulate([formatted_student_details_headings,
+                                              formatted_student_details],
+                                              headers='firstrow',
+                                              tablefmt='pretty',
+                                              stralign='left',
+                                              numalign='left')
         print(registered_student_details)
 
     def edit_student_details(self):
@@ -437,13 +447,13 @@ deferred.\n''')
             student_current_academic_year = (current_year - int(self.start_year)) + 1
         else:
             student_current_academic_year = current_year - int(self.start_year)
-        
+
         if isinstance(student_current_academic_year, int):
             if student_current_academic_year < 1:
                 student_current_academic_year = 'yet to start'
-        
+
         return [student_current_academic_year, f"Current academic year: {student_current_academic_year}."]
-    
+
     def retrieve_student_enrolled_module_info(self, year):
         """
         Retrieves information on the enrolled modules of a student for a chosen year, and generates two tables containing it.
@@ -480,26 +490,45 @@ deferred.\n''')
         first_table_content = dict(zip(formatted_module_titles_enrolled, first_table_module_info))
         second_table_content = dict(zip(formatted_module_titles_enrolled, second_table_module_info))
         module_numeric_labels = [label for label in range(1, len(module_titles_enrolled) + 1, 1)]
-        first_table_headings = ['Module Title', 'Cohort\nYear', 'Module\nStatus']
-        second_table_headings = ['Module Title', 'Mark\n(%)', 'Grade']
+        first_table_headings = ['Module Title',
+                                'Cohort\nYear',
+                                'Module\nStatus']
+        second_table_headings = ['Module Title',
+                                 'Mark\n(%)',
+                                 'Grade']
         first_table_data = [first_table_headings]
         second_table_data = [second_table_headings]
         label_index = 0
         for key, value in first_table_content.items():
-            next_row = [module_numeric_labels[label_index], key, value[0], value[1]]
+            next_row = [module_numeric_labels[label_index],
+                        key, value[0],
+                        value[1]]
             first_table_data.append(next_row)
             label_index += 1
-        modules_enrolled_info_first_table = tabulate(first_table_data, headers='firstrow', tablefmt='pretty', stralign='left', numalign='left')
+        modules_enrolled_info_first_table = tabulate(first_table_data,
+                                                     headers='firstrow',
+                                                     tablefmt='pretty',
+                                                     stralign='left',
+                                                     numalign='left')
         label_index = 0
         for key, value in second_table_content.items():
-            next_row = [module_numeric_labels[label_index], key, value[0], value[1]]
+            next_row = [module_numeric_labels[label_index],
+                        key, value[0],
+                        value[1]]
             second_table_data.append(next_row)
             label_index += 1
-        modules_enrolled_info_second_table = tabulate(second_table_data, headers='firstrow', tablefmt='pretty', stralign='left', numalign='left')
+        modules_enrolled_info_second_table = tabulate(second_table_data,
+                                                      headers='firstrow',
+                                                      tablefmt='pretty',
+                                                      stralign='left',
+                                                      numalign='left')
 
-        return [modules_enrolled_info_first_table, modules_enrolled_info_second_table, module_titles_enrolled]
-    
-    def edit_student_module_info(self, print_info_function, load_and_prepare_module_info_function):
+        return [modules_enrolled_info_first_table,
+                modules_enrolled_info_second_table,
+                module_titles_enrolled]
+
+    def edit_student_module_info(self, print_info_function,
+                                 load_and_prepare_module_info_function):
         """
         Allows the user to select to modify the module status and mark for a chosen module for which the student is enrolled.
 
@@ -513,11 +542,11 @@ deferred.\n''')
             load_and_prepare_module_info_function: The 'load_and_prepare_module_info' inner function of the
                                                    'view_or_edit_student_module_info_and_grades_interface func'. Generates
                                                    the tables printed by the print_info func.
-        
+
         Returns:
                 Returns a str that if set equal to the global next_function_call variable of run.py,
                 determines which interface the user sees next.
-        
+
         Raises:
                 ValueError: If the student mark input does not contain only numbers, or the number entered is not given to 1dp.
         """
@@ -547,7 +576,8 @@ to one of the following options:\n""")
                 if int(chosen_year) != option_index:
                     print(f"'modify a {years_with_enrolled_modules[int(chosen_year) - 1]} module' selected.")
                     print('Is this correct? Enter 1 for yes, 2 for no.\n')
-                    correct_year_chosen = gen_functions.is_this_correct_checker(chosen_year, 'number corresponding to one of the following options')
+                    correct_year_chosen = gen_functions.is_this_correct_checker(chosen_year,
+                                                                                'number corresponding to one of the following options')
                 else:
                     return 'view_or_edit_student_module_info_and_grades_interface'
 
@@ -562,20 +592,28 @@ to one of the following options:\n""")
                 print(f"'{self.enrolled_modules[years_with_enrolled_modules[int(chosen_year) - 1]][int(chosen_module) - 1]}' module selected.")
                 print('Is this correct? Enter 1 for yes, 2 for no.\n')
                 correct_module_chosen = gen_functions.is_this_correct_checker(chosen_module, 'label corresponding to the relevant module title')
-            
+
             chosen_module_worksheet = SHEET.worksheet(f'{years_with_enrolled_modules[int(chosen_year) - 1]} modules')
             chosen_module_title_col = chosen_module_worksheet.find(self.enrolled_modules[years_with_enrolled_modules[int(chosen_year) - 1]][int(chosen_module) - 1], 1).col
             student_entry_row = chosen_module_worksheet.find(self.student_id).row
             student_module_info_cell_reference_range = f'{gspread.utils.rowcol_to_a1(student_entry_row, chosen_module_title_col + 1)}:{gspread.utils.rowcol_to_a1(student_entry_row, chosen_module_title_col + 4)}'
             student_module_info = chosen_module_worksheet.batch_get([student_module_info_cell_reference_range])
-            table_headings = ['Cohort\nyear', 'Module\nstatus', 'Mark\n(%)', 'Grade']
-            student_module_info_table = tabulate([table_headings, student_module_info[0][0]], headers='firstrow', tablefmt='pretty', stralign='left', numalign='left')
+            table_headings = ['Cohort\nyear',
+                              'Module\nstatus',
+                              'Mark\n(%)',
+                              'Grade']
+            student_module_info_table = tabulate([table_headings,
+                                                  student_module_info[0][0]],
+                                                 headers='firstrow',
+                                                 tablefmt='pretty',
+                                                 stralign='left',
+                                                 numalign='left')
             gen_functions.clear()
             print('Student module information:')
             print(student_module_info_table)
             print('')
             cohort_year = (int(self.start_year) + int(years_with_enrolled_modules[int(chosen_year) - 1][-1])) - 1
-                
+
             print('Enter the number corresponding to the current module status for the student:\n')
             module_status_options = ['not yet completed', 'completed']
             for option_index in range(1, 3, 1):
@@ -609,8 +647,8 @@ as a number between 0-100 to 1dp, for example 56.5.''')
                                     raise ValueError('Invalid input: Enter a number between 0-100 to 1dp, for example 56.5\n')
                             except ValueError as error:
                                 print(f'{error}\n')
-                                valid_mark = False                     
-                            
+                                valid_mark = False
+
                             else:
                                 print(f"Mark (%): {valid_mark}")
                                 print('Is this correct? Enter 1 for yes, 2 for no.\n')
@@ -625,8 +663,8 @@ as a number between 0-100 to 1dp, for example 56.5.''')
                 elif valid_mark >= 40.0:
                     valid_grade = '3rd'
                 else:
-                    valid_grade = 'fail' 
-                
+                    valid_grade = 'fail'
+
             else:
                 valid_mark = '-'
                 valid_grade = '-'
@@ -635,7 +673,11 @@ as a number between 0-100 to 1dp, for example 56.5.''')
                                                                                                                   valid_mark, valid_grade]]}])
             print('Student module information updated.\n')
             student_module_info = chosen_module_worksheet.batch_get([student_module_info_cell_reference_range])
-            student_module_info_table = tabulate([table_headings, student_module_info[0][0]], headers='firstrow', tablefmt='pretty', stralign='left', numalign='left')
+            student_module_info_table = tabulate([table_headings, student_module_info[0][0]],
+                                                 headers='firstrow',
+                                                 tablefmt='pretty',
+                                                 stralign='left',
+                                                 numalign='left')
             print(student_module_info_table)
             print('')
             print('''To modify the status and mark of another module for the same student, enter 1;
@@ -647,9 +689,9 @@ or to go back enter 2.''')
                 return 'student_information_top_level_interface'
             else:
                 module_info = {}
-                modules_enrolled ={}
+                modules_enrolled = {}
                 load_and_prepare_module_info_function()
-        
+
     def unenrol_student_from_module(self):
         """
         Prompts the user to select an optional module for the student's current academic year, to unenrol the student from.
@@ -675,27 +717,33 @@ normally within the first month that the module commenced.\n''')
         print(f"{self.student_current_year()[1]}\n")
         time.sleep(1)
 
-        if student_academic_year in [1,2,3,4]:
+        if student_academic_year in [1, 2, 3, 4]:
             repeat = True
             while repeat:
                 this_year_modules_worksheet = SHEET.worksheet(f'year {student_academic_year} modules')
-                active_and_compulsory_modules_this_year = academic_module.AcademicModule.retrieve_active_and_compulsory_year_x_modules(student_academic_year, self.study_programme)
+                active_and_compulsory_modules_this_year = academic_module.AcademicModule.retrieve_active_and_compulsory_year_x_modules(student_academic_year,
+                                                                                                                                       self.study_programme)
                 student_currently_enrolled_modules_this_year = self.enrolled_modules[f'year {student_academic_year}']
-                student_current_enrolled_optional_modules_this_year = [module for module in student_currently_enrolled_modules_this_year 
+                student_current_enrolled_optional_modules_this_year = [module for module in student_currently_enrolled_modules_this_year
                                                                        if (module not in active_and_compulsory_modules_this_year)]
                 student_entry_row = this_year_modules_worksheet.find(self.student_id).row
                 student_not_completed_enrolled_optional_modules_this_year = []
                 for module in student_current_enrolled_optional_modules_this_year:
-                    module_status = this_year_modules_worksheet.get(gspread.utils.rowcol_to_a1(student_entry_row, this_year_modules_worksheet.find(module, in_row=1).col + 2))[0][0]
+                    module_status = this_year_modules_worksheet.get(gspread.utils.rowcol_to_a1(student_entry_row,
+                                                                                               this_year_modules_worksheet.find(module, in_row=1).col + 2))[0][0]
                     if module_status != 'completed':
                         student_not_completed_enrolled_optional_modules_this_year.append(module)
-                
-                formatted_student_not_completed_enrolled_optional_modules_this_year = [title.replace(': ', ':\n') 
+
+                formatted_student_not_completed_enrolled_optional_modules_this_year = [title.replace(': ', ':\n')
                                                                                        for title in student_not_completed_enrolled_optional_modules_this_year]
                 table_headings = [' ', 'Module title']
                 table_data = [[label, module_title] for label, module_title in enumerate(formatted_student_not_completed_enrolled_optional_modules_this_year, 1)]
                 table_data.insert(0, table_headings)
-                labelled_not_completed_enrolled_optional_modules_table = tabulate(table_data, headers='firstrow', tablefmt='pretty', stralign='left', numalign='left')
+                labelled_not_completed_enrolled_optional_modules_table = tabulate(table_data,
+                                                                                  headers='firstrow',
+                                                                                  tablefmt='pretty',
+                                                                                  stralign='left',
+                                                                                  numalign='left')
                 print("""Student's currently enrolled and not completed optional modules,
 for their current academic year:""")
                 time.sleep(1)
@@ -730,15 +778,16 @@ you wish to unenrol the student from;""")
                     print(f"'Module {student_not_completed_enrolled_optional_modules_this_year[int(chosen_module) - 1]}' selected.")
                     print('Is this correct? Enter 1 for yes, 2 for no.\n')
                     correct_module_chosen = gen_functions.is_this_correct_checker(chosen_module,
-                    f'number corresponding to one of the modules, or the number {len(student_not_completed_enrolled_optional_modules_this_year) + 1} to go back.')
-                
+                                                                                  f'number corresponding to one of the modules, or the number {len(student_not_completed_enrolled_optional_modules_this_year) + 1} to go back.')
+
                 module_info_cell_range_start_col = this_year_modules_worksheet.find(student_not_completed_enrolled_optional_modules_this_year[int(chosen_module) - 1],
                                                                                     in_row=1).col
-                module_info_cell_range_start_address = gspread.utils.rowcol_to_a1(student_entry_row, module_info_cell_range_start_col)
+                module_info_cell_range_start_address = gspread.utils.rowcol_to_a1(student_entry_row,
+                                                                                  module_info_cell_range_start_col)
                 module_info_cell_range_end_address = gspread.utils.rowcol_to_a1(student_entry_row, module_info_cell_range_start_col + 4)
                 this_year_modules_worksheet.batch_clear([f'{module_info_cell_range_start_address}:{module_info_cell_range_end_address}'])
                 self.enrolled_modules[f'year {student_academic_year}'].remove(student_not_completed_enrolled_optional_modules_this_year[int(chosen_module) - 1])
-                
+
                 print(f"Student successfully unenrolled from the module: '{student_not_completed_enrolled_optional_modules_this_year[int(chosen_module) - 1]}'.\n")
                 print('Enter a number corresponding to one of the following options:\n')
                 print('1. Unenrol the student from another optional module.')
@@ -757,8 +806,8 @@ you wish to unenrol the student from;""")
             print(f"Cannot unenrol the student from any modules, as the student has {student_academic_year}.")
             print('Enter any key to continue.')
             input('->')
-            return 'student_information_top_level_interface'    
-    
+            return 'student_information_top_level_interface'
+
     def enrol_student_on_module(self, auto=False):
         """
         Performs the enrolment of a student automatically on a set of compulsory modules, or a user selected optional module.
@@ -773,14 +822,14 @@ you wish to unenrol the student from;""")
         Args:
             auto (bool): Determines whether the student is automatically enrolled on compulsory modules, or enrolled
             on a user selected optional module; with all modules belonging to the student's current academic year.
-        
+
         Returns:
                 One of several strings, that if set equal to the global next_function_call variable of run.py,
                 determines which interface the user sees next.
         """
         student_academic_year = self.student_current_year()[0]
-        if student_academic_year in [1,2,3,4]:
-        
+        if student_academic_year in [1, 2, 3, 4]:
+
             active_and_compulsory_modules_this_year = academic_module.AcademicModule.retrieve_active_and_compulsory_year_x_modules(student_academic_year, self.study_programme)
             this_year_modules_worksheet = SHEET.worksheet(f'year {student_academic_year} modules')
             student_entry_row = this_year_modules_worksheet.find(self.student_id).row
@@ -791,7 +840,7 @@ you wish to unenrol the student from;""")
                     batch_update_range = f'{gspread.utils.rowcol_to_a1(student_entry_row, module_cell_col_num)}:{gspread.utils.rowcol_to_a1(student_entry_row, module_cell_col_num + 4)}'
                     batch_update_values = ['X', int(self.start_year) + student_academic_year - 1, 'not yet completed', '-', '-']
                     this_year_modules_worksheet.batch_update([{'range': batch_update_range, 'values': [batch_update_values]}])
-                
+
             else:
                 gen_functions.clear()
                 print('Student enrolment:\n')
@@ -805,14 +854,16 @@ starting on {datetime.date(datetime.date.today().year, 9, 27)}.\n""")
                 while repeat:
                     gen_functions.clear()
                     module_properties_worksheet = SHEET.worksheet('module properties')
-                    active_modules_this_year = academic_module.AcademicModule.retrieve_active_year_x_modules(student_academic_year, self.study_programme)
+                    active_modules_this_year = academic_module.AcademicModule.retrieve_active_year_x_modules(student_academic_year,
+                                                                                                             self.study_programme)
                     student_currently_enrolled_modules_this_year = self.enrolled_modules[f'year {student_academic_year}']
                     credit_allowance_optional_modules_col = module_properties_worksheet.find(f'Year {student_academic_year} {self.study_programme} Optional Module Credits Available').col
-                    credit_allowance_optional_modules = int(module_properties_worksheet.get(gspread.utils.rowcol_to_a1(2, credit_allowance_optional_modules_col))[0][0])
-                    student_current_enrolled_optional_modules_this_year = [module for module in student_currently_enrolled_modules_this_year 
+                    credit_allowance_optional_modules = int(module_properties_worksheet.get(gspread.utils.rowcol_to_a1(2,
+                                                                                                                       credit_allowance_optional_modules_col))[0][0])
+                    student_current_enrolled_optional_modules_this_year = [module for module in student_currently_enrolled_modules_this_year
                                                                            if (module not in active_and_compulsory_modules_this_year)]
                     module_credits_dict = academic_module.AcademicModule.retrieve_year_x_module_credits(student_academic_year)
-                    
+
                     student_optional_module_credit_sum = 0
                     for module in student_current_enrolled_optional_modules_this_year:
                         student_optional_module_credit_sum += module_credits_dict[module]
@@ -823,12 +874,16 @@ starting on {datetime.date(datetime.date.today().year, 9, 27)}.\n""")
                     if available_credits > 0:
                         optional_modules_this_year = [module for module in active_modules_this_year if module not in active_and_compulsory_modules_this_year]
                         available_optional_modules_this_year = {key: value for key, value in module_credits_dict.items()
-                        if (value <= available_credits and key in optional_modules_this_year and key not in student_current_enrolled_optional_modules_this_year)}
+                                                                if (value <= available_credits and key in optional_modules_this_year and key not in student_current_enrolled_optional_modules_this_year)}
                         formatted_available_optional_modules_this_year = {key.replace(': ', ':\n'): value for key, value in available_optional_modules_this_year.items()}
                         table_data = [[label, module_title, credits] for label, (module_title, credits) in enumerate(formatted_available_optional_modules_this_year.items(), 1)]
                         table_headings = [' ', 'Module Title', 'Credits']
                         table_data.insert(0, table_headings)
-                        available_optional_modules_table = tabulate(table_data, headers='firstrow', tablefmt='pretty', stralign='left', numalign='left')
+                        available_optional_modules_table = tabulate(table_data,
+                                                                    headers='firstrow',
+                                                                    tablefmt='pretty',
+                                                                    stralign='left',
+                                                                    numalign='left')
                         print('Remaining available optional modules for the student:')
                         time.sleep(2)
                         print(available_optional_modules_table)
@@ -853,7 +908,7 @@ to enrol the student on;''')
                         batch_update_values = ['X', (int(self.start_year) + student_academic_year) - 1, 'not yet completed', '-', '-']
                         this_year_modules_worksheet.batch_update([{'range': batch_update_range, 'values': [batch_update_values]}])
                         self.enrolled_modules[f'year {student_academic_year}'].append(list(available_optional_modules_this_year.keys())[int(valid_input) - 1])
-                        print(f"Student successfully enrolled on '{list(available_optional_modules_this_year.keys())[int(valid_input) - 1]}.'\n" )
+                        print(f"Student successfully enrolled on '{list(available_optional_modules_this_year.keys())[int(valid_input) - 1]}.'\n")
                         print('Enter a number corresponding to one of the following options:\n')
                         print('1. Enrol the student on another optional module.')
                         print('2. Unenrol the student from an optional module.')
@@ -881,7 +936,7 @@ for this year and this programme.\n''')
                             return returned_next_function_string
                         return 'view_or_edit_student_module_info_and_grades_interface'
         else:
-            if auto == False:
+            if not auto:
                 gen_functions.clear()
                 print('Student enrolment:\n')
                 if student_academic_year == 'yet to start':
@@ -895,12 +950,12 @@ starting on {datetime.date(datetime.date.today().year, 9, 27)}.\n""")
                 print(f'Cannot enrol the student on any modules, as the student has {student_academic_year}.')
                 print('Enter any key to continue.')
                 input('->')
-            return 'student_information_top_level_interface'    
+            return 'student_information_top_level_interface'
 
     def compulsory_module_enrolment_checker_and_updater(self):
         """
         Checks whether the student instance is enrolled on all active compulsory modules. Performs enrolment if necessary.
-        
+
         Checks the enrolement status of the active compulsory modules for their current academic year and programme, in the unigrade
         google sheet. Then enrols the student on any active compulsory modules that they are not yet enrolled on.
         """
@@ -909,7 +964,7 @@ for the student's current academic year.
 Please wait...''')
         print('')
         time.sleep(2)
-        if self.student_current_year()[0] in [1,2,3,4]:
+        if self.student_current_year()[0] in [1, 2, 3, 4]:
             current_year_enrolled_modules = self.retrieve_student_enrolled_module_info(self.student_current_year()[0])[2]
             if len(current_year_enrolled_modules) == 0:
                 self.enrol_student_on_module(True)
