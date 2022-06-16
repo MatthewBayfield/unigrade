@@ -1,13 +1,13 @@
-import gspread
 import time
 import sys
 from os import system
+import gspread
 
 
 def clear():
     """
     Effectively clears the terminal.
-    
+
     Clears the visible portion of the terminal, and then prints empty rows as well as a
     'top of terminal banner' to visually separate future printed content, from the scrollback
     history.
@@ -35,7 +35,7 @@ def gspread_api_error_exception_handling(gspread_method_or_request):
 
     Returns:
             The decorated gspread method.
-    
+
     Raises:
         gspread.exceptions.APIError: if a google sheets API error, including the 'resource exhausted error' occurs.
         gspread.exceptions.GSpreadException: if any non-API related gspread error occurs.
@@ -67,7 +67,7 @@ If the error persists try again later.\n''')
                     time.sleep(3.0)
                     clear()
                     sys.exit()
-                    
+
             except gspread.exceptions.GSpreadException:
                 print('''ERROR ENCOUNTERED: There seems to be a problem accessing
 the unigrade google sheet, and or performing the requested actions.
@@ -81,7 +81,7 @@ If the error persists try again later.\n''')
                 time.sleep(3.0)
                 clear()
                 sys.exit()
-               
+
             else:
                 return result
     return inner
@@ -90,7 +90,7 @@ If the error persists try again later.\n''')
 # Decorated gspread methods of interest. Executed when imported as part of this module.
 gspread.worksheet.Worksheet.find = gspread_api_error_exception_handling(gspread.worksheet.Worksheet.find)
 gspread.worksheet.Worksheet.findall = gspread_api_error_exception_handling(gspread.worksheet.Worksheet.findall)
-gspread.worksheet.Worksheet.cell = gspread_api_error_exception_handling(gspread.worksheet.Worksheet.cell) 
+gspread.worksheet.Worksheet.cell = gspread_api_error_exception_handling(gspread.worksheet.Worksheet.cell)
 gspread.worksheet.Worksheet.update_cell = gspread_api_error_exception_handling(gspread.worksheet.Worksheet.update_cell)
 gspread.worksheet.Worksheet.col_values = gspread_api_error_exception_handling(gspread.worksheet.Worksheet.col_values)
 gspread.worksheet.Worksheet.add_rows = gspread_api_error_exception_handling(gspread.worksheet.Worksheet.add_rows)

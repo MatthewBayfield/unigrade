@@ -5,7 +5,6 @@ from google.oauth2.service_account import Credentials
 from tabulate import tabulate
 import datetime
 import time
-from os import system
 student_dir = os.path.dirname(__file__)
 general_functions_dir = os.path.join(student_dir, '..')
 sys.path.insert(1, general_functions_dir)
@@ -39,7 +38,7 @@ Please try running the program again. If the error persists try again later.\n''
 class StudentMixin(object):
     """
     A mixin class with methods for use in the Student class, to reassign instance attributes, and update the unigrade google sheet.
-    
+
     Contains methods that retrieve student information from the unigrade google sheet as well as user input, for the purpose
     of reassigning Student instance attributes, as part of the process of generating and displaying student information to
     the user, as well as editing student information in the unigrade google sheet.
@@ -166,7 +165,7 @@ the student's name correctly; or maybe you entered the wrong ID previously.""")
 
         Args:
             programme_change (bool): determines flow control, by indicating whether the student's programme is being assigned
-            during student registration (False), or changed (True).            
+            during student registration (False), or changed (True).
                    assignment (str): has the values 'initial' or 'edit'. Indicates whether the study_programme instance
                                      attribute is being reassigned using the unigrade google sheet and used elsewhere;
                                      or whether it is being reassigned, and then used to update the google sheet.
@@ -193,7 +192,7 @@ the student's name correctly; or maybe you entered the wrong ID previously.""")
                     correct = gen_functions.is_this_correct_checker(self.study_programme, 'study programme')
                     STUDENT_DETAILS.update_cell(student_name_cell.row, student_name_cell.col + 1, self.study_programme)
                 print('study programme confirmed.\n')
-            
+
             if not programme_change:
                 execute_programme_change()
                 return
@@ -229,7 +228,7 @@ the student's name correctly; or maybe you entered the wrong ID previously.""")
                    assignment (str): has the values 'initial' or 'edit'. Indicates whether the year instance attributes are
                                      being reassigned using the unigrade google sheet and used elsewhere; or whether they
                                      are being reassigned, and then used to update the google sheet.
-        
+
         Raises:
             ValueError: if the start year user input does not contain only 4 numbers, or if the start year is in the past.
         """
@@ -257,7 +256,7 @@ the student's name correctly; or maybe you entered the wrong ID previously.""")
                                     raise ValueError('''Invalid input. The start date for the entered year has already past.
 Please enter a valid year.''')
                             except ValueError as error:
-                                print(f'{error}\n')                     
+                                print(f'{error}\n')
                             else:
                                 break
 
@@ -298,7 +297,7 @@ started their programme.""")
 class Student(StudentMixin):
     """
     Represents a student registered or to be registered in the unigrade google sheet.
-    
+
     Student instance attributes replicate those found in the student details worksheet of the unigrade google sheet.
     A student instance is used to hold the results of user inputs or database queries, during the process of updating
     the google sheet, and for displaying retrieved student information. The various instance methods allow the user
@@ -380,7 +379,7 @@ class Student(StudentMixin):
         print('student successfully unregistered\n')
         print('Enter any key to continue.')
         input('->')
-    
+
     def retrieve_student_details(self):
         """
         Retrieves the student details of a student from the unigrade google sheet. Prints the details as a table.
@@ -402,7 +401,7 @@ class Student(StudentMixin):
     def edit_student_details(self):
         """
         Allows the user to edit the student's mutable details, namely their start year, and study programme under certain conditions.
-        
+
         Performs the editing process using existing student class methods, that through user input first alter the instance
         properties, before then updating the unigrade google sheet.
         """
@@ -419,7 +418,7 @@ deferred.\n''')
         print('Student details successfully updated.')
         time.sleep(2.5)
         gen_functions.clear()
-    
+
     def student_current_year(self):
         """
         Calulates and returns the current academic year the student is in.

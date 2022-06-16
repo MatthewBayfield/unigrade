@@ -37,9 +37,9 @@ Please try running the program again. If the error persists try again later.\n''
 class AcademicModule:
     """
     Represents an academic module in the unigrade google sheet.
-    
-    Methods and attributes featured pertain to changing the module properties of existing modules in the unigrade google sheet,
-    as well as adding new modules. Also includes class methods required by the Student class for processes such as
+
+    Methods and attributes featured pertain to changing the module properties of existing modules in the unigrade google
+    sheet, as well as adding new modules. Also includes class methods required by the Student class for processes such as
     student module enrolment. Finally includes methods and attributes necessary for producing module statistics.
 
     Attributes:
@@ -110,7 +110,7 @@ class AcademicModule:
                                                                 f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 3)}:{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 3)[:-1]}'],
                                                                 major_dimension='ROWS')
         elif study_programme == 'BSc Physics':
-            module_info = MODULE_PROPERTIES_WORKSHEET.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number)[:-1]}', 
+            module_info = MODULE_PROPERTIES_WORKSHEET.batch_get([f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number)}:{gspread.utils.rowcol_to_a1(1, year_x_module_titles_col_number)[:-1]}',
                                                                 f'{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 5)}:{gspread.utils.rowcol_to_a1(2, year_x_module_titles_col_number + 5)[:-1]}'],
                                                                 major_dimension='ROWS')
 
@@ -143,7 +143,7 @@ class AcademicModule:
     def retrieve_active_and_optional_year_x_modules(cls, x, study_programme):
         """
         Returns a list of the active optional modules for the academic year x and specified study programme.
-        
+
         Retrieved from the unigrade google sheet.
 
         Args:
@@ -173,7 +173,7 @@ class AcademicModule:
             module_properties_batch_get_range = f"{gspread.utils.rowcol_to_a1(module_title_entry_cell.row, module_title_entry_cell.col + 1)}:{gspread.utils.rowcol_to_a1(module_title_entry_cell.row, module_title_entry_cell.col + 6)}"
             module_properties_raw = MODULE_PROPERTIES_WORKSHEET.batch_get([module_properties_batch_get_range], major_dimension='ROWS')[0][0]
             module_year = int(MODULE_PROPERTIES_WORKSHEET.cell(1, module_title_entry_cell.col).value.split(' ')[1])
-            
+
             programmes = ['MSci Physics', 'BSc Physics']
             activity = True if module_properties_raw[0] == 'X' else False
             module_credits = int(module_properties_raw[-1])
@@ -187,7 +187,7 @@ class AcademicModule:
                 compulsory_status[programmes[j - 1]] = True if module_properties_raw[i - 1] == 'X' else False
                 i += 1
                 j += 1
-            
+
             return AcademicModule(module_year, module_title, availability, module_credits, compulsory_status, activity)
         else:
             return 'No module with this title exists.'
@@ -203,7 +203,7 @@ class AcademicModule:
         MODULE_YEAR_MODULES_SHEET = SHEET.worksheet(f'year {self.year} modules')
         last_module_title = list(filter(lambda title: title != "", MODULE_YEAR_MODULES_SHEET.row_values(1)))[-1]
         last_occupied_column_index = MODULE_YEAR_MODULES_SHEET.find(last_module_title).col + 4
-        
+
         append_columns_body = {
             "requests": [
                 {
@@ -216,7 +216,7 @@ class AcademicModule:
             ]
         }
         SHEET.batch_update(append_columns_body)
-        
+
         copy_paste_body = {
             "requests": [
                 {
@@ -303,7 +303,7 @@ class AcademicModule:
             ]
         }
         SHEET.batch_update(column_sizing_body)
-        
+
         MODULE_YEAR_MODULES_SHEET.update_cell(1, last_occupied_column_index + 2, self.title)
 
         MODULE_PROPERTIES_WORKSHEET = SHEET.worksheet('module properties')
@@ -373,17 +373,17 @@ or enter 'all' to view data for all the years combined.""")
                         quartiles = np.percentile(module_mark_data_array, [25, 50, 75])
                         interquartile_range = round(quartiles[2] - quartiles[0], 1)
                         percentage_pass_or_better = round(100 * len([mark for mark in module_mark_data if mark >=40.0])/dataset_size, 1)
-                        percentage_lower_second_or_better =  round(100 * len([mark for mark in module_mark_data if mark >=50.0])/dataset_size, 1)
-                        percentage_upper_second_or_better = round(100 * len([mark for mark in module_mark_data if mark >=60.0])/dataset_size, 1)
-                        percentage_first_or_better = round(100 * len([mark for mark in module_mark_data if mark >=70.0])/dataset_size, 1)
-                        
+                        percentage_lower_second_or_better = round(100 * len([mark for mark in module_mark_data if mark >= 50.0])/dataset_size, 1)
+                        percentage_upper_second_or_better = round(100 * len([mark for mark in module_mark_data if mark >= 60.0])/dataset_size, 1)
+                        percentage_first_or_better = round(100 * len([mark for mark in module_mark_data if mark >= 70.0])/dataset_size, 1)
+
                         print('')
                         print(f"'{self.title}' module statistics for {user_input} {'years:' if user_input == 'all' else ':'}\n".center(60))
                         print(f'Dataset size: {dataset_size}\n')
                         print(f'mean mark (%): {mean_mark}', f'mark standard deviation (%): {mark_std}\n', sep=' '.center(10))
                         print(f'median mark (%): {round(quartiles[1], 1)}', f'interquartile range (%): {interquartile_range}\n', sep=' '.center(10))
                         print(f'pass or better (%): {percentage_pass_or_better}', f'2:2 or better (%): {percentage_lower_second_or_better}\n', sep=' '.center(10))
-                        print(f'2:1 or better (%): {percentage_lower_second_or_better}', f'1st or better (%): {percentage_first_or_better}\n', sep=' '.center(10))
+                        print(f'2:1 or better (%): {percentage_upper_second_or_better}', f'1st or better (%): {percentage_first_or_better}\n', sep=' '.center(10))
                         if len(cohort_years) > 1:
                             print('View statistics for another cohort year of this module? Enter 1 for yes, 2 for no.')
                             valid_input = False

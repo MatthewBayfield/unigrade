@@ -1,4 +1,3 @@
-from os import system
 import gspread
 from google.oauth2.service_account import Credentials
 import sys
@@ -35,7 +34,7 @@ Please try running the program again. If the error persists try again later.\n''
 def top_level_interface():
     """
     Displays the top-level interface of the unigrade program to the user.
-    
+
     Clears the terminal, displays the unigrade program logo, before prompting the user to choose one of three options:
     either view module information; view and or edit/add student information; or exit the program. The user input
     determines which interface/function is called next.
@@ -66,12 +65,12 @@ def student_information_top_level_interface():
                      / __|| |_  _  _  __| | ___  _ _ | |_ 
                      \__ \|  _|| || |/ _` |/ -_)| ' \|  _|
                      |___/ \__| \_,_|\__,_|\___||_||_|\__|
-                                                          
+
             ___         __                         _    _            
            |_ _| _ _   / _| ___  _ _  _ __   __ _ | |_ (_) ___  _ _  
             | | | ' \ |  _|/ _ \| '_|| '  \ / _` ||  _|| |/ _ \| ' \ 
            |___||_||_||_|  \___/|_|  |_|_|_|\__,_| \__||_|\___/|_||_|
-                                                                             
+
     \n""")
     global last_function_call
     last_function_call = 'student_information_top_level_interface'
@@ -127,7 +126,7 @@ def unregister_student(registration_status, new_student_object, valid_entry, use
 def student_registration_interface():
     """
     Displays the student registration interface to the user. Manages the student registration process.
-    
+
     Prompts the user to confirm to register or unregister a student. Then through function calls
     prompts the user to input a student's name or ID, before indicating to the user whether the student is
     currently registered in the unigrade google sheet. The user is then prompted to select to register or
@@ -140,18 +139,18 @@ def student_registration_interface():
     valid_input = False
     while not valid_input:
         valid_input = gen_functions.validate_numeric_input(2)
-    
+
     if valid_input == '2':
-        next_function([['1', 'go_back'],['2', 'top_level_interface'], ['3', 'exit_the_program']])
+        next_function([['1', 'go_back'], ['2', 'top_level_interface'], ['3', 'exit_the_program']])
     else:
         valid_entry, user_options, user_options_index, new_student_object = registration_status_checker()
         next_function([['1', 'register_student'], ['2', 'unregister_student'], ['3', 'top_level_interface'], ['4', 'exit_the_program']])
-        
+
         while next_function_call in ('register_student', 'unregister_student'):
             registration_status = new_student_object.set_student_identifiers(valid_entry, user_options[user_options_index])
             if next_function_call in ('register_student', 'unregister_student'):
                 FUNCTION_DICTIONARY[next_function_call](registration_status, new_student_object, valid_entry, user_options, user_options_index)
-      
+
 
 def registration_status_checker():
     """
@@ -217,7 +216,7 @@ def view_or_edit_student_details_interface():
     while not valid_input:
         valid_input = gen_functions.validate_numeric_input(2)
     if valid_input == '2':
-        next_function([['1', 'go_back'],['2', 'top_level_interface'], ['3', 'exit_the_program']])
+        next_function([['1', 'go_back'], ['2', 'top_level_interface'], ['3', 'exit_the_program']])
     else:
         global next_function_call
         input_student_identifier, identifier_types_list, input_identifier_type_index, new_student_object = registration_status_checker()

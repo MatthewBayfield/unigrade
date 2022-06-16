@@ -1,5 +1,4 @@
 from os import system
-import gspread
 import decorated_gspread_methods
 
 
@@ -11,7 +10,7 @@ def validate_numeric_input(number_of_options):
 
     Args:
         number_of_options (int): determines the size of the range of integers, where the step is one.
-    
+
     Returns:
         Returns a False boolean if the user input is invalid, or the user input value for a valid input.
 
@@ -66,7 +65,7 @@ def validate_student_name_input():
         print(f"{error}\n")
         return False
 
-    
+
 def is_this_correct_checker(user_input, user_input_description):
     """
     Prompts the user for input in response to being asked to enter '1' for 'yes', '2' for 'no, to confirm their input is correct.
@@ -98,10 +97,10 @@ def validate_module_title_input(component):
 
     Args:
         component (str): Has the value 'code' or 'name'. Determines which input is requested.
-    
+
     Returns:
         In the absence of exceptions, returns a formatted form of the requested input.
-    
+
     Raises:
         ValueError: if non-alphanumeric characters are used in the module code or module name.
     """
@@ -114,7 +113,7 @@ def validate_module_title_input(component):
             print(f"{error}\n")
         else:
             return f"{code.upper()}"
-    
+
     if component == 'name':
         try:
             name = input('->')
@@ -129,7 +128,7 @@ def validate_module_title_input(component):
             filtered_name_words = [word.lower() for word in filtered_name_words]
             for word_index in range(0, len(filtered_name_words), 1):
                 if filtered_name_words[word_index] not in ['of', 'the', 'and']:
-                    filtered_name_words[word_index] = filtered_name_words[word_index].capitalize()  
+                    filtered_name_words[word_index] = filtered_name_words[word_index].capitalize()
             return f"{' '.join(filtered_name_words)}"
 
 
@@ -159,7 +158,7 @@ def validate_module_credits_input():
 def update_sheet_borders(worksheet, google_sheet):
     """
     Updates the border formatting of a worksheet in a google sheet. In particular it gives all cells a black border.
-    
+
     This function should be called when new rows or columns are added to the worksheet in the google sheet.
     Uses the gspread batch_update API method.
 
@@ -247,7 +246,7 @@ def update_sheet_borders(worksheet, google_sheet):
 def clear():
     """
     Effectively clears the terminal.
-    
+
     Clears the visible portion of the terminal, and then prints empty rows as well as a
     'top of terminal banner' to visually separate future printed content, from the scrollback
     history.
@@ -259,4 +258,3 @@ def clear():
     print('-----------------------------------------------------------------')
     print('\n' * 24)
     system('clear')
-    
