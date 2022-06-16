@@ -824,9 +824,19 @@ Enter 1 for yes, enter 2 for no. ''')
 
 def next_function(option_pair_list):
     """
-    Prints a list of indexed options, provided using the option_pair_list param - a list of 2-item lists, to the user,
-    each featuring a description. Then prompts the user for input. Uses the user_input to select which function to
-    call next, where the function to be called matches the selected description.
+    Prints a list of indexed options to the user, to determine the next function/interface call.
+    
+    Each printed indexed option corresponds to a description of its purpose/functionality. The user is then
+    prompted for input to select an option. This user_input then determines which function is called next, either
+    indirectly in the main function, or directly within the function the next_function is called.
+
+    Args:
+        option_pair_list (list): a list of 2-item lists, one for each option, containing a str numeric label,
+                                 and a str of the function name, for the function that executes an option as described
+                                 by its printed description.
+    
+    Returns:
+        The function corresponding to the chosen option.
     """
     print("Enter a number corresponding to one of the following options:\n")
     for option_pair in option_pair_list:
@@ -846,8 +856,10 @@ def next_function(option_pair_list):
 
 def go_back():
     """
-    Allows the user to cancel the current function called, in particular its action, and returns ths user
-    to the previous function called.
+    Allows the user to return to a previous interface/function.
+
+    The exact previous interface/function is determined by the most recent global reassignment of the
+    last_function_call variable.
     """
     global next_function_call
     global last_function_call
@@ -857,8 +869,10 @@ def go_back():
 
 def exit_the_program():
     """
-    When called clears the terminal, informs the user the program is quitting, pauses,
-    before clearing the terminal again, and terminating the program.
+    Exits the unigrade program in a tidily fashion.
+
+    Clears the terminal, informs the user the program is quitting, pauses,
+    before clearing the terminal again, and then terminates the program.
     """
     gen_functions.clear()
     print('Quitting the unigrade program...')
