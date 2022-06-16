@@ -52,7 +52,8 @@ class AcademicModule:
                                 compulsory on each programme.
         module_credits (int): credits the module is worth.
     """
-    def __init__(self, year, title, availability, module_credits, compulsory_status, activity=True):
+    def __init__(self, year, title, availability, module_credits,
+                 compulsory_status, activity=True):
         self.title = title
         self.year = year
         self.activity = activity
@@ -66,7 +67,8 @@ class AcademicModule:
         Returns a list of all academic module titles for a chosen year x: 1<=x<=4, retrieved from the unigrade google sheet.
         """
         YEAR_X_MODULES_WORKSHEET = SHEET.worksheet(f'year {x} modules')
-        year_x_modules = list(filter(lambda title: title != "", YEAR_X_MODULES_WORKSHEET.row_values(1)))
+        year_x_modules = list(filter(lambda title: title != "",
+                              YEAR_X_MODULES_WORKSHEET.row_values(1)))
         return year_x_modules
 
     @classmethod
@@ -171,7 +173,8 @@ class AcademicModule:
         module_title_entry_cell = MODULE_PROPERTIES_WORKSHEET.find(f'{module_title}')
         if module_title_entry_cell is not None:
             module_properties_batch_get_range = f"{gspread.utils.rowcol_to_a1(module_title_entry_cell.row, module_title_entry_cell.col + 1)}:{gspread.utils.rowcol_to_a1(module_title_entry_cell.row, module_title_entry_cell.col + 6)}"
-            module_properties_raw = MODULE_PROPERTIES_WORKSHEET.batch_get([module_properties_batch_get_range], major_dimension='ROWS')[0][0]
+            module_properties_raw = MODULE_PROPERTIES_WORKSHEET.batch_get([module_properties_batch_get_range],
+                                                                          major_dimension='ROWS')[0][0]
             module_year = int(MODULE_PROPERTIES_WORKSHEET.cell(1, module_title_entry_cell.col).value.split(' ')[1])
 
             programmes = ['MSci Physics', 'BSc Physics']
@@ -188,7 +191,8 @@ class AcademicModule:
                 i += 1
                 j += 1
 
-            return AcademicModule(module_year, module_title, availability, module_credits, compulsory_status, activity)
+            return AcademicModule(module_year, module_title, availability,
+                                  module_credits, compulsory_status, activity)
         else:
             return 'No module with this title exists.'
 
@@ -304,15 +308,22 @@ class AcademicModule:
         }
         SHEET.batch_update(column_sizing_body)
 
-        MODULE_YEAR_MODULES_SHEET.update_cell(1, last_occupied_column_index + 2, self.title)
+        MODULE_YEAR_MODULES_SHEET.update_cell(1,
+                                              last_occupied_column_index + 2,
+                                              self.title)
 
         MODULE_PROPERTIES_WORKSHEET = SHEET.worksheet('module properties')
         module_year_module_titles_col_num = MODULE_PROPERTIES_WORKSHEET.find(f'Year {self.year} Module Titles').col
         next_empty_row_num = len(MODULE_PROPERTIES_WORKSHEET.col_values(module_year_module_titles_col_num)) + 1
         batch_update_range = f'{gspread.utils.rowcol_to_a1(next_empty_row_num, module_year_module_titles_col_num)}:{gspread.utils.rowcol_to_a1(next_empty_row_num, module_year_module_titles_col_num + 6)}'
-        batch_update_values = [self.title, 'X' if self.activity else '', 'X' if self.availablity['MSci Physics'] else '', 'X' if self.compulsory_status['MSci Physics'] else '',
-                               'X' if self.availablity['BSc Physics'] else '', 'X' if self.compulsory_status['BSc Physics'] else '', self.module_credits]
-        MODULE_PROPERTIES_WORKSHEET.batch_update([{'range': batch_update_range, 'values': [batch_update_values]}])
+        batch_update_values = [self.title, 'X' if self.activity else '',
+                               'X' if self.availablity['MSci Physics'] else '',
+                               'X' if self.compulsory_status['MSci Physics'] else '',
+                               'X' if self.availablity['BSc Physics'] else '',
+                               'X' if self.compulsory_status['BSc Physics'] else '',
+                               self.module_credits]
+        MODULE_PROPERTIES_WORKSHEET.batch_update([{'range': batch_update_range,
+                                                   'values': [batch_update_values]}])
         MODULE_PROPERTIES_WORKSHEET.add_rows(1)
 
     def edit_module_properties(self):
@@ -322,10 +333,14 @@ class AcademicModule:
         MODULE_PROPERTIES_WORKSHEET = SHEET.worksheet('module properties')
         module_title_entry_cell = MODULE_PROPERTIES_WORKSHEET.find(f'{self.title}')
         module_properties_batch_update_range = f"{gspread.utils.rowcol_to_a1(module_title_entry_cell.row, module_title_entry_cell.col + 1)}:{gspread.utils.rowcol_to_a1(module_title_entry_cell.row, module_title_entry_cell.col + 6)}"
-        module_properties_batch_update_values = ['X' if self.activity else '', 'X' if self.availablity['MSci Physics'] else '',
-                                                 'X' if self.compulsory_status['MSci Physics'] else '', 'X' if self.availablity['BSc Physics'] else '',
-                                                 'X' if self.compulsory_status['BSc Physics'] else '', self.module_credits]
-        MODULE_PROPERTIES_WORKSHEET.batch_update([{'range': module_properties_batch_update_range, 'values': [module_properties_batch_update_values]}])
+        module_properties_batch_update_values = ['X' if self.activity else '',
+                                                 'X' if self.availablity['MSci Physics'] else '',
+                                                 'X' if self.compulsory_status['MSci Physics'] else '',
+                                                 'X' if self.availablity['BSc Physics'] else '',
+                                                 'X' if self.compulsory_status['BSc Physics'] else '',
+                                                 self.module_credits]
+        MODULE_PROPERTIES_WORKSHEET.batch_update([{'range': module_properties_batch_update_range,
+                                                   'values': [module_properties_batch_update_values]}])
 
     def generate_module_statistics(self):
         """
@@ -350,7 +365,8 @@ class AcademicModule:
                 print('No data exists for this module yet.\n')
                 return
             else:
-                print('Data exists for the following cohort years:', sorted(cohort_years))
+                print('Data exists for the following cohort years:',
+                      sorted(cohort_years))
                 print('')
                 print(f"""Enter the year you wish to view, for example {list(cohort_years)[0]};
 or enter 'all' to view data for all the years combined.""")
@@ -372,7 +388,7 @@ or enter 'all' to view data for all the years combined.""")
                         mark_std = round(np.std(module_mark_data_array), 1)
                         quartiles = np.percentile(module_mark_data_array, [25, 50, 75])
                         interquartile_range = round(quartiles[2] - quartiles[0], 1)
-                        percentage_pass_or_better = round(100 * len([mark for mark in module_mark_data if mark >=40.0])/dataset_size, 1)
+                        percentage_pass_or_better = round(100 * len([mark for mark in module_mark_data if mark >= 40.0])/dataset_size, 1)
                         percentage_lower_second_or_better = round(100 * len([mark for mark in module_mark_data if mark >= 50.0])/dataset_size, 1)
                         percentage_upper_second_or_better = round(100 * len([mark for mark in module_mark_data if mark >= 60.0])/dataset_size, 1)
                         percentage_first_or_better = round(100 * len([mark for mark in module_mark_data if mark >= 70.0])/dataset_size, 1)
@@ -380,10 +396,18 @@ or enter 'all' to view data for all the years combined.""")
                         print('')
                         print(f"'{self.title}' module statistics for {user_input} {'years:' if user_input == 'all' else ':'}\n".center(60))
                         print(f'Dataset size: {dataset_size}\n')
-                        print(f'mean mark (%): {mean_mark}', f'mark standard deviation (%): {mark_std}\n', sep=' '.center(10))
-                        print(f'median mark (%): {round(quartiles[1], 1)}', f'interquartile range (%): {interquartile_range}\n', sep=' '.center(10))
-                        print(f'pass or better (%): {percentage_pass_or_better}', f'2:2 or better (%): {percentage_lower_second_or_better}\n', sep=' '.center(10))
-                        print(f'2:1 or better (%): {percentage_upper_second_or_better}', f'1st or better (%): {percentage_first_or_better}\n', sep=' '.center(10))
+                        print(f'mean mark (%): {mean_mark}',
+                              f'mark standard deviation (%): {mark_std}\n',
+                              sep=' '.center(10))
+                        print(f'median mark (%): {round(quartiles[1], 1)}',
+                              f'interquartile range (%): {interquartile_range}\n',
+                              sep=' '.center(10))
+                        print(f'pass or better (%): {percentage_pass_or_better}',
+                              f'2:2 or better (%): {percentage_lower_second_or_better}\n',
+                              sep=' '.center(10))
+                        print(f'2:1 or better (%): {percentage_upper_second_or_better}',
+                              f'1st or better (%): {percentage_first_or_better}\n',
+                              sep=' '.center(10))
                         if len(cohort_years) > 1:
                             print('View statistics for another cohort year of this module? Enter 1 for yes, 2 for no.')
                             valid_input = False
@@ -395,4 +419,4 @@ or enter 'all' to view data for all the years combined.""")
                             else:
                                 break
                         else:
-                            return  
+                            return
