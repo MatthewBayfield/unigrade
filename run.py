@@ -249,9 +249,12 @@ def view_or_edit_student_details_interface():
 
 def view_or_edit_student_module_info_and_grades_interface():
     """
-    Allows a user to view a registered student's enrolled module information, by printing the information, including tables,
-    to the terminal. The user is then given options to update a student's module status and mark, as well an enrol/unenrol
-    on/from an optional module on their current academic year.
+    Allows a user to view and edit a registered student's enrolled modules, as well their module status and mark for a module.
+
+    A student's enrolled module information is retrieved from the unigrade google sheet, and is printed,
+    including information in the form of tables, to the terminal. The user is then given options to update
+    a student's module status and mark, as well an enrol/unenrol on/from an optional module on their
+    current academic year where possible.
     """
     gen_functions.clear()
     print('Student module information and grades:', '\n')
