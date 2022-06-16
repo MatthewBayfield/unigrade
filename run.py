@@ -48,7 +48,9 @@ def top_level_interface():
         | |__| || |\  | _| |_| |__| || | \ \  / ____ \ | |__| || |____ 
          \____/ |_| \_||_____|\_____||_|  \_\/_/    \_\|_____/ |______|
     \n""")
-    next_function([['1', 'modules_interface'], ['2', 'student_information_top_level_interface'], ['3', 'exit_the_program']])
+    next_function([['1', 'modules_interface'],
+                   ['2', 'student_information_top_level_interface'],
+                   ['3', 'exit_the_program']])
 
 
 def student_information_top_level_interface():
@@ -74,11 +76,14 @@ def student_information_top_level_interface():
     \n""")
     global last_function_call
     last_function_call = 'student_information_top_level_interface'
-    next_function([['1', 'view_or_edit_student_details_interface'], ['2', 'student_registration_interface'], ['3', 'view_or_edit_student_module_info_and_grades_interface'],
+    next_function([['1', 'view_or_edit_student_details_interface'],
+                   ['2', 'student_registration_interface'],
+                   ['3', 'view_or_edit_student_module_info_and_grades_interface'],
                    ['4', 'top_level_interface'], ['5', 'exit_the_program']])
 
 
-def register_student(registration_status, new_student_object, valid_entry, user_options, user_options_index):
+def register_student(registration_status, new_student_object, valid_entry,
+                     user_options, user_options_index):
     """
     Registers a student in the unigrade google sheet, by invoking instance methods on a Student instance.
 
@@ -93,7 +98,8 @@ def register_student(registration_status, new_student_object, valid_entry, user_
         user_options_index (str): either '1' or '2' chosen by user input. Corresponds to one of the user_options dict keys.
     """
     if registration_status != 'Student is currently registered.\n':
-        new_student_object.register(valid_entry, user_options[user_options_index])
+        new_student_object.register(valid_entry,
+                                    user_options[user_options_index])
         global next_function_call
         next_function_call = 'go_back'
     else:
@@ -101,7 +107,8 @@ def register_student(registration_status, new_student_object, valid_entry, user_
         next_function([['1', 'unregister_student'], ['2', 'go_back']])
 
 
-def unregister_student(registration_status, new_student_object, valid_entry, user_options, user_options_index):
+def unregister_student(registration_status, new_student_object, valid_entry,
+                       user_options, user_options_index):
     """
     Unregisters a student in the unigrade google sheet, by invoking instance methods on a Student instance.
 
@@ -141,15 +148,25 @@ def student_registration_interface():
         valid_input = gen_functions.validate_numeric_input(2)
 
     if valid_input == '2':
-        next_function([['1', 'go_back'], ['2', 'top_level_interface'], ['3', 'exit_the_program']])
+        next_function([['1', 'go_back'],
+                       ['2', 'top_level_interface'],
+                       ['3', 'exit_the_program']])
     else:
         valid_entry, user_options, user_options_index, new_student_object = registration_status_checker()
-        next_function([['1', 'register_student'], ['2', 'unregister_student'], ['3', 'top_level_interface'], ['4', 'exit_the_program']])
+        next_function([['1', 'register_student'],
+                       ['2', 'unregister_student'],
+                       ['3', 'top_level_interface'],
+                       ['4', 'exit_the_program']])
 
         while next_function_call in ('register_student', 'unregister_student'):
-            registration_status = new_student_object.set_student_identifiers(valid_entry, user_options[user_options_index])
+            registration_status = new_student_object.set_student_identifiers(valid_entry,
+                                                                             user_options[user_options_index])
             if next_function_call in ('register_student', 'unregister_student'):
-                FUNCTION_DICTIONARY[next_function_call](registration_status, new_student_object, valid_entry, user_options, user_options_index)
+                FUNCTION_DICTIONARY[next_function_call](registration_status,
+                                                        new_student_object,
+                                                        valid_entry,
+                                                        user_options,
+                                                        user_options_index)
 
 
 def registration_status_checker():
@@ -196,7 +213,8 @@ it should contain 9 digits and nothing else. Then try enter an ID again.""")
                 user_options_index = '2'
 
     # As part of creating this Student instance, the student registration status is printed to the terminal.
-    new_student_object = student.Student(valid_entry, user_options[user_options_index])
+    new_student_object = student.Student(valid_entry,
+                                         user_options[user_options_index])
     return [valid_entry, user_options, user_options_index, new_student_object]
 
 
@@ -216,16 +234,23 @@ def view_or_edit_student_details_interface():
     while not valid_input:
         valid_input = gen_functions.validate_numeric_input(2)
     if valid_input == '2':
-        next_function([['1', 'go_back'], ['2', 'top_level_interface'], ['3', 'exit_the_program']])
+        next_function([['1', 'go_back'],
+                       ['2', 'top_level_interface'],
+                       ['3', 'exit_the_program']])
     else:
         global next_function_call
         input_student_identifier, identifier_types_list, input_identifier_type_index, new_student_object = registration_status_checker()
-        registration_status = new_student_object.set_student_identifiers(input_student_identifier, identifier_types_list[input_identifier_type_index])
+        registration_status = new_student_object.set_student_identifiers(input_student_identifier,
+                                                                         identifier_types_list[input_identifier_type_index])
         if registration_status == 'Student not registered.\n':
             next_function([['1', 'register_student'], ['2', 'go_back']])
             global next_function_call
             if next_function_call == 'register_student':
-                FUNCTION_DICTIONARY[next_function_call](registration_status, new_student_object, input_student_identifier, identifier_types_list, input_identifier_type_index)
+                FUNCTION_DICTIONARY[next_function_call](registration_status,
+                                                        new_student_object,
+                                                        input_student_identifier,
+                                                        identifier_types_list,
+                                                        input_identifier_type_index)
 
         else:
             while True:
@@ -262,21 +287,29 @@ def view_or_edit_student_module_info_and_grades_interface():
     while not valid_input:
         valid_input = gen_functions.validate_numeric_input(2)
     if valid_input == '2':
-        next_function([['1', 'go_back'],['2', 'top_level_interface'], ['3', 'exit_the_program']])
+        next_function([['1', 'go_back'],
+                       ['2', 'top_level_interface'],
+                       ['3', 'exit_the_program']])
     else:
         global next_function_call
         input_student_identifier, identifier_types_list, input_identifier_type_index, new_student_object = registration_status_checker()
-        registration_status = new_student_object.set_student_identifiers(input_student_identifier, identifier_types_list[input_identifier_type_index])
+        registration_status = new_student_object.set_student_identifiers(input_student_identifier,
+                                                                         identifier_types_list[input_identifier_type_index])
         if registration_status == 'Student not registered.\n':
             next_function([['1', 'register_student'], ['2', 'go_back']])
             if next_function_call == 'register_student':
-                FUNCTION_DICTIONARY[next_function_call](registration_status, new_student_object, input_student_identifier, identifier_types_list, input_identifier_type_index)
+                FUNCTION_DICTIONARY[next_function_call](registration_status,
+                                                        new_student_object,
+                                                        input_student_identifier,
+                                                        identifier_types_list,
+                                                        input_identifier_type_index)
                 next_function_call = 'student_information_top_level_interface'
         else:
             time.sleep(2.0)
             new_student_object.compulsory_module_enrolment_checker_and_updater()
             module_info = {}
-            modules_enrolled ={}
+            modules_enrolled = {}
+
             def load_and_prepare_module_information():
                 gen_functions.clear()
                 print('Loading student details, module information and grades...')
@@ -294,6 +327,7 @@ def view_or_edit_student_module_info_and_grades_interface():
                 new_student_object.enrolled_modules = modules_enrolled
 
             load_and_prepare_module_information()
+
             def print_info():
                 gen_functions.clear()
                 print("Student's details:")
@@ -338,7 +372,8 @@ academic year, and unenrol the student from an optional module .""")
             while not valid_input:
                 valid_input = gen_functions.validate_numeric_input(4)
             if valid_input == '1':
-                next_function_call = new_student_object.edit_student_module_info(print_info, load_and_prepare_module_information)
+                next_function_call = new_student_object.edit_student_module_info(print_info,
+                                                                                 load_and_prepare_module_information)
             elif valid_input == '2':
                 next_function_call = new_student_object.enrol_student_on_module()
             elif valid_input == '3':
@@ -350,7 +385,7 @@ academic year, and unenrol the student from an optional module .""")
 def modules_interface():
     """
     Displays the modules terminal interface to the user. Provides options to the user.
-    
+
     Prompts the user to select to add a new module to or edit an existing module in the unigrade google sheet;
     to view module statistics; or to 'go back' or 'exit' the program.
     """
@@ -366,8 +401,12 @@ def modules_interface():
             | | | ' \ |  _|/ _ \| '_|| '  \ / _` ||  _|| |/ _ \| ' \ 
            |___||_||_||_|  \___/|_|  |_|_|_|\__,_| \__||_|\___/|_||_|
     \n""")
-    next_function([['1', 'add_module_interface'], ['2', 'edit_module_properties_interface'], ['3', 'view_modules_list_interface'], ['4', 'module_statistics_interface'],
-                   ['5', 'top_level_interface'], ['6', 'exit_the_program']])
+    next_function([['1', 'add_module_interface'],
+                   ['2', 'edit_module_properties_interface'],
+                   ['3', 'view_modules_list_interface'],
+                   ['4', 'module_statistics_interface'],
+                   ['5', 'top_level_interface'],
+                   ['6', 'exit_the_program']])
     global last_function_call
     last_function_call = 'modules_interface'
 
@@ -382,7 +421,7 @@ def set_subset_of_module_properties(module_year):
         module_year (int): The academic year on which the module is taught.
 
     Returns:
-        A list containing the assigned/reassigned mutable properties. 
+        A list containing the assigned/reassigned mutable properties.
     """
     correct_activity = False
     while not correct_activity:
@@ -394,14 +433,15 @@ def set_subset_of_module_properties(module_year):
         activity = True if valid_input == '1' else False
         print(f"Module is being taught: {activity}. ")
         print('is this correct? Enter 1 for yes, 2 for no.')
-        correct_activity = gen_functions.is_this_correct_checker(valid_input, 'module activity')
+        correct_activity = gen_functions.is_this_correct_checker(valid_input,
+                                                                 'module activity')
     print('')
 
     study_programmes = ['MSci Physics', 'BSc Physics']
     availability = {}
     compulsory_status = {}
     for programme in study_programmes:
-        if module_year!= 4:
+        if module_year != 4:
             correct_availability = False
             while not correct_availability:
                 print(f'Is the module available on the {programme} programme?')
@@ -412,11 +452,11 @@ def set_subset_of_module_properties(module_year):
                 availability[f'{programme}'] = True if valid_input == '1' else False
                 print(f"Module available on {programme}:", f"{availability[programme]}.")
                 print('is this correct? Enter 1 for yes, 2 for no.')
-                correct_availability = gen_functions.is_this_correct_checker(valid_input, 'availability')
+                correct_availability = gen_functions.is_this_correct_checker(valid_input,
+                                                                             'availability')
                 print('')
         else:
             availability[f'{programme}'] = True if programme == 'MSci Physics' else False
-        
 
         if availability[programme]:
             correct_compulsory_status = False
@@ -429,7 +469,8 @@ def set_subset_of_module_properties(module_year):
                 compulsory_status[f'{programme}'] = True if valid_input == '1' else False
                 print(f"Module compulsory on {programme}:", f"{compulsory_status[programme]}.")
                 print('is this correct? Enter 1 for yes, 2 for no.')
-                correct_compulsory_status = gen_functions.is_this_correct_checker(valid_input, 'compulsory status')
+                correct_compulsory_status = gen_functions.is_this_correct_checker(valid_input,
+                                                                                  'compulsory status')
                 print('')
         else:
             compulsory_status[f'{programme}'] = False
@@ -443,8 +484,9 @@ of 15.\n''')
             valid_credits = gen_functions.validate_module_credits_input()
         print(f'Module credits: {valid_credits}')
         print('is this correct? Enter 1 for yes, 2 for no.')
-        correct_credits = gen_functions.is_this_correct_checker(valid_credits, 'number of credits the module is worth')
-    
+        correct_credits = gen_functions.is_this_correct_checker(valid_credits,
+                                                                'number of credits the module is worth')
+
     return [activity, availability, compulsory_status, int(valid_credits)]
 
 
@@ -456,7 +498,7 @@ def add_module_interface(module_title=None):
     (If the module already exists, the user is given the option of editing its module properties.)
     The user is then prompted to enter valid module properties for the new module. A new AcademicModule instance
     object is then initialised using these properties as parameters. The add_module method is then called on the object.
-    
+
     Args:
         module_title (str): An optional parameter, that when passed has a value equal to a valid module title.
                             It should be passed in a function call inside the edit_module_properties_interface.
@@ -468,7 +510,9 @@ def add_module_interface(module_title=None):
     while not valid_input:
         valid_input = gen_functions.validate_numeric_input(2)
     if valid_input == '2':
-        next_function([['1', 'go_back'],['2', 'top_level_interface'], ['3', 'exit_the_program']])
+        next_function([['1', 'go_back'],
+                       ['2', 'top_level_interface'],
+                       ['3', 'exit_the_program']])
         return
     else:
         global next_function_call
@@ -500,7 +544,8 @@ for example Planetary,Science.\n''')
                 print('')
                 print(f'Module title: {valid_title}')
                 print('is this correct? Enter 1 for yes, 2 for no.')
-                correct_title = gen_functions.is_this_correct_checker(valid_title, 'module title')
+                correct_title = gen_functions.is_this_correct_checker(valid_title,
+                                                                      'module title')
 
             MODULE_PROPERTIES_WORKSHEET = SHEET.worksheet('module properties')
             if MODULE_PROPERTIES_WORKSHEET.find(valid_title):
@@ -528,14 +573,17 @@ for example Planetary,Science.\n''')
                 valid_year = gen_functions.validate_numeric_input(4)
             print(f"Module year: {valid_year} ")
             print('is this correct? Enter 1 for yes, 2 for no.')
-            correct_year = gen_functions.is_this_correct_checker(valid_year, 'module year')
+            correct_year = gen_functions.is_this_correct_checker(valid_year,
+                                                                 'module year')
         print('')
 
         module_properties_subset = set_subset_of_module_properties(int(valid_year))
-        
-        
-        new_module_object = academic_module.AcademicModule(int(valid_year), valid_title, module_properties_subset[1], module_properties_subset[3],
-                                           module_properties_subset[2], module_properties_subset[0])
+
+        new_module_object = academic_module.AcademicModule(int(valid_year), valid_title,
+                                                           module_properties_subset[1],
+                                                           module_properties_subset[3],
+                                                           module_properties_subset[2],
+                                                           module_properties_subset[0])
         print('')
         print('Adding module to the unigrade google sheet...')
         new_module_object.add_module()
@@ -567,7 +615,9 @@ def edit_module_properties_interface(module_title=None):
     while not valid_input:
         valid_input = gen_functions.validate_numeric_input(2)
     if valid_input == '2':
-        next_function([['1', 'go_back'],['2', 'top_level_interface'], ['3', 'exit_the_program']])
+        next_function([['1', 'go_back'],
+                       ['2', 'top_level_interface'],
+                       ['3', 'exit_the_program']])
         return
     else:
         global next_function_call
@@ -594,12 +644,14 @@ for example Planetary,Science.\n''')
                             valid_name = gen_functions.validate_module_title_input('name')
                     print(f"Module name: {valid_name} ")
                     print('is this correct? Enter 1 for yes, 2 for no.')
-                    correct_name = gen_functions.is_this_correct_checker(valid_name, 'module name')
+                    correct_name = gen_functions.is_this_correct_checker(valid_name,
+                                                                         'module name')
                 valid_title = f'{valid_code}: {valid_name}'
                 print('')
                 print(f'Module title: {valid_title}')
                 print('is this correct? Enter 1 for yes, 2 for no.')
-                correct_title = gen_functions.is_this_correct_checker(valid_title, 'module code and name')
+                correct_title = gen_functions.is_this_correct_checker(valid_title,
+                                                                      'module code and name')
             title_exists = False
             for year in [1, 2, 3, 4]:
                 module_year_modules_sheet = SHEET.worksheet(f'year {year} modules')
@@ -621,22 +673,29 @@ for example Planetary,Science.\n''')
                 return
         else:
             valid_title = module_title
-    
+
         MODULE_PROPERTIES_WORKSHEET = SHEET.worksheet('module properties')
         module_title_entry_cell = MODULE_PROPERTIES_WORKSHEET.find(f'{valid_title}')
         module_properties_batch_get_range = f"{gspread.utils.rowcol_to_a1(module_title_entry_cell.row, module_title_entry_cell.col + 1)}:{gspread.utils.rowcol_to_a1(module_title_entry_cell.row, module_title_entry_cell.col + 6)}"
-        module_properties = MODULE_PROPERTIES_WORKSHEET.batch_get([module_properties_batch_get_range], major_dimension='ROWS')[0][0]
-        module_properties_descriptors = ['Module currently active', 'Available on MSci Physics','Compulsory on MSci Physics',
-                                            'Available on BSc Physics', 'Compulsory on BSc Physics', 'Module credits']
+        module_properties = MODULE_PROPERTIES_WORKSHEET.batch_get([module_properties_batch_get_range],
+                                                                  major_dimension='ROWS')[0][0]
+        module_properties_descriptors = ['Module currently active',
+                                         'Available on MSci Physics',
+                                         'Compulsory on MSci Physics',
+                                         'Available on BSc Physics',
+                                         'Compulsory on BSc Physics',
+                                         'Module credits']
         module_year = int(MODULE_PROPERTIES_WORKSHEET.cell(1, module_title_entry_cell.col).value.split(' ')[1])
-        print('')                                  
+        print('')
         print(f"'{valid_title}' current module properties:".center(60))
         print('')
         print(f'Module year: {module_year}')
         for property_num in range(0, len(module_properties) - 1, 1):
             property_value = 'YES' if module_properties[property_num] == 'X' else 'NO'
-            print(f'{module_properties_descriptors[property_num]}:', f'{property_value}')
-        print(f'{module_properties_descriptors[len(module_properties) - 1]}:', f'{module_properties[len(module_properties) - 1]}')
+            print(f'{module_properties_descriptors[property_num]}:',
+                  f'{property_value}')
+        print(f'{module_properties_descriptors[len(module_properties) - 1]}:',
+              f'{module_properties[len(module_properties) - 1]}')
         print('')
         print('Enter 1 to edit the mutable module properties, or enter 2 to go back.')
         valid_input = False
@@ -646,8 +705,11 @@ for example Planetary,Science.\n''')
             next_function_call = 'go_back'
             return
         module_properties_subset = set_subset_of_module_properties(module_year)
-        new_module_object = academic_module.AcademicModule(module_year, valid_title, module_properties_subset[1], module_properties_subset[3],
-                                        module_properties_subset[2], module_properties_subset[0])
+        new_module_object = academic_module.AcademicModule(module_year, valid_title,
+                                                           module_properties_subset[1],
+                                                           module_properties_subset[3],
+                                                           module_properties_subset[2],
+                                                           module_properties_subset[0])
         print('')
         print('Updating module properties in the unigrade google sheet...')
         new_module_object.edit_module_properties()
@@ -674,7 +736,8 @@ def view_modules_list_interface():
         while not valid_input:
             valid_input = gen_functions.validate_numeric_input(2)
         if valid_input == '2':
-            next_function([['1', 'go_back'],['2', 'top_level_interface'], ['3', 'exit_the_program']])
+            next_function([['1', 'go_back'], ['2', 'top_level_interface'],
+                           ['3', 'exit_the_program']])
             return
         else:
             print('')
@@ -685,26 +748,32 @@ the module titles you wish to to view.''')
                 valid_year = gen_functions.validate_numeric_input(4)
             print('')
 
-            programme_options_descriptors_dict = {'1': 'all programmes' , '2': 'MSci Physics', '3': 'BSc Physics'}
-            programme_options_dict = {'1': ['MSci Physics', 'BSc Physics'] , '2': ['MSci Physics'], '3': ['BSc Physics']}
+            programme_options_descriptors_dict = {'1': 'all programmes',
+                                                  '2': 'MSci Physics',
+                                                  '3': 'BSc Physics'}
+            programme_options_dict = {'1': ['MSci Physics', 'BSc Physics'],
+                                      '2': ['MSci Physics'], '3': ['BSc Physics']}
             if valid_year != '4':
                 print('''Enter 1 to view module titles for regardless of programme;
 enter 2 for MSci Physics only;
 enter 3 for BSc Physics only.''')
                 valid_input = False
                 while not valid_input:
-                    valid_input = gen_functions.validate_numeric_input(3) 
+                    valid_input = gen_functions.validate_numeric_input(3)
             else:
                 valid_input = '2'
             chosen_programme_option_descriptor = programme_options_descriptors_dict[valid_input]
             chosen_programme_option = programme_options_dict[valid_input]
             print('')
 
-            property_filters_descriptors_dict = {'1': 'active modules only', '2': 'active compulsory modules only', '3': 'active optional modules only',
-                                                '4': 'active and inactive modules'}
+            property_filters_descriptors_dict = {'1': 'active modules only',
+                                                 '2': 'active compulsory modules only',
+                                                 '3': 'active optional modules only',
+                                                 '4': 'active and inactive modules'}
             property_filters_funcs_dict = {'1': academic_module.AcademicModule.retrieve_active_year_x_modules,
-                                    '2': academic_module.AcademicModule.retrieve_active_and_compulsory_year_x_modules,
-                                    '3': academic_module.AcademicModule.retrieve_active_and_optional_year_x_modules, '4': academic_module.AcademicModule.retrieve_year_x_modules}
+                                           '2': academic_module.AcademicModule.retrieve_active_and_compulsory_year_x_modules,
+                                           '3': academic_module.AcademicModule.retrieve_active_and_optional_year_x_modules,
+                                           '4': academic_module.AcademicModule.retrieve_year_x_modules}
             print('Enter a number corresponding to one of the following options:')
             for key in property_filters_descriptors_dict.keys():
                 if key != '4':
@@ -715,11 +784,11 @@ enter 3 for BSc Physics only.''')
             while not valid_input:
                 valid_input = gen_functions.validate_numeric_input(4 if chosen_programme_option_descriptor == 'all programmes' else 3)
             chosen_property_filter_descriptor = property_filters_descriptors_dict[valid_input]
-            chosen_property_filter_func = property_filters_funcs_dict[valid_input]     
+            chosen_property_filter_func = property_filters_funcs_dict[valid_input]
             print('')
             print('Loading modules...')
             print('')
-            time.sleep(0.5)           
+            time.sleep(0.5)
 
             module_titles = set()
             for programme in chosen_programme_option:
@@ -734,11 +803,11 @@ enter 3 for BSc Physics only.''')
             print('')
             if len(module_titles) == 0:
                 print('No such modules.')
-            else:     
-                for module_title in module_titles:                   
+            else:
+                for module_title in module_titles:
                     print(f'{module_title}')
                     time.sleep(0.5)
-            
+
             print('')
             time.sleep(0.5)
             print('''To view a different set of filtered modules, enter 1;
@@ -750,7 +819,8 @@ or to go back, enter 2.''')
                 global next_function_call
                 next_function_call = 'go_back'
                 return
-            
+
+
 def module_statistics_interface():
     """
     Allows a user to select a module from a chosen academic year, in order to view its module statistics.
@@ -767,7 +837,8 @@ def module_statistics_interface():
         while not valid_input:
             valid_input = gen_functions.validate_numeric_input(2)
         if valid_input == '2':
-            next_function([['1', 'go_back'],['2', 'top_level_interface'], ['3', 'exit_the_program']])
+            next_function([['1', 'go_back'], ['2', 'top_level_interface'],
+                           ['3', 'exit_the_program']])
             return
         else:
             correct_year = False
@@ -775,7 +846,7 @@ def module_statistics_interface():
                 print('Enter a number corresponding to one of the following options:\n')
                 for year in [1, 2, 3, 4]:
                     print(f"{year}. View year {year} module statistics.")
-                
+
                 valid_year = False
                 while not valid_year:
                     valid_year = gen_functions.validate_numeric_input(4)
@@ -783,14 +854,14 @@ def module_statistics_interface():
                 print('is this correct? Enter 1 for yes, 2 for no.')
                 correct_year = gen_functions.is_this_correct_checker(valid_year, 'year')
             modules_list = academic_module.AcademicModule.retrieve_year_x_modules(int(valid_year))
-            
+
             print('')
             print(f'Year {valid_year} modules list:\n'.center(60))
             time.sleep(0.5)
             for label, module in enumerate(modules_list):
                 print(f'{label + 1}. {module}')
                 time.sleep(0.5)
-            
+
             print('')
             print(f'''Inspect the above list, and enter the number corresponding to the module
 whose statistics you wish to view; or enter {len(modules_list) + 1} to select another year.''')
@@ -802,7 +873,8 @@ whose statistics you wish to view; or enter {len(modules_list) + 1} to select an
                 if int(valid_module) != len(modules_list) + 1:
                     print(f"View '{modules_list[int(valid_module) - 1]}' module statistics.")
                     print('is this correct? Enter 1 for yes, 2 for no.')
-                    correct_module = gen_functions.is_this_correct_checker(valid_module, f'number for a desired module, or enter {len(modules_list) + 1} to select another year.')
+                    correct_module = gen_functions.is_this_correct_checker(valid_module,
+                                                                           f'number for a desired module, or enter {len(modules_list) + 1} to select another year.')
                 else:
                     break
             if int(valid_module) != len(modules_list) + 1:
@@ -824,7 +896,7 @@ Enter 1 for yes, enter 2 for no. ''')
 def next_function(option_pair_list):
     """
     Prints a list of indexed options to the user, to determine the next function/interface call.
-    
+
     Each printed indexed option corresponds to a description of its purpose/functionality. The user is then
     prompted for input to select an option. This user_input then determines which function is called next, either
     indirectly in the main function, or directly within the function the next_function is called.
@@ -833,7 +905,7 @@ def next_function(option_pair_list):
         option_pair_list (list): a list of 2-item lists, one for each option, containing a str numeric label,
                                  and a str of the function name, for the function that executes an option as described
                                  by its printed description.
-    
+
     Returns:
         The function corresponding to the chosen option.
     """
@@ -844,8 +916,8 @@ def next_function(option_pair_list):
     print('')
     valid_input = False
     while (not valid_input):
-        valid_input = gen_functions.validate_numeric_input(len(option_pair_list)) 
-    
+        valid_input = gen_functions.validate_numeric_input(len(option_pair_list))
+
     for option_pair in option_pair_list:
         if valid_input in option_pair:
                     global next_function_call
@@ -885,24 +957,35 @@ def main():
     Runs and controls program execution.
     """
     global FUNCTION_DICTIONARY
-    FUNCTION_DICTIONARY = {'top_level_interface': top_level_interface, 'student_information_top_level_interface': student_information_top_level_interface,
-                           'modules_interface': modules_interface, 'student_registration_interface': student_registration_interface,
-                            'register_student': register_student, 'unregister_student': unregister_student, 
-                            'view_or_edit_student_details_interface': view_or_edit_student_details_interface,
-                            'view_or_edit_student_module_info_and_grades_interface': view_or_edit_student_module_info_and_grades_interface,
-                            'add_module_interface': add_module_interface, 'edit_module_properties_interface': edit_module_properties_interface,
-                            'view_modules_list_interface': view_modules_list_interface, 'module_statistics_interface': module_statistics_interface,
-                            'exit_the_program': exit_the_program, 'go_back' : go_back}
-    
+    FUNCTION_DICTIONARY = {'top_level_interface': top_level_interface,
+                           'student_information_top_level_interface': student_information_top_level_interface,
+                           'modules_interface': modules_interface,
+                           'student_registration_interface': student_registration_interface,
+                           'register_student': register_student, 'unregister_student': unregister_student,
+                           'view_or_edit_student_details_interface': view_or_edit_student_details_interface,
+                           'view_or_edit_student_module_info_and_grades_interface': view_or_edit_student_module_info_and_grades_interface,
+                           'add_module_interface': add_module_interface,
+                           'edit_module_properties_interface': edit_module_properties_interface,
+                           'view_modules_list_interface': view_modules_list_interface,
+                           'module_statistics_interface': module_statistics_interface,
+                           'exit_the_program': exit_the_program,
+                           'go_back': go_back}
+
     global FUNCTION_USER_DESCRIPTION_DICTIONARY
     FUNCTION_USER_DESCRIPTION_DICTIONARY = {'top_level_interface': 'return to the top program interface',
-                                        'student_information_top_level_interface': 'view or add/edit student information',
-                                        'modules_interface': 'view module information and statistics','student_registration_interface': 'register or unregister a student',                                        'register_student': 'register the student',
-                                        'unregister_student': 'unregister the student', 'view_or_edit_student_details_interface': 'view and edit student details',
-                                        'view_or_edit_student_module_info_and_grades_interface': 'view/edit student module information, including grades and enrolment status',
-                                        'add_module_interface': 'add a new module', 'edit_module_properties_interface': 'update the module properties of an existing module',
-                                        'view_modules_list_interface': 'view filtered lists of the existing modules in the unigrade google sheet',
-                                        'module_statistics_interface': 'view module statistics', 'exit_the_program': 'exit the unigrade program', 'go_back': 'go back'}
+                                            'student_information_top_level_interface': 'view or add/edit student information',
+                                            'modules_interface': 'view module information and statistics',
+                                            'student_registration_interface': 'register or unregister a student',
+                                            'register_student': 'register the student',
+                                            'unregister_student': 'unregister the student',
+                                            'view_or_edit_student_details_interface': 'view and edit student details',
+                                            'view_or_edit_student_module_info_and_grades_interface': 'view/edit student module information, including grades and enrolment status',
+                                            'add_module_interface': 'add a new module',
+                                            'edit_module_properties_interface': 'update the module properties of an existing module',
+                                            'view_modules_list_interface': 'view filtered lists of the existing modules in the unigrade google sheet',
+                                            'module_statistics_interface': 'view module statistics',
+                                            'exit_the_program': 'exit the unigrade program',
+                                            'go_back': 'go back'}
     global last_function_call
     last_function_call = ''
     global next_function_call
