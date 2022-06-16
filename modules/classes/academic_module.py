@@ -409,7 +409,8 @@ or enter 'all' to view data for all the years combined.""")
                               f'1st or better (%): {percentage_first_or_better}\n',
                               sep=' '.center(10))
                         if len(cohort_years) > 1:
-                            print('View statistics for another cohort year of this module? Enter 1 for yes, 2 for no.')
+                            print('''View statistics for another cohort year of this module? Enter 1 for yes,
+enter 2 for no.''')
                             valid_input = False
                             while not valid_input:
                                 valid_input = gen_functions.validate_numeric_input(2)
