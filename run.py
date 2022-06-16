@@ -34,8 +34,11 @@ Please try running the program again. If the error persists try again later.\n''
 
 def top_level_interface():
     """
-    Displays the top-level interface, after clearing the console.
-    The user is prompted to choose one of two options: either view module information, or view and or edit/add student information.
+    Displays the top-level interface of the unigrade program to the user.
+    
+    Clears the terminal, displays the unigrade program logo, before prompting the user to choose one of three options:
+    either view module information; view and or edit/add student information; or exit the program. The user input
+    determines which interface/function is called next.
     """
     gen_functions.clear()
     print("""
@@ -52,8 +55,10 @@ def top_level_interface():
 def student_information_top_level_interface():
     """
     Displays the top-level student information terminal interface to the user.
-    Prompts the user to select to alter student registration, or to view/edit existing student information,
-    as well as 'return to the top program interface' or 'exit' the program.
+
+    Prompts the user to select to alter student registration; to view/edit existing student details;
+    view/edit student module information; as well as 'return to the top program interface' or 'exit' the program.
+    The user input determines which interface/function is called next.
     """
     gen_functions.clear()
     print("""
