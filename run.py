@@ -126,9 +126,13 @@ def unregister_student(registration_status, new_student_object, valid_entry, use
 
 def student_registration_interface():
     """
-    Displays the student registration interface to the user. Prompts the user to input a student's name or ID, then
-    confirms whether the student is currently registered in the unigrade google sheet, before allowing the user to register or unregister a
-    student by perfoming the registration process.
+    Displays the student registration interface to the user. Manages the student registration process.
+    
+    Prompts the user to confirm to register or unregister a student. Then through function calls
+    prompts the user to input a student's name or ID, before indicating to the user whether the student is
+    currently registered in the unigrade google sheet. The user is then prompted to select to register or
+    unregister the student; or return to the top-level interface; or exit the program, and the corresponding
+    function called.
     """
     gen_functions.clear()
     print('Student Registration:', '\n')
