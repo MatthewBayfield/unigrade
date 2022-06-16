@@ -203,7 +203,9 @@ it should contain 9 digits and nothing else. Then try enter an ID again.""")
 
 def view_or_edit_student_details_interface():
     """
-    Prompts the user to input a student's name or ID, for a query within the unigrade google sheet.
+    Allows the user to edit the mutable student details of a registered student in the unigrade google sheet.
+
+    Prompts the user to input a student's name or ID, to search for within the unigrade google sheet.
     If the student is not registered, the user is given the option of registering the student. If the student
     is registered, their details are displayed in a table printed to the terminal. The user is then able to edit
     the mutable details if they desire, which are then updated in the unigrade google sheet.
