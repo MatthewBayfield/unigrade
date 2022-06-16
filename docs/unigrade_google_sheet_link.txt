@@ -1,0 +1,6 @@
+In order to demonstrate the actions of the unigrade program on the unigrade google sheet directly, it has been
+published at
+https://docs.google.com/spreadsheets/d/e/2PACX-1vTlJo08-IgSGswRiVIFJGSH5e37ZTLHrPRx7bWnzoO0tUvyipMj0YRR3tnfMPAm6edmDg1YyjYKz9hc/pubhtml.
+
+It displays correctly other than, a few columns in some worksheets, where the cell borders don't display as they should, but this does not
+matter.
