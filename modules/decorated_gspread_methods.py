@@ -23,11 +23,22 @@ def clear():
 
 def gspread_api_error_exception_handling(gspread_method_or_request):
     """
-    Decorator function that handles the processing of gspread 'APIError' exceptions that occur as part of a request in a called function or method.
+    Decorator function that handles the processing of gspread 'APIError' exceptions that occur as part of a request in a method.
+
     If a 'resource exhausted error' occurs, due to exceeding the google sheet API request rate of 60 requests per minute per user,
-    then the request is repeated until successful, which should occur when upto 60 seconds have passed. The user is displayed
-    a timer updating them of the maximum time left for loading. For any other form of API error,
+    then the request is repeated until successful, which should occur when up to 60 seconds have passed. The user is displayed
+    a timer updating them of the maximum time left for loading. For any other form of API error or gspread error,
     an error message is printed, and the program terminated.
+
+    Args:
+        gspread_method_or_request: any gspread method that uses the google sheets API.
+
+    Returns:
+            The decorated gspread method.
+    
+    Raises:
+        gspread.exceptions.APIError: if a google sheets API error, including the 'resource exhausted error' occurs.
+        gspread.exceptions.GSpreadException: if any non-API related gspread error occurs.
     """
     def inner(*params, **kparams):
         time_left = 60
