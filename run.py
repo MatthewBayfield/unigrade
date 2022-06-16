@@ -155,9 +155,17 @@ def student_registration_interface():
 
 def registration_status_checker():
     """
-    Checks whether a student identified by their student ID or student name, provided by user input,
-    is registered in the unigrade google sheet. Prints to the terminal the result.
-    Returns the valid input value and its identifier type, and the new student object.
+    Checks whether a student is registered in the unigrade google sheet, using a provided user input.
+
+    The user is prompted to enter a valid student ID or student name input. The student registration status
+    is then printed to the terminal.
+
+    Returns:
+        A list including the Student instance; the student name or ID; the student identifier types dict;
+        the index of the chosen identifier type.
+
+    Raises:
+        ValueError: if the user student ID input is invalid: does not contain only 9 digits.
     """
     print("To enter the student's name, enter 1; or 2 for their student ID.\n")
     user_options = {'1': 'name', '2': 'ID'}
@@ -178,7 +186,8 @@ def registration_status_checker():
             try:
                 ID_input = input('->')
                 if not (ID_input.isdigit() and len(ID_input) == 9):
-                    raise ValueError("""Invalid ID, please check you have entered the student's ID correctly: it should contain 9 digits and nothing else.\n""")
+                    raise ValueError("""Invalid ID, please check you have entered the student's ID correctly:
+it should contain 9 digits and nothing else. Then try enter an ID again.""")
             except ValueError as error:
                 print(f"{error}\n")
             else:
@@ -187,6 +196,7 @@ def registration_status_checker():
                 valid_entry = gen_functions.is_this_correct_checker(ID_input, 'Student ID:')
                 user_options_index = '2'
 
+    # As part of creating this Student instance, the student registration status is printed to the terminal.
     new_student_object = student.Student(valid_entry, user_options[user_options_index])
     return [valid_entry, user_options, user_options_index, new_student_object]
 
