@@ -1,31 +1,19 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+# Unigrade
 
-Welcome MatthewBayfield,
+## Overview
+Unigrade is a prototype database command-line user interface program. The database being the unigrade-physics google
+sheet, which is a university style student module information database: it stores module information for enrolled
+students, including which modules they are enrolled on for each of their academic years on their study programme,
+as well as the module status and mark/grade achieved for their completed modules. The database also contains
+information on the various module properties of all currently active and inactive modules on each academic
+year and study programme, including availability and compulsory status by programme, as well as the credits allocated for a module.
 
-This is the Code Institute student template for deploying your third portfolio project, the Python command-line project. The last update to this file was: **August 17, 2021**
+The interface allows the user to both retrieve information from the database, as well as update the database
+programmatically. Using the interface a user can register/unregister a student; enrol/unenrol a student on a module;
+view the student's enrolled modules; and view/edit their module status and marks for a module. The user also can add
+new modules; view/edit module properties; and finally view summuary module statistics.
 
-## Reminders
+The unigrade program is written using python, and is deployed on heroku, in a mock terminal created by the
+Code Institute, primarily using Node.js.
 
-* Your code must be placed in the `run.py` file
-* Your dependencies must be placed in the `requirements.txt` file
-* Do not edit any of the other files or your code may not deploy properly
-
-## Creating the Heroku app
-
-When you create the app, you will need to add two buildpacks from the _Settings_ tab. The ordering is as follows:
-
-1. `heroku/python`
-2. `heroku/nodejs`
-
-You must then create a _Config Var_ called `PORT`. Set this to `8000`
-
-If you have credentials, such as in the Love Sandwiches project, you must create another _Config Var_ called `CREDS` and paste the JSON into the value field.
-
-Connect your GitHub repository and deploy as normal.
-
-## Constraints
-
-The deployment terminal is set to 80 columns by 24 rows. That means that each line of text needs to be 80 characters or less otherwise it will be wrapped onto a second line.
-
------
-Happy coding!
+![unigrade top-level interface](docs/screenshots/unigrade_top_level_interface.png)
