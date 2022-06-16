@@ -118,7 +118,8 @@ def validate_module_title_input(component):
         try:
             name = input('->')
             name_words = name.split(',')
-            filtered_name_words = list(filter(lambda word: word != '', name_words))
+            filtered_name_words = list(filter(lambda word: word != '',
+                                       name_words))
             for word in filtered_name_words:
                 if not word.isalnum():
                     raise ValueError('Invalid input. Please use only standard alphanumeric characters in the module name.')
