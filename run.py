@@ -81,8 +81,17 @@ def student_information_top_level_interface():
 
 def register_student(registration_status, new_student_object, valid_entry, user_options, user_options_index):
     """
-    Registers a student in the unigrade google sheet, by invoking the student class methods,
-    on the new_student_object param. Should only be called within the student_registration_interface function.
+    Registers a student in the unigrade google sheet, by invoking instance methods on a Student instance.
+
+    The Student instance is provided in the form of the new_student_object param. This function should only be
+    called within the student_registration_interface function, as that is where all parameters are created.
+
+    Args:
+        registration_status (str): has value 'Student is currently registered.' or 'Student not registered.'.
+        new_student_object: A Student class instance created in the student_registration_interface function.
+        valid_entry (str): either a student name or student ID user input.
+        user_options (dict): with key:value pairs: '1': 'name, '2': 'ID.
+        user_options_index (str): either '1' or '2' chosen by user input. Corresponds to one of the user_options dict keys.
     """
     if registration_status != 'Student is currently registered.\n':
         new_student_object.register(valid_entry, user_options[user_options_index])
@@ -95,9 +104,16 @@ def register_student(registration_status, new_student_object, valid_entry, user_
 
 def unregister_student(registration_status, new_student_object, valid_entry, user_options, user_options_index):
     """
-    Unregisters a student in the unigrade google sheet, by invoking the student class methods, on the new_student_object param.
-    Should only be called within the student_registration_interface function --- unused params allow the function to be called
-    within this function .
+    Unregisters a student in the unigrade google sheet, by invoking instance methods on a Student instance.
+
+    The Student instance is provided in the form of the new_student_object param. This function should only be
+    called within the student_registration_interface function, as that is where all parameters are created.
+    Unused params are an artefact of the function call within the student_registration_interface_function.
+
+    Args (used):
+        registration_status (str): has value 'Student is currently registered.' or 'Student not registered.'.
+        new_student_object: A Student class instance created in the student_registration_interface function.
+
     """
     if registration_status == 'Student is currently registered.\n':
         new_student_object.unregister()
