@@ -52,4 +52,27 @@ level interface, thus allowing the user to switch between module and student bas
 one of their descendant 3rd level interfaces, and it is here where specific actions will be performed, for example student registration or adding a new module. It will be possible to go back from a 3rd-level interface to its parent 2nd level interface, allowing the user to navigate back and forth before committing to
 a specific action.
 
+## Current Existing Program Version
+
+### Current features
+
+#### General Features
+
+##### User input
+
+Throughout the program flow control is determined primarily through user input, which generally takes the form of a user entering a number from a range of numbers
+corresponding to the number of indexed options. This was as intended, as it minmises the complexity/amount of information the user has to enter, and also makes
+inputs easier to validate and also errors less likely to occur. Aside from inputs for flow control most other types of user input take the form of short alphanumeric inputs,
+for example a module code or year; or short strings separated by a comma, for example a student name. Thus, there are no long user inputs, thereby improving the user experience,
+and minimising the risk of error in line with the program goals.
+
+Also throughout the program, user inputs, in particular those for updating and retrieving information from the unigrade google sheet, are typically required to be confirmed by the user, who can then change the input if necessary, as many times as they wish. This allows the user to correct any mistakes in their inputs before proceeding with any process, thus reducing the risk of human error, and the time wasted repeating whole process again. On the whole this user confirmation feature does provide an additional level
+of input validation, and gives the user the confidence to input data without the fear of making a mistake.
+
+The screenshots below show examples of the different types of user input and the input confirmation feature.
+
+<img src="docs/screenshots/user_input3.png" alt="enter a number from range of numbers example" width=30%% height=50%> 
+<img src="docs/screenshots/user_input1.png" alt="student name string input and confirmation example" width=30%% height=50%>
+<img src="docs/screenshots/user_input2.png" alt="module code alphanumeric input and confirmation example" width=30%% height=50%>
+
 
