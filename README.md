@@ -74,4 +74,21 @@ The screenshots below show examples of the different types of user input and the
 <img src="docs/screenshots/user_input3.png" alt="enter a number from range of numbers example" width=50%% height=50%><img src="docs/screenshots/user_input1.png" alt="student name string input and confirmation example" width=50%% height=50%>
 <img src="docs/screenshots/user_input2.png" alt="module code alphanumeric input and confirmation example" width=50%% height=50%>
 
+##### User feedback and terminal display features
+User feedback is provided regularly to the user during any process and after most inputs, for example indicating to the user the success or failure of a process, the reason why an input is invalid, or 'loading...' type messages during a period of inactivity. In addition a user is often provided with reasons why a process cannot be performed,
+as well any constraints that exist on editing information. Finally the user for certain processes is given usage guidance on the intended purpose behind performing a process, and
+how and when it should be used. The screenshots below show examples of the mentioned user feedback features.
+
+<img src="docs/screenshots/user_feedback_success.png" alt=" process successful example" width=50%% height=50%><img src="docs/screenshots/user_feedback_reason_invalid.png" alt="invalid input explanation example" width=50%% height=50%>
+
+<img src="docs/screenshots/user_feedback_loading.png" alt=" loading feedback example" width=50%% height=50%><img src="docs/screenshots/user_feedback_usage_msg.png" alt=" usage feedback example" width=50%% height=50%>
+
+<img src="docs/screenshots/user_feedback_not_possible_reason.png" alt="feedback why a process is not possible example" width=50%% height=50%>
+
+With regard to how content is displayed to the terminal, outputs are often time separated, appearing successively rather than all at once, thereby making it easier for the user 
+to track and read, particularly when printed information causes scrolling of the terminal. To further aid a user in reading printed information, particularly if the process is to
+retrieve and view student or module information, the user can choose when to proceed through 'enter any key to continue' inputs. Finally to optimise the readability and clarity
+of displayed information in the terminal, titled lists and tables have been employed where possible. The screenshots below show examples of the terminal display features.
+
+<img src="docs/screenshots/terminal_display_list.png" alt=" an example of using lists in displaying information in the terminal" width=50%% height=50%><img src="docs/screenshots/terminal_display_table.png" alt="an example of using tables for displaying information in the terminal" width=50%% height=50%>
 
