@@ -139,3 +139,13 @@ After the user has attempted to change the student's study programme, they are t
 student has yet to start their study programme. If the student has already started, the user receives feedback informing them of this. Once both mutable properties have attempted to be changed, the user receives confirmation that any changes made have been successful. Finally the updated student details table is printed to the terminal, and the user is given the option of trying to alter them again, or to go back to the previous interface. Below are screenshots showing a variation of some of the steps involved throughout the process:
 
 <img src="docs/screenshots/student_details1.png" alt=" view/edit student details part 1 screenshot" width=50%% height=50%><img src="docs/screenshots/student_details2.png" alt="view/edit student details part 2 screenshot " width=50%% height=50%>
+
+##### View or edit student module information
+After confirming to proceed and having entered the details of a currently registered student, the aforementioned auto enrol feature for compulsory modules is performed again,
+so that if the student has entered a new academic year, they will automatically be enrolled on this year's compulsory modules for the student's programme.
+Following this an array of tables grouped by year, are printed to the terminal that display all currently enrolled modules for the student, along with the module status and mark/grade for each module. The user is then given options to update the module status/mark of a module for the student; and enrol/unenrol a student on/from the available optional modules for their current academic year. When enrolling a student on an available optional module for their current academic year, a user can only enrol the student on modules
+whose credits do not exceed the remaining credits outstanding for the student; if this occurs the user is given the option of unenrolling a student from an optional module. The user is also restricted to unenrolling a student from modules for which they are yet to complete. If the student is not enrolled on any modules, the user is given the option of
+enrolling a student on an optional module. Below are a few screenshots showing some of the initial steps in the process of viewing and editing a student's module information.
+
+<img src="docs/screenshots/view_edit_student_module_info1.png" alt=" view/edit student module info part 1 screenshot" width=50%% height=50%><img src="docs/screenshots/view_edit_student_module_info2.png" alt="view/edit student module info part 2 screenshot " width=50%% height=50%>
+
