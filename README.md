@@ -122,9 +122,20 @@ who is not registered.
 When selecting to register a student not yet registered, the user must input the unique student ID of the student if the name was entered previously, or the
 student name if the ID was entered before. If a user enters an ID or name belonging to another student in the database, they are given feedback and given options to reenter the correct ID/name or abort the registration. If instead the user has provided valid unique identifiers, they must then enter the study programme, and student start year, where the start year is validated to ensure it has not yet passed. The end year for the student is then automatically set and displayed to the terminal as well as confirmation that the student is now registered. A table with the newly registered student details is then printed to the terminal. Finally the user is informed that the student is being checked to ensure they are enrolled on the compulsory modules for their current academic year. This feature enrols the student on any compulsory modules automatically if necessary, thus allowing the user to focus only on enrolling the student on their optional modules, when appropriate. The user when ready is then returned to the student information top-level interface. The screenshots below show a variation of the key steps involved in registering a student.
 
-<img src="docs/screenshots/register_student1.png" alt=" register studet step 1" width=50%% height=50%><img src="docs/screenshots/register_student2.png" alt=" register studet step 2" width=50%% height=50%>
+<img src="docs/screenshots/register_student1.png" alt=" register student step 1" width=50%% height=50%><img src="docs/screenshots/register_student2.png" alt=" register student step 2" width=50%% height=50%>
 
 When selecting to unregister a registered student, the student data is deleted from the unigrade google sheet, and the user then given feedback confirming that the student has
 been successfully unregistered. The user when ready is then returned to the student information top-level interface.
 
 <img src="docs/screenshots/unregister_student.png" alt=" unregister student process screenshot" width=50%% height=50%>
+
+##### View and or edit student details
+As with performing student registration, and for any other student information based activity in the unigrade program, the user must first enter the student name/ID of the student. Feedback is then provided indicating to the user whether the student is currently registered or not in the database. If the student is not registered, the user is provided the option of registering the student. Assuming the student is registered, the student's details are retrieved from the database and a table with them is printed to the terminal. The user can then choose to alter some of the student's mutable properties subject to constraints, and a usage message is printed to the terminal informing the user of
+the constraints. The mutable property of the student study programme can be modified, provided the student has not
+started their 3rd academic year, and the user is provided feedback if this not the case. If the student has not started their 3rd academic year, the user can choose their
+study programme, and the new end year is automatically set for the student.
+
+After the user has attempted to change the student's study programme, they are then given the option to alter the student's start year, subject to the constraint that the
+student has yet to start their study programme. If the student has already started, the user receives feedback informing them of this. Once both mutable properties have attempted to be changed, the user receives confirmation that any changes made have been successful. Finally the updated student details table is printed to the terminal, and the user is given the option of trying to alter them again, or to go back to the previous interface. Below are screenshots showing a variation of some of the steps involved throughout the process:
+
+<img src="docs/screenshots/student_details1.png" alt=" view/edit student details part 1 screenshot" width=50%% height=50%><img src="docs/screenshots/student_details2.png" alt="view/edit student details part 2 screenshot " width=50%% height=50%>
