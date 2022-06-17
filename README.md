@@ -99,3 +99,11 @@ Screenshots demonstrating examples of program navigation features:
 
 <img src="docs/screenshots/program_nav_switch_activity.png" alt=" an example of a user being given an option to switch activity" width=50%% height=50%><img src="docs/screenshots/program_nav_want_to_continue.png" alt="an example of prompting the user to continue or go back, with options" width=50%% height=50%>
 
+#### Main Interface Features
+The program top-level interface is the first interface the user sees, it contains the unigrade logo, and three numerically indexed options for the user. The 3rd option allows the user to exit the program, the other two allow the user to specify which branch of the program is of interest, namely whether they want to perform a modules or student information related activity. A screenshot of the top-level interface can be seen below the overview section.
+
+Having selected a branch of the program, the user either sees the student top-level information interface or the module interface, both clearly designated with the ASCII titles.
+Both interfaces then display a list of indexed options to the user to direct them to one of the 3rd level interfaces, where specific activities can be selected by the user. As mentioned in the program navigation section, it is possible to navigate back and forth between parent and descendant interfaces, and sometimes between same level interfaces.
+Below are screenshots of both 2nd level interfaces:
+
+<img src="docs/screenshots/modules_interface.png" alt=" the modules information interface" width=50%% height=50%><img src="docs/screenshots/student_info_top_level_interface.png" alt="the student information top-level interface" width=50%% height=50%>
