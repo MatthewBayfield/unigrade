@@ -974,7 +974,7 @@ def main():
     global FUNCTION_USER_DESCRIPTION_DICTIONARY
     FUNCTION_USER_DESCRIPTION_DICTIONARY = {'top_level_interface': 'return to the top program interface',
                                             'student_information_top_level_interface': 'view or add/edit student information',
-                                            'modules_interface': 'view module information and statistics',
+                                            'modules_interface': 'view/add module information and statistics',
                                             'student_registration_interface': 'register or unregister a student',
                                             'register_student': 'register the student',
                                             'unregister_student': 'unregister the student',
