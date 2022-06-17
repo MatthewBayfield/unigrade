@@ -71,6 +71,7 @@ of input validation, and gives the user the confidence to input data without the
 
 The screenshots below show examples of the different types of user input and the input confirmation feature.
 
-<img src="docs/screenshots/user_input3.png" alt="enter a number from range of numbers example" width=30%% height=50%><img src="docs/screenshots/user_input1.png" alt="student name string input and confirmation example" width=30%% height=50%><img src="docs/screenshots/user_input2.png" alt="module code alphanumeric input and confirmation example" width=30%% height=50%>
+<img src="docs/screenshots/user_input3.png" alt="enter a number from range of numbers example" width=50%% height=50%><img src="docs/screenshots/user_input1.png" alt="student name string input and confirmation example" width=50%% height=50%>
+<img src="docs/screenshots/user_input2.png" alt="module code alphanumeric input and confirmation example" width=50%% height=50%>
 
 
