@@ -107,3 +107,24 @@ Both interfaces then display a list of indexed options to the user to direct the
 Below are screenshots of both 2nd level interfaces:
 
 <img src="docs/screenshots/modules_interface.png" alt=" the modules information interface" width=50%% height=50%><img src="docs/screenshots/student_info_top_level_interface.png" alt="the student information top-level interface" width=50%% height=50%>
+
+#### Program activities
+
+##### Student Registration
+The user must enter the student name or ID of the student they wish to register or unregister from the unigrade-physics google sheet database.
+Feedback is then provided indicating to the user whether the student is currently registered or not in the database. The user is then provided with
+options to register or unregister the student. Choosing to register an already registered student, triggers feedback to the user that the user is already registered,
+and then options are given to go back or unregister the student instead; the same happens when trying to unregister a student
+who is not registered.
+
+<img src="docs/screenshots/student_registration_interface.png" alt=" the student registration interface" width=50%% height=50%><img src="docs/screenshots/register_student_already_registered.png" alt=" user feedback and options when trying to register already registered student" width=50%% height=50%>
+
+When selecting to register a student not yet registered, the user must input the unique student ID of the student if the name was entered previously, or the
+student name if the ID was entered before. If a user enters an ID or name belonging to another student in the database, they are given feedback and given options to reenter the correct ID/name or abort the registration. If instead the user has provided valid unique identifiers, they must then enter the study programme, and student start year, where the start year is validated to ensure it has not yet passed. The end year for the student is then automatically set and displayed to the terminal as well as confirmation that the student is now registered. A table with the newly registered student details is then printed to the terminal. Finally the user is informed that the student is being checked to ensure they are enrolled on the compulsory modules for their current academic year. This feature enrols the student on any compulsory modules automatically if necessary, thus allowing the user to focus only on enrolling the student on their optional modules, when appropriate. The user when ready is then returned to the student information top-level interface. The screenshots below show a variation of the key steps involved in registering a student.
+
+<img src="docs/screenshots/register_student1.png" alt=" register studet step 1" width=50%% height=50%><img src="docs/screenshots/register_student2.png" alt=" register studet step 2" width=50%% height=50%>
+
+When selecting to unregister a registered student, the student data is deleted from the unigrade google sheet, and the user then given feedback confirming that the student has
+been successfully unregistered. The user when ready is then returned to the student information top-level interface.
+
+<img src="docs/screenshots/unregister_student.png" alt=" unregister student process screenshot" width=50%% height=50%>
