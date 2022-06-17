@@ -58,7 +58,7 @@ a specific action.
 
 #### General Features
 
-##### User input
+##### User input features
 
 Throughout the program flow control is determined primarily through user input, which generally takes the form of a user entering a number from a range of numbers
 corresponding to the number of indexed options. This was as intended, as it minmises the complexity/amount of information the user has to enter, and also makes
@@ -71,8 +71,6 @@ of input validation, and gives the user the confidence to input data without the
 
 The screenshots below show examples of the different types of user input and the input confirmation feature.
 
-<img src="docs/screenshots/user_input3.png" alt="enter a number from range of numbers example" width=30%% height=50%> 
-<img src="docs/screenshots/user_input1.png" alt="student name string input and confirmation example" width=30%% height=50%>
-<img src="docs/screenshots/user_input2.png" alt="module code alphanumeric input and confirmation example" width=30%% height=50%>
+<img src="docs/screenshots/user_input3.png" alt="enter a number from range of numbers example" width=30%% height=50%><img src="docs/screenshots/user_input1.png" alt="student name string input and confirmation example" width=30%% height=50%><img src="docs/screenshots/user_input2.png" alt="module code alphanumeric input and confirmation example" width=30%% height=50%>
 
 
