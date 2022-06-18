@@ -263,3 +263,40 @@ The testing process performed on the program can be found in [TESTING.md](TESTIN
 - tabulate - used to generate all the tables displayed to the terminal.
 
 - numpy - to generate module statistics.
+
+### Deployment
+
+The unigrade program is deployed on [heroku](https://www.heroku.com/) in a mock terminal created by the Code Institute.
+
+The live URL link is: [unigrade-system](https://unigrade-system.herokuapp.com/)
+
+It was deployed using the following procedure:
+
+1. Log in to your Heroku account, or create an account if required.
+2. At the top right of the Heroku dashboard click the "New" button, and from the menu that appears, click the 
+'Create new app' button.
+3. In the 'Create New App' section that follows, enter a unique name for the app, (indicated by a green tick) in the App name field, and also
+select a region, using the 'choose a region drop-down list.
+4. Once you have entered a unique app name and selected your region, click the 'create app'
+ button.
+5. After clicking 'create app' you are then taken to the deploy tab on your apps homepage. From here click on the
+'Settings' tab button to view the app settings.
+6. On the settings tab scroll down to the 'Config Vars' section, and click the 'Config Vars' button to reveal the configuration
+variables for the app.
+7. In the opened subsection, in the box containing the word 'key', enter port, and for the box containing 'value',
+enter 8000. Then click the 'add' button.
+8. Then enter as a 'key' CREDS, and as a 'value' paste the contents of the 'creds.json' file, and then again click the
+'add' button.
+9. Next scroll down to the Buildpacks section, and click the 'Add buildpack' button.
+10. On the 'Add Buildpack' window that appears, select 'Python' and click the 'Save Changes' button.
+11. Repeat step 10 again, this time selecting 'node.js.
+12. Next scroll back up to the top of the page, and the click back on the 'Deploy' tab button.
+13. On this tab, scroll down to the 'Deployment method' section. In this section select 'Heroku Git' as
+the deployment method.
+14. Next if not already installed, download and install the Heroku CLI.
+15. Then in the terminal first type the command '$ heroku login -i' and hit enter.
+16. Next login in to Heroku by entering your email address and password next to the input prompts and hit enter.
+17. Recalling your app-name, type the command '$ heroku git:remote -a app-name' and hit enter.
+18. Then finally type the command '$ git push heroku main' and hit enter. The app is then built and if successful
+deployed, as indicated by a printed message in the terminal. To update the app with any changes made, then provided you
+are still logged in, repeat step 18, or else repeat steps 15-18.
