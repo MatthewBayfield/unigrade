@@ -243,3 +243,23 @@ would first modify the instance attributes, and these are then be used to update
 ### Testing
 
 The testing process performed on the program can be found in [TESTING.md](TESTING.md).
+
+### Libraries
+ 
+ The imported external python libraries/modules used in constructing the unigrade program are as follows:
+ 
+- sys - required its exit function in order to exit the program when desired, for example when the user chooses to exit the unigrade program, or automatically when there is an issue accessing the unigrade google sheet.
+ 
+- time - required its sleep function to enable staggered printing of information to the terminal for improved readability and for updating the loading timer in the gspread error handling decorator function.
+ 
+- OS - both for access to the system command clear, for clearing the terminal, but also for the path module when creating a relative path to a module for the purpose of importing it.
+ 
+- google.oauth2.service_account - for access to the Credentials class, for connecting to the unigrade google sheet using credentials
+ 
+- gspread - for access to its methods and properties needed to retrieve information from, and also update the unigrade google sheet.
+
+- datetime - was needed when calculating the student's academic year in a student class method, as well for comparing dates.
+
+- tabulate - used to generate all the tables displayed to the terminal.
+
+- numpy - to generate module statistics.
