@@ -317,9 +317,9 @@ class AcademicModule:
         next_empty_row_num = len(MODULE_PROPERTIES_WORKSHEET.col_values(module_year_module_titles_col_num)) + 1
         batch_update_range = f'{gspread.utils.rowcol_to_a1(next_empty_row_num, module_year_module_titles_col_num)}:{gspread.utils.rowcol_to_a1(next_empty_row_num, module_year_module_titles_col_num + 6)}'
         batch_update_values = [self.title, 'X' if self.activity else '',
-                               'X' if self.availablity['MSci Physics'] else '',
+                               'X' if self.availability['MSci Physics'] else '',
                                'X' if self.compulsory_status['MSci Physics'] else '',
-                               'X' if self.availablity['BSc Physics'] else '',
+                               'X' if self.availability['BSc Physics'] else '',
                                'X' if self.compulsory_status['BSc Physics'] else '',
                                self.module_credits]
         MODULE_PROPERTIES_WORKSHEET.batch_update([{'range': batch_update_range,
@@ -334,9 +334,9 @@ class AcademicModule:
         module_title_entry_cell = MODULE_PROPERTIES_WORKSHEET.find(f'{self.title}')
         module_properties_batch_update_range = f"{gspread.utils.rowcol_to_a1(module_title_entry_cell.row, module_title_entry_cell.col + 1)}:{gspread.utils.rowcol_to_a1(module_title_entry_cell.row, module_title_entry_cell.col + 6)}"
         module_properties_batch_update_values = ['X' if self.activity else '',
-                                                 'X' if self.availablity['MSci Physics'] else '',
+                                                 'X' if self.availability['MSci Physics'] else '',
                                                  'X' if self.compulsory_status['MSci Physics'] else '',
-                                                 'X' if self.availablity['BSc Physics'] else '',
+                                                 'X' if self.availability['BSc Physics'] else '',
                                                  'X' if self.compulsory_status['BSc Physics'] else '',
                                                  self.module_credits]
         MODULE_PROPERTIES_WORKSHEET.batch_update([{'range': module_properties_batch_update_range,
