@@ -176,3 +176,13 @@ the module. The module is then updated in the database, and feedback is printed 
 This screenshot demonstrates the process of editing a module's mutable properties:
 
 <img src="docs/screenshots/edit_module_properties.png" alt=" edit module properies process screenshot" width=50%% height=50%>
+
+##### View module lists
+A user can choose from the options in the modules interface, to view filtered lists of the existing modules in the unigrade google sheet.
+The user must specify via input a year, a programme or all programmes, and then choose one of a range of module property filters. A list of
+the retrieved modules from the database, are then printed to the terminal. The user is then given the option of viewing another a list or
+to go back. \n
+
+This screenshot demonstrates the process of viewing a filtered module list:
+
+<img src="docs/screenshots/view_module_lists.png" alt=" view module list process screenshot" width=50%% height=50%>
