@@ -72,4 +72,4 @@ The current program is free of any significant errors, with the only warnings re
 'line too long'. Best efforts have been made to minimise the width of lines to under 79 characters, however
 this was not always possible, or necessarily preferable in my opinion for the readability of the program code.
 
-[return to README.md](README.MD)
+[return to README.md](README.md)
