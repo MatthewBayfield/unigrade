@@ -108,6 +108,18 @@ Below are screenshots of both 2nd level interfaces:
 
 <img src="docs/screenshots/modules_interface.png" alt=" the modules information interface" width=50%% height=50%><img src="docs/screenshots/student_info_top_level_interface.png" alt="the student information top-level interface" width=50%% height=50%>
 
+#### Input validation and exception handling features
+All user inputs are validated, to ensure they are of the correct form and type. If an invalid input is entered by a user, a ValueError exception is raised, and an
+error message printed to the user, sometimes explaining the specific issue with their input, if necessary. The user is then asked to input a value again until
+a valid input is entered. As well as form and type validation, some inputs are validated based on whether they are unique or abide by any constraints of
+the process in which they feature. This safeguarding feature is a way to prevent inputs that are valid with regard to their form and type, but that are not permitted
+in the database for other reasons, from being entered. User inputs are also not case sensitive, as they are often reformatted before being added to the unigrade database;
+again this simplifies user input, and reduces human error.
+
+The major exception that occurs regularly in the program is a consequence of the gspread module, whose methods make use of the google sheets API, and thus are used constantly
+to access, retrieve from, and update the unigrade google sheet. Due to the existence of a request rate limit of 60 requests per minute per user, the gspread methods often raise APIError exceptions when this rate is exceeded. In order to handle these exceptions and still be able to complete the desired requests, an exception handling feature was created, that handles the exceptions. This feature continuously retries a request until it is successful, whilst displaying to the user an updated timer indicating the max time left for loading. The same exception handling feature also handles all other APIErrors and general gspread exceptions by exiting the program, after informing the user of the issue, and
+instructing them to restart the program.
+
 #### Program activities
 
 ##### Student Registration
@@ -196,4 +208,5 @@ is then given the option to view another cohort year statistics for the same mod
 This screenshot demonstrates the process of viewing a module's statistics:
 
 <img src="docs/screenshots/view_module_stats.png" alt=" view module statistics process screenshot" width=50%% height=50%>
+
 
