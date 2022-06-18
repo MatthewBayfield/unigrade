@@ -23,7 +23,7 @@ google sheets API accessed using the gspread imported module was used. However I
 the raised APIError exception 'resource exhausted', that the google sheets API has a request rate limit of
 60 requests per minute per user. Consequently the various gspread methods acting on the unigrade sheet would
 raise exceptions if this rate was exceeded. In order to handle these exceptions and still be able to complete
-the desired requests, I created a gspread method decorator, that handles the exception by continously retrying
+the desired requests, I created a gspread method decorator, that handles the exception by continuously retrying
 the request until it is successful, whilst displaying to the user a timer indicating the max time left for loading.
 The decorator was applied to all gspread methods used.
 
@@ -53,7 +53,7 @@ This was fixed by altering the code logic, in particular adding an additional if
 current year, and thus determine the flow accordingly.
 
 - When performing a specific batch_get request, I was not always getting the range of cells expected. It turned out
-the way I was generatinng part of the batch_get range in A1 notation, that involved extracting the column letter using
+the way I was generating part of the batch_get range in A1 notation, that involved extracting the column letter using
 the index syntax on the string, failed for columns designated with two letters as opposed to one. This was fixed by
 using the slice syntax on the string.
 
