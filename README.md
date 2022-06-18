@@ -61,7 +61,7 @@ a specific action.
 ##### User input features
 
 Throughout the program flow control is determined primarily through user input, which generally takes the form of a user entering a number from a range of numbers
-corresponding to the number of indexed options. This was as intended, as it minmises the complexity/amount of information the user has to enter, and also makes
+corresponding to the number of indexed options. This was as intended, as it minimises the complexity/amount of information the user has to enter, and also makes
 inputs easier to validate and also errors less likely to occur. Aside from inputs for flow control most other types of user input take the form of short alphanumeric inputs,
 for example a module code or year; or short strings separated by a comma, for example a student name. Thus, there are no long user inputs, thereby improving the user experience,
 and minimising the risk of error in line with the program goals.
@@ -93,7 +93,7 @@ of displayed information in the terminal, titled lists and tables have been empl
 <img src="docs/screenshots/terminal_display_list.png" alt=" an example of using lists in displaying information in the terminal" width=50%% height=50%><img src="docs/screenshots/terminal_display_table.png" alt="an example of using tables for displaying information in the terminal" width=50%% height=50%>
 
 ##### Flow control/Program navigation features
-At the start of every interface and all processes the user is asked to confirm they wish to proceed. If they select no, they are then given options to return to a higher level interface, as well as to exit the program. Additionally in many activities the user has options to switch between closely related actvities, particulary when they cannot perform
+At the start of every interface and all processes the user is asked to confirm they wish to proceed. If they select no, they are then given options to return to a higher level interface, as well as to exit the program. Additionally in many activities the user has options to switch between closely related activities, particularily when they cannot perform
 the activity they desire, or if other things must be done first; for example if in trying to view/edit student information for a module, the user is informed the student is not registered in the database, they are provided the option of registering the student. 
 Screenshots demonstrating examples of program navigation features:
 
@@ -113,7 +113,7 @@ All user inputs are validated, to ensure they are of the correct form and type. 
 error message printed to the user, sometimes explaining the specific issue with their input, if necessary. The user is then asked to input a value again until
 a valid input is entered. As well as form and type validation, some inputs are validated based on whether they are unique or abide by any constraints of
 the process in which they feature. This safeguarding feature is a way to prevent inputs that are valid with regard to their form and type, but that are not permitted
-in the database for other reasons, from being entered. User inputs are also not case sensitive, as they are often reformatted before being added to the unigrade database;
+in the database for other reasons, from being entered. User inputs are also not case-sensitive, as they are often reformatted before being added to the unigrade database;
 again this simplifies user input, and reduces human error.
 
 The major exception that occurs regularly in the program is a consequence of the gspread module, whose methods make use of the google sheets API, and thus are used constantly
