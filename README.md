@@ -238,7 +238,7 @@ use of core user interfaces to be used by a user to choose a particular activity
 of classes modelled on student and module objects. Upon creating instances of each class, the various class methods for performing the program functionality
 responsible for acting on the unigrade database would be called on them. Every time information is retrieved from the database for a module or student,
 a corresponding instance is created with attribute mirroring those found in the database. All activities responsible for changing information in the database,
-would first modify the instance attributes, and these are then be used to update the unigrade sheet.
+would first modify the instance attributes, and these are used to update the unigrade sheet.
 
 
 ### Future features
