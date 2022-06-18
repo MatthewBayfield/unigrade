@@ -161,7 +161,7 @@ When enrolling a student on an available optional module for their current acade
  
 When choosing to edit a student's mark and module status, the enrolled module tables are reprinted to the terminal after it is cleared. The user can then select a module from one of the tables to edit the student's status and mark for; changing a student's module status to completed, then enables the user to
 enter a validated percentage module mark input, and the grade is automatically calculated. Feedback is then provided to the user to indicate a successful update, and table
-displaying the updated module information displayed. The user can then choose to update another module for the same student or go back.\n
+displaying the updated module information displayed. The user can then choose to update another module for the same student or go back.
 
 Below are a few screenshots showing some of the initial steps in the process of viewing and editing a student's module information.
 
@@ -173,7 +173,7 @@ The combined code and name that make up the title is then searched for in the un
 If it does exist, the user is then provided the options of editing its module properties or to go back. If the module does not exist, the user is then required
 to choose the year for which it will be taught, before completing a series of yes or no equivalent inputs in order to assign the module properties. Finally, the user
 is required to input the number of credits the module is worth, with the input validated to ensure the credits number is a multiple of 15. The module is then added to the
-database, and feedback is printed to the terminal to confirm the module has been added. The user is then returned when ready to the modules interface.\n
+database, and feedback is printed to the terminal to confirm the module has been added. The user is then returned when ready to the modules interface.
 
 This screenshot demonstrates the process of adding a module:
 
@@ -183,7 +183,7 @@ This screenshot demonstrates the process of adding a module:
 A user again must enter a module code and module name to search for a module title in the google sheet. If no module exists in the database, the user is given the option
 of adding the module. If the module does exist, its current module properties are printed to the terminal; the user can select to edit its mutable properties or to go back.
 The user then must complete a series of yes or no equivalent inputs in order to assign the module properties, before performing an input to assign a number of credits to
-the module. The module is then updated in the database, and feedback is printed to the terminal to confirm this. The user is then returned when ready to the modules interface.\n
+the module. The module is then updated in the database, and feedback is printed to the terminal to confirm this. The user is then returned when ready to the modules interface.
 
 This screenshot demonstrates the process of editing a module's mutable properties:
 
@@ -193,7 +193,7 @@ This screenshot demonstrates the process of editing a module's mutable propertie
 A user can choose from the options in the modules interface, to view filtered lists of the existing modules in the unigrade google sheet.
 The user must specify via input a year, a programme or all programmes, and then choose one of a range of module property filters. A list of
 the retrieved modules from the database, are then printed to the terminal. The user is then given the option of viewing another a list or
-to go back. \n
+to go back.
 
 This screenshot demonstrates the process of viewing a filtered module list:
 
@@ -203,7 +203,7 @@ This screenshot demonstrates the process of viewing a filtered module list:
 The user having chosen the view module statistics option in the modules interface, must first select a year, followed by a module from the list of modules
 printed to the terminal. If data exists for the module, the user must then pick to view information from one of the available cohort years for the module,
 or choose to view all years combined. A formatted set of summary module statistics as well as the dataset size, are then printed to the terminal. The user
-is then given the option to view another cohort year statistics for the same module, or is again asked to confirm if they wish to view another module's statistics.\n
+is then given the option to view another cohort year statistics for the same module, or is again asked to confirm if they wish to view another module's statistics.
 
 This screenshot demonstrates the process of viewing a module's statistics:
 
@@ -220,7 +220,7 @@ the properties of the modules taught past and present, including whether or not 
 With this in mind, the database is split into three sets of worksheets: a student details worksheet, that contains the identifiers of the student, and their programme
 information; a set of module worksheets, each containing student module information for modules taught on a specific year, in particular information for all registered students
 on which modules they are enrolled, their current module status and or module marks/grades; the final worksheet is the module properties worksheet that contains all
-properties for each module in columns of modules organised by the year they are taught.\n
+properties for each module in columns of modules organised by the year they are taught.
 
 The following screenshots show each type of worksheet:
 
