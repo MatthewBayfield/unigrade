@@ -239,3 +239,7 @@ of classes modelled on student and module objects. Upon creating instances of ea
 responsible for acting on the unigrade database would be called on them. Every time information is retrieved from the database for a module or student,
 a corresponding instance is created with attribute mirroring those found in the database. All activities responsible for changing information in the database,
 would first modify the instance attributes, and these are then be used to update the unigrade sheet.
+
+### Testing
+
+The testing process performed on the program can be found in [TESTING.md](TESTING.md).
