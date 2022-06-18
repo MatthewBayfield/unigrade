@@ -155,3 +155,14 @@ Below are a few screenshots showing some of the initial steps in the process of 
 
 <img src="docs/screenshots/view_edit_student_module_info1.png" alt=" view/edit student module info part 1 screenshot" width=50%% height=50%><img src="docs/screenshots/view_edit_student_module_info2.png" alt="view/edit student module info part 2 screenshot " width=50%% height=50%>
 
+##### Add a new module
+To add a new module to the unigrade google sheet, a user has to enter a module code input followed by a module name input, both of which are validated.
+The combined code and name that make up the title is then searched for in the unigrade sheet, and the user given feedback as to whether the module already exists.
+If it does exist, the user is then provided the options of editing its module properties or to go back. If the module does not exist, the user is then required
+to choose the year for which it will be taught, before completing a series of yes or no equivalent inputs in order to assign the module properties. Finally, the user
+is required to input the number of credits the module is worth, with the input validated to ensure the credits number is a multiple of 15. The module is then added to the
+database, and feedback is printed to the terminal to confirm the module has been added. The user is then returned when ready to the modules interface.\n
+
+This screenshot demonstrates the process of adding a module:
+
+<img src="docs/screenshots/add_module.png" alt=" add module process screenshot" width=50%% height=50%>
