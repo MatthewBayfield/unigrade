@@ -209,4 +209,33 @@ This screenshot demonstrates the process of viewing a module's statistics:
 
 <img src="docs/screenshots/view_module_stats.png" alt=" view module statistics process screenshot" width=50%% height=50%>
 
+### Data model
 
+#### unigrade-physics google sheet database
+As was mentioned in the program objectives, the unigrade-physics google sheet database contains university-style student module information and module information, in
+particular modelled on the UCL physics MSci and BSc programmes. The purpose of the database is to contain all the information typical to a university grade/enrolement
+tracking database, where it would be expected to store information for a student on what their study programme and start/end dates are; which modules are they enrolled on,
+as well as their progress on those modules and the marks/grades achieved for a module. To this end it must also be possible to store information detailing
+the properties of the modules taught past and present, including whether or not they are compulsory, how many credits they are worth and on what year they are taught.
+With this in mind, the database is split into three sets of worksheets: a student details worksheet, that contains the identifiers of the student, and their programme
+information; a set of module worksheets, each containing student module information for modules taught on a specific year, in particular information for all registered students
+on which modules they are enrolled, their current module status and or module marks/grades; the final worksheet is the module properties worksheet that contains all
+properties for each module in columns of modules organised by the year they are taught.\n
+
+The following screenshots show each type of worksheet:
+
+<img src="docs/screenshots/unigrade_student_details_worksheet.png" alt=" unigrade student details worskheet screenshot" width=50%% height=50%>
+<img src="docs/screenshots/unigrade_modules_worksheet.png" alt=" unigrade year 1 modules worskheet screenshot" width=50%% height=50%>
+<img src="docs/screenshots/unigrade_module_properties_worksheet.png" alt=" unigrade module properties worskheet screenshot" width=50%% height=50%>
+
+An updated published HTML version of the unigrade-physics google sheet is also viewable at [https://docs.google.com/spreadsheets/d/e/2PACX-1vTlJo08-IgSGswRiVIFJGSH5e37ZTLHrPRx7bWnzoO0tUvyipMj0YRR3tnfMPAm6edmDg1YyjYKz9hc/pubhtml
+](https://docs.google.com/spreadsheets/d/e/2PACX-1vTlJo08-IgSGswRiVIFJGSH5e37ZTLHrPRx7bWnzoO0tUvyipMj0YRR3tnfMPAm6edmDg1YyjYKz9hc/pubhtml
+)
+
+#### Student and AcademicModule classes
+The general approach to retrieving information from, and updating the unigrade google sheet database using the unigrade program interface, is based around the
+use of core user interfaces to be used by a user to choose a particular activity to perform. These core interfaces are then responsible for creating instances
+of classes modelled on student and module objects. Upon creating instances of each class, the various class methods for performing the program functionality
+responsible for acting on the unigrade database would be called on them. Every time information is retrieved from the database for a module or student,
+a corresponding instance is created with attribute mirroring those found in the database. All activities responsible for changing information in the database,
+would first modify the instance attributes, and these are then be used to update the unigrade sheet.
