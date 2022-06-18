@@ -166,3 +166,13 @@ database, and feedback is printed to the terminal to confirm the module has been
 This screenshot demonstrates the process of adding a module:
 
 <img src="docs/screenshots/add_module.png" alt=" add module process screenshot" width=50%% height=50%>
+
+##### Edit a module's mutable properties
+A user again must enter a module code and module name to search for a module title in the google sheet. If no module exists in the database, the user is given the option
+of adding the module. If the module does exist, its current module properties are printed to the terminal; the user can select to edit its mutable properties or to go back.
+The user then must complete a series of yes or no equivalent inputs in order to assign the module properties, before performing an input to assign a number of credits to
+the module. The module is then updated in the database, and feedback is printed to the terminal to confirm this. The user is then returned when ready to the modules interface.\n
+
+This screenshot demonstrates the process of editing a module's mutable properties:
+
+<img src="docs/screenshots/edit_module_properties.png" alt=" edit module properies process screenshot" width=50%% height=50%>
