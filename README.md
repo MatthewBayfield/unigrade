@@ -309,3 +309,17 @@ the deployment method.
 18. Then finally type the command '$ git push heroku main' and hit enter. The app is then built and if successful
 deployed, as indicated by a printed message in the terminal. To update the app with any changes made, then provided you
 are still logged in, repeat step 18, or else repeat steps 15-18.
+
+
+### Credits
+
+#### External libraries
+- The gspread module and the related google sheets API were used extensively in the unigrade program to access and update the unigrade google sheet. 
+
+#### Content
+- The flowchart and diagram generating site [https://app.diagrams.net/](https://app.diagrams.net/) was used to produce the diagram in my README.
+- The ASCII Generator [http://www.network-science.de/ascii/](http://www.network-science.de/ascii/) was used to create ASCII titles in some interfaces.
+- The programme/course information used in the unigrade google sheet was modelled on the [UCL physics programmes](https://www.ucl.ac.uk/prospective-students/undergraduate/degrees/physics-bsc-2022#tab3-year3).
+
+#### Other
+- Thanks to my Code Institute Mentor Richard Wells, for the guidance you provided throughout the project.
