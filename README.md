@@ -66,7 +66,7 @@ inputs easier to validate and also errors less likely to occur. Aside from input
 for example a module code or year; or short strings separated by a comma, for example a student name. Thus, there are no long user inputs, thereby improving the user experience,
 and minimising the risk of error in line with the program goals.
 
-Also throughout the program, user inputs, in particular those for updating and retrieving information from the unigrade google sheet, are typically required to be confirmed by the user, who can then change the input if necessary, as many times as they wish. This allows the user to correct any mistakes in their inputs before proceeding with any process, thus reducing the risk of human error, and the time wasted repeating whole process again. On the whole this user confirmation feature does provide an additional level
+Also throughout the program, user inputs, in particular those for updating and retrieving information from the unigrade google sheet, are typically required to be confirmed by the user, who can then change the input if necessary, as many times as they wish. This allows the user to correct any mistakes in their inputs before proceeding with any process, thus reducing the risk of human error, and the time wasted repeating the whole process again. On the whole this user confirmation feature does provide an additional level
 of input validation, and gives the user the confidence to input data without the fear of making a mistake.
 
 The screenshots below show examples of the different types of user input and the input confirmation feature.
@@ -143,9 +143,15 @@ student has yet to start their study programme. If the student has already start
 ##### View or edit student module information
 After confirming to proceed and having entered the details of a currently registered student, the aforementioned auto enrol feature for compulsory modules is performed again,
 so that if the student has entered a new academic year, they will automatically be enrolled on this year's compulsory modules for the student's programme.
-Following this an array of tables grouped by year, are printed to the terminal that display all currently enrolled modules for the student, along with the module status and mark/grade for each module. The user is then given options to update the module status/mark of a module for the student; and enrol/unenrol a student on/from the available optional modules for their current academic year. When enrolling a student on an available optional module for their current academic year, a user can only enrol the student on modules
-whose credits do not exceed the remaining credits outstanding for the student; if this occurs the user is given the option of unenrolling a student from an optional module. The user is also restricted to unenrolling a student from modules for which they are yet to complete. If the student is not enrolled on any modules, the user is given the option of
-enrolling a student on an optional module. Below are a few screenshots showing some of the initial steps in the process of viewing and editing a student's module information.
+Following this an array of tables grouped by year, are printed to the terminal that display all currently enrolled modules for the student, along with the module status and mark/grade for each module. The user is then given options to update the module status/mark of a module for the student; and enrol/unenrol a student on/from the available optional modules for their current academic year.
+
+When enrolling a student on an available optional module for their current academic year, a table of the available optional modules for the student's academic year and programme is printed to the terminal, as well as the credits still available for the student; A user can only enrol the student on modules whose credits do not exceed the remaining credits outstanding for the student; if this occurs the user is given the option of unenrolling a student from an optional module. When unenrolling a student from a module, a table of the student's enrolled optional modules is displayed to the terminal; the user is then restricted to unenrolling a student from modules for which they are yet to complete. If the student is not enrolled on any modules, the user is given the option of enrolling a student on an optional module instead.
+ 
+When choosing to edit a student's mark and module status, the enrolled module tables are reprinted to the terminal after it is cleared. The user can then select a module from one of the tables to edit the student's status and mark for; changing a student's module status to completed, then enables the user to
+enter a validated percentage module mark input, and the grade is automatically calculated. Feedback is then provided to the user to indicate a successful update, and table
+displaying the updated module information displayed. The user can then choose to update another module for the same student or go back.\n
+
+Below are a few screenshots showing some of the initial steps in the process of viewing and editing a student's module information.
 
 <img src="docs/screenshots/view_edit_student_module_info1.png" alt=" view/edit student module info part 1 screenshot" width=50%% height=50%><img src="docs/screenshots/view_edit_student_module_info2.png" alt="view/edit student module info part 2 screenshot " width=50%% height=50%>
 
