@@ -186,3 +186,14 @@ to go back. \n
 This screenshot demonstrates the process of viewing a filtered module list:
 
 <img src="docs/screenshots/view_module_lists.png" alt=" view module list process screenshot" width=50%% height=50%>
+
+##### View module statistics
+The user having chosen the view module statistics option in the modules interface, must first select a year, followed by a module from the list of modules
+printed to the terminal. If data exists for the module, the user must then pick to view information from one of the available cohort years for the module,
+or choose to view all years combined. A formatted set of summary module statistics as well as the dataset size, are then printed to the terminal. The user
+is then given the option to view another cohort year statistics for the same module, or is again asked to confirm if they wish to view another module's statistics.\n
+
+This screenshot demonstrates the process of viewing a module's statistics:
+
+<img src="docs/screenshots/view_module_stats.png" alt=" view module statistics process screenshot" width=50%% height=50%>
+
