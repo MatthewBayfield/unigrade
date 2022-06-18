@@ -240,6 +240,15 @@ responsible for acting on the unigrade database would be called on them. Every t
 a corresponding instance is created with attribute mirroring those found in the database. All activities responsible for changing information in the database,
 would first modify the instance attributes, and these are then be used to update the unigrade sheet.
 
+
+### Future features
+- Extend the scope of the database and interface program to include a larger number of physics programmes, as well as extend it to other subjects or even courses.
+- Add student statistics, including features to calculate the student year-end and whole programme grades/mark. Also improve the module statistics, to try include terminal
+plots, to show grade distributions. 
+- Create a different database not in google sheets, so as to overcome any resource exhausted errors, which even though have
+been handled, do slow down the speed of the unigrade program.
+- Possibly add a GUI to the program, to further improve how user-friendly the program is to use. 
+
 ### Testing
 
 The testing process performed on the program can be found in [TESTING.md](TESTING.md).
